@@ -2,7 +2,7 @@
 painel_template.py
 
 Shell HTML e funcoes de render das secoes do painel de entregas incremental.
-Design: dark editorial / cyberpunk-mono (Fluxo Criativo aesthetic).
+Design: dark editorial premium (Mapa do Criador). Paleta escuro com dourado, tipografia serif.
 
 Secoes suportadas (id da secao = id do painel na sidebar):
     pesquisa
@@ -34,44 +34,47 @@ from typing import Iterable
 # ----- metadados das secoes -----
 
 SECOES: list[dict] = [
-    {"id": "visao-geral", "grupo": "PRODUTO", "titulo": "Visao Geral", "ix": "01",
-     "subtitulo": "Resumo do produto e informacoes principais."},
-    {"id": "quadro", "grupo": "PRODUTO", "titulo": "Quadro", "ix": "02",
-     "subtitulo": "A transformacao principal que o produto entrega ao cliente.",
+    {"id": "visao-geral", "grupo": "PERFIL", "titulo": "Visao Geral", "ix": "01",
+     "subtitulo": "Resumo do DNA do Criador e informacoes principais."},
+    {"id": "quadro", "grupo": "PERFIL", "titulo": "Quadro", "ix": "02",
+     "subtitulo": "A transformacao principal que o criador entrega ao leitor.",
      "proxima": "Quadro sera preenchido ao concluir o Bloco 1 de /produto-concepcao."},
-    {"id": "furadeira", "grupo": "PRODUTO", "titulo": "Furadeira", "ix": "03",
-     "subtitulo": "O metodo estruturado que torna visivel a eficiencia do produto.",
+    {"id": "furadeira", "grupo": "PERFIL", "titulo": "Furadeira", "ix": "03",
+     "subtitulo": "O metodo do criador. No Mapa do Criador, geralmente Capture-Cure-Crie.",
      "proxima": "Furadeira sera preenchida ao concluir o Bloco 2 de /produto-concepcao."},
-    {"id": "decorados", "grupo": "PRODUTO", "titulo": "Decorados", "ix": "04",
-     "subtitulo": "50 beneficios derivados do Quadro.",
-     "proxima": "Decorados serao preenchidos ao concluir o Bloco 4 de /produto-concepcao."},
-    {"id": "urgencias", "grupo": "PRODUTO", "titulo": "Urgencias Ocultas", "ix": "05",
-     "subtitulo": "70 itens em 7 categorias.",
-     "proxima": "Urgencias serao preenchidas ao concluir o Bloco 5 de /produto-concepcao."},
-    {"id": "identidade-produto", "grupo": "IDENTIDADES", "titulo": "Identidade do Produto", "ix": "06",
-     "subtitulo": "Como o produto se posiciona e se diferencia no mercado.",
+    {"id": "identidade-comunicador", "grupo": "DNA", "titulo": "DNA Criativo", "ix": "04",
+     "subtitulo": "Tom, valores, mantras, vocabulario, linha editorial e cosmovisao do criador. Filtro de voz autoral.",
+     "proxima": "Sera preenchido ao rodar /dna-criativo."},
+    {"id": "identidade-produto", "grupo": "DNA", "titulo": "Identidade do Produto", "ix": "05",
+     "subtitulo": "Como o produto editorial do criador se posiciona no nicho.",
      "proxima": "Sera preenchida ao concluir o Bloco 3 de /produto-concepcao."},
-    {"id": "identidade-consumidor", "grupo": "IDENTIDADES", "titulo": "Identidade do Consumidor", "ix": "07",
-     "subtitulo": "Perfil detalhado do cliente ideal.",
+    {"id": "identidade-consumidor", "grupo": "DNA", "titulo": "Identidade do Leitor", "ix": "06",
+     "subtitulo": "Perfil detalhado do leitor-alvo da newsletter e do conteudo.",
      "proxima": "Sera preenchida automaticamente no Passo 4C de /produto-concepcao."},
-    {"id": "identidade-comunicador", "grupo": "IDENTIDADES", "titulo": "Identidade do Comunicador", "ix": "08",
-     "subtitulo": "Tom, posicionamento e linguagem do criador.",
-     "proxima": "Sera preenchida ao concluir o Bloco 2B de /produto-concepcao."},
-    {"id": "comercial-playbook", "grupo": "ENTREGAS", "titulo": "Playbook Comercial", "ix": "09",
-     "subtitulo": "Script de venda 1:1 por WhatsApp (middle e low ticket).",
-     "proxima": "Sera preenchido ao rodar /comercial-playbook."},
-    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Mercado", "ix": "10",
-     "subtitulo": "Inteligencia de mercado. Use para argumentos, copy e posicionamento.",
+    {"id": "decorados", "grupo": "PERFIL", "titulo": "Decorados", "ix": "07",
+     "subtitulo": "50 beneficios derivados da consistencia editorial do criador.",
+     "proxima": "Decorados serao preenchidos ao concluir o Bloco 4 de /produto-concepcao."},
+    {"id": "urgencias", "grupo": "PERFIL", "titulo": "Urgencias Ocultas", "ix": "08",
+     "subtitulo": "70 itens em 7 categorias. Alimenta ganchos de newsletter, carrossel e stories.",
+     "proxima": "Urgencias serao preenchidas ao concluir o Bloco 5 de /produto-concepcao."},
+    {"id": "banco-de-ideias", "grupo": "CRIACAO", "titulo": "Caixa de Entrada", "ix": "09",
+     "subtitulo": "Ideias capturadas durante a semana (primeira coordenada: Capture).",
+     "proxima": "Sera preenchida ao rodar /capture quantas vezes precisar durante a semana."},
+    {"id": "newsletter", "grupo": "CRIACAO", "titulo": "Newsletter", "ix": "10",
+     "subtitulo": "Newsletters editoriais semanais geradas no Crie.",
+     "proxima": "Sera preenchida ao rodar /criar-newsletter ou /ritual-3x3."},
+    {"id": "carrosseis", "grupo": "CRIACAO", "titulo": "Carrosseis", "ix": "11",
+     "subtitulo": "Carrosseis autorais de 10 slides para Instagram.",
+     "proxima": "Sera preenchida ao rodar /criar-carrossel ou /ritual-3x3."},
+    {"id": "stories", "grupo": "CRIACAO", "titulo": "Stories", "ix": "12",
+     "subtitulo": "Sequencias conversacionais de stories.",
+     "proxima": "Sera preenchida ao rodar /criar-stories ou /ritual-3x3."},
+    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Mercado", "ix": "13",
+     "subtitulo": "Inteligencia do nicho do criador. Use para alimentar ganchos, ampliar repertorio, achar referencias.",
      "proxima": "Sera preenchida ao final de /produto-novo (Ramo 2) ou do Bloco 3 de /produto-concepcao."},
-    {"id": "copy-pagina", "grupo": "ENTREGAS", "titulo": "Copy da Página",
-     "subtitulo": "16 blocos da página de vendas 8D. Aprove um bloco por vez em /copy-pagina.",
-     "proxima": "Será preenchida conforme você aprova os blocos em /copy-pagina."},
-    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "11",
-     "subtitulo": "Metricas das redes sociais. Instagram, TikTok e YouTube em abas.",
+    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "14",
+     "subtitulo": "Metricas de presenca digital. Instagram, TikTok e YouTube em abas.",
      "proxima": "Sera preenchido ao rodar /dashboard-social."},
-    {"id": "analise-trafego", "grupo": "DADOS", "titulo": "Análise de Tráfego", "ix": "12",
-     "subtitulo": "Histórico de análises narradas do Meta Ads. Geradas via /trafego-analise.",
-     "proxima": "Sera preenchido ao salvar um output em /trafego-analise."},
 ]
 
 SECOES_RENDERIZAVEIS = {
@@ -82,34 +85,34 @@ SECOES_RENDERIZAVEIS = {
 
 _CSS = """\
 /* ============================================
-   FLUXO CRIATIVO - Painel de Entregas
-   Dark editorial / cyberpunk-mono aesthetic
+   MAPA DO CRIADOR - Painel de Entregas
+   Dark editorial premium aesthetic (escuro com dourado, serif)
 ============================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
 
 :root {
-  --ink-0: #000000;
-  --ink-1: #050505;
-  --ink-2: #0b0b0b;
-  --ink-3: #141414;
-  --ink-4: #1c1c1c;
-  --line-1: #1a1a1a;
-  --line-2: #262626;
-  --paper: #ededea;
-  --text-hi: #ffffff;
-  --text-mid: #e8e8e6;
-  --text-dim: #cfcfcb;
-  --text-faint: #a8a8a3;
-  --neon: #c4ff5e;
-  --neon-dim: #9ec947;
-  --neon-deep: #4a6517;
-  --neon-glow: rgba(196,255,94,0.18);
-  --rust: #d97757;
+  --ink-0: #0a0807;
+  --ink-1: #0f0d0a;
+  --ink-2: #15120e;
+  --ink-3: #1d1812;
+  --ink-4: #261f17;
+  --line-1: #1f1a14;
+  --line-2: #2e261c;
+  --paper: #f0ebe1;
+  --text-hi: #f5efe2;
+  --text-mid: #ddd5c4;
+  --text-dim: #b8ad97;
+  --text-faint: #7a705f;
+  --neon: #d4af37;
+  --neon-dim: #b89630;
+  --neon-deep: #5c4818;
+  --neon-glow: rgba(212,175,55,0.22);
+  --rust: #c2723d;
   --ochre: #d4a24a;
-  --plum: #9a7bb5;
-  --sky: #7aa8c9;
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui;
+  --plum: #8d6f50;
+  --sky: #a89478;
+  --font-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px;
@@ -117,7 +120,7 @@ _CSS = """\
   --r-sm:4px; --r-md:6px; --r-lg:10px;
   --shadow-sm:0 1px 2px rgba(0,0,0,.4);
   --shadow-md:0 4px 16px rgba(0,0,0,.5);
-  --shadow-glow:0 0 0 1px var(--neon-glow),0 0 24px rgba(196,255,94,.08);
+  --shadow-glow:0 0 0 1px var(--neon-glow),0 0 28px rgba(212,175,55,.12);
   --sidebar-w:220px;
 }
 *{box-sizing:border-box;}
@@ -778,7 +781,7 @@ def build_shell(nome_produto: str, owner: str = "", timestamp: str = "") -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Entregas - Fluxo Criativo</title>
+<title>Painel de Entregas - Mapa do Criador</title>
 <style>
 {_CSS}
 </style>
@@ -788,7 +791,7 @@ def build_shell(nome_produto: str, owner: str = "", timestamp: str = "") -> str:
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true"></div>
-      <div class="brand-text">fluxo<br/>criativo<span class="tiny">Painel &middot; v1.1</span></div>
+      <div class="brand-text">mapa<br/>do criador<span class="tiny">Painel &middot; v1.0</span></div>
     </div>
     <div class="sala-link" id="sala-link" data-id="sala-dos-agentes" onclick="showSala()" title="Ver agentes trabalhando ao vivo">
       <span>Sala dos Agentes</span>

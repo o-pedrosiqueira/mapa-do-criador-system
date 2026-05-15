@@ -3,19 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fluxo Criativo</title>
+<title>Mapa do Criador</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink-0:#000000; --ink-1:#050505; --ink-2:#0b0b0b; --ink-3:#141414;
-    --line-1:#1a1a1a; --line-2:#262626; --line-3:#3a3a3a;
-    --text-hi:#ffffff; --text-mid:#e8e8e6; --text-dim:#cfcfcb; --text-faint:#a8a8a3;
-    --neon:#c4ff5e; --neon-dim:#9ec947; --neon-deep:#4a6517; --neon-glow:rgba(196,255,94,0.18);
-    --font-display:"Space Grotesk", ui-sans-serif, system-ui;
-    --font-body:"Inter", ui-sans-serif, system-ui;
-    --font-mono:"JetBrains Mono", ui-monospace, monospace;
+    --paper:oklch(95.5% 0.018 82);
+    --paper-deep:oklch(92% 0.022 82);
+    --sand:oklch(86% 0.030 80);
+    --ink:oklch(16% 0.022 55);
+    --ink-soft:oklch(32% 0.020 55);
+    --ink-mute:oklch(52% 0.016 68);
+    --line:oklch(82% 0.012 75);
+    --moss:oklch(34% 0.060 148);
+    --moss-deep:oklch(28% 0.055 148);
+    --moss-soft:oklch(86% 0.035 145);
+    /* Aliases para reaproveitamento de codigo legado */
+    --ink-0:var(--paper); --ink-1:var(--paper); --ink-2:var(--paper-deep); --ink-3:var(--sand);
+    --line-1:var(--line); --line-2:var(--line); --line-3:var(--line);
+    --text-hi:var(--ink); --text-mid:var(--ink-soft); --text-dim:var(--ink-soft); --text-faint:var(--ink-mute);
+    --neon:var(--moss); --neon-dim:var(--moss-deep); --neon-deep:var(--moss-deep); --neon-glow:oklch(34% 0.060 148 / 0.18);
+    --font-display:"Instrument Serif", "Newsreader", Georgia, serif;
+    --font-body:"Newsreader", "Instrument Serif", Georgia, serif;
+    --font-sans:"Geist", ui-sans-serif, system-ui;
+    --font-mono:"Geist Mono", ui-monospace, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -232,7 +244,7 @@
         <div class="brand-dot"></div>
       </div>
       <div class="brand-text">
-        <span class="brand-name">Fluxo Criativo</span>
+        <span class="brand-name"><span style="color:var(--moss)">✦</span> Mapa do Criador</span>
         <span class="brand-sub" id="subtitle">PAINEL · V—</span>
       </div>
     </div>
@@ -316,7 +328,7 @@
   function renderAvisoInstalarClaude() {
     renderAviso({
       titulo: 'Claude não está instalado',
-      texto: 'Para usar o Fluxo Criativo, o <strong>Claude da Anthropic</strong> precisa estar instalado no seu computador.',
+      texto: 'Para usar o Mapa do Criador, o <strong>Claude da Anthropic</strong> precisa estar instalado no seu computador.',
       actions: [
         {
           id: 'btn-baixar-claude',

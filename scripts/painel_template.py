@@ -34,45 +34,51 @@ from typing import Iterable
 # ----- metadados das secoes -----
 
 SECOES: list[dict] = [
-    {"id": "visao-geral", "grupo": "PERFIL", "titulo": "Visao Geral", "ix": "01",
-     "subtitulo": "Resumo do DNA do Criador e informacoes principais."},
-    {"id": "quadro", "grupo": "PERFIL", "titulo": "Quadro", "ix": "02",
-     "subtitulo": "A transformacao principal que o criador entrega ao leitor.",
-     "proxima": "Quadro sera preenchido ao concluir o Bloco 1 de /produto-concepcao."},
-    {"id": "furadeira", "grupo": "PERFIL", "titulo": "Furadeira", "ix": "03",
-     "subtitulo": "O metodo do criador. No Mapa do Criador, geralmente Capture-Cure-Crie.",
-     "proxima": "Furadeira sera preenchida ao concluir o Bloco 2 de /produto-concepcao."},
-    {"id": "identidade-comunicador", "grupo": "DNA", "titulo": "DNA Criativo", "ix": "04",
-     "subtitulo": "Tom, valores, mantras, vocabulario, linha editorial e cosmovisao do criador. Filtro de voz autoral.",
+    {"id": "visao-geral", "grupo": "ESTA SEMANA", "titulo": "Visao Geral", "ix": "01",
+     "subtitulo": "Capa do criador, status do Ritual 3x3 e proxima publicacao."},
+    {"id": "esta-semana", "grupo": "ESTA SEMANA", "titulo": "Ritual da Semana", "ix": "02",
+     "subtitulo": "Status do ciclo Capture-Cure-Crie da semana corrente.",
+     "proxima": "Sera preenchido conforme voce avanca no /ritual-3x3."},
+    {"id": "calendario", "grupo": "ESTA SEMANA", "titulo": "Calendario Editorial", "ix": "03",
+     "subtitulo": "Grade mensal de publicacoes por formato. Newsletter, carrossel, stories e posts agendados.",
+     "proxima": "Sera preenchido conforme voce salvar pecas em entregas/newsletter, carrosseis, stories e posts."},
+    {"id": "banco-de-ideias", "grupo": "CRIACAO", "titulo": "Caixa de Entrada", "ix": "04",
+     "subtitulo": "Ideias capturadas durante a semana. Primeira coordenada do Mapa: Capture.",
+     "proxima": "Sera preenchida ao rodar /capture quantas vezes precisar durante a semana."},
+    {"id": "newsletter", "grupo": "CRIACAO", "titulo": "Newsletter", "ix": "05",
+     "subtitulo": "Newsletters editoriais semanais. Formato gancho + contexto + analise + provocacao.",
+     "proxima": "Sera preenchida ao rodar /criar-newsletter ou /ritual-3x3."},
+    {"id": "carrosseis", "grupo": "CRIACAO", "titulo": "Carrosseis", "ix": "06",
+     "subtitulo": "Carrosseis autorais de 10 slides para Instagram. Tese central preservada.",
+     "proxima": "Sera preenchida ao rodar /criar-carrossel ou /ritual-3x3."},
+    {"id": "stories", "grupo": "CRIACAO", "titulo": "Stories", "ix": "07",
+     "subtitulo": "Sequencias conversacionais de stories. Bastidor, ampliacao ou contraponto.",
+     "proxima": "Sera preenchida ao rodar /criar-stories ou /ritual-3x3."},
+    {"id": "identidade-comunicador", "grupo": "DNA", "titulo": "DNA Criativo", "ix": "08",
+     "subtitulo": "Tom, valores, mantras, vocabulario, linha editorial e cosmovisao. Filtro de voz autoral.",
      "proxima": "Sera preenchido ao rodar /dna-criativo."},
-    {"id": "identidade-produto", "grupo": "DNA", "titulo": "Identidade do Produto", "ix": "05",
+    {"id": "identidade-produto", "grupo": "DNA", "titulo": "Identidade do Produto", "ix": "09",
      "subtitulo": "Como o produto editorial do criador se posiciona no nicho.",
      "proxima": "Sera preenchida ao concluir o Bloco 3 de /produto-concepcao."},
-    {"id": "identidade-consumidor", "grupo": "DNA", "titulo": "Identidade do Leitor", "ix": "06",
-     "subtitulo": "Perfil detalhado do leitor-alvo da newsletter e do conteudo.",
+    {"id": "identidade-consumidor", "grupo": "DNA", "titulo": "Identidade do Leitor", "ix": "10",
+     "subtitulo": "Perfil detalhado do leitor-alvo da newsletter e do conteudo autoral.",
      "proxima": "Sera preenchida automaticamente no Passo 4C de /produto-concepcao."},
-    {"id": "decorados", "grupo": "PERFIL", "titulo": "Decorados", "ix": "07",
+    {"id": "quadro", "grupo": "PERFIL", "titulo": "Quadro", "ix": "11",
+     "subtitulo": "A transformacao que o criador entrega ao leitor da sua audiencia.",
+     "proxima": "Quadro sera preenchido ao concluir o Bloco 1 de /produto-concepcao."},
+    {"id": "furadeira", "grupo": "PERFIL", "titulo": "Furadeira", "ix": "12",
+     "subtitulo": "O metodo do criador. No Mapa do Criador, geralmente Capture-Cure-Crie.",
+     "proxima": "Furadeira sera preenchida ao concluir o Bloco 2 de /produto-concepcao."},
+    {"id": "decorados", "grupo": "PERFIL", "titulo": "Decorados", "ix": "13",
      "subtitulo": "50 beneficios derivados da consistencia editorial do criador.",
      "proxima": "Decorados serao preenchidos ao concluir o Bloco 4 de /produto-concepcao."},
-    {"id": "urgencias", "grupo": "PERFIL", "titulo": "Urgencias Ocultas", "ix": "08",
+    {"id": "urgencias", "grupo": "PERFIL", "titulo": "Urgencias Ocultas", "ix": "14",
      "subtitulo": "70 itens em 7 categorias. Alimenta ganchos de newsletter, carrossel e stories.",
      "proxima": "Urgencias serao preenchidas ao concluir o Bloco 5 de /produto-concepcao."},
-    {"id": "banco-de-ideias", "grupo": "CRIACAO", "titulo": "Caixa de Entrada", "ix": "09",
-     "subtitulo": "Ideias capturadas durante a semana (primeira coordenada: Capture).",
-     "proxima": "Sera preenchida ao rodar /capture quantas vezes precisar durante a semana."},
-    {"id": "newsletter", "grupo": "CRIACAO", "titulo": "Newsletter", "ix": "10",
-     "subtitulo": "Newsletters editoriais semanais geradas no Crie.",
-     "proxima": "Sera preenchida ao rodar /criar-newsletter ou /ritual-3x3."},
-    {"id": "carrosseis", "grupo": "CRIACAO", "titulo": "Carrosseis", "ix": "11",
-     "subtitulo": "Carrosseis autorais de 10 slides para Instagram.",
-     "proxima": "Sera preenchida ao rodar /criar-carrossel ou /ritual-3x3."},
-    {"id": "stories", "grupo": "CRIACAO", "titulo": "Stories", "ix": "12",
-     "subtitulo": "Sequencias conversacionais de stories.",
-     "proxima": "Sera preenchida ao rodar /criar-stories ou /ritual-3x3."},
-    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Mercado", "ix": "13",
-     "subtitulo": "Inteligencia do nicho do criador. Use para alimentar ganchos, ampliar repertorio, achar referencias.",
-     "proxima": "Sera preenchida ao final de /produto-novo (Ramo 2) ou do Bloco 3 de /produto-concepcao."},
-    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "14",
+    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Nicho", "ix": "15",
+     "subtitulo": "Inteligencia do nicho do criador. Use para alimentar ganchos e achar referencias.",
+     "proxima": "Sera preenchida ao final de /produto-novo (Ramo 2) ou /pesquisa-mercado."},
+    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "16",
      "subtitulo": "Metricas de presenca digital. Instagram, TikTok e YouTube em abas.",
      "proxima": "Sera preenchido ao rodar /dashboard-social."},
 ]
@@ -86,66 +92,90 @@ SECOES_RENDERIZAVEIS = {
 _CSS = """\
 /* ============================================
    MAPA DO CRIADOR - Painel de Entregas
-   Dark editorial premium aesthetic (escuro com dourado, serif)
+   Editorial calmo. Papel creme + tinta + acento Musgo. Sinete ✦.
+   Design system Pedro Siqueira / Mapa do Criador.
 ============================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600&display=swap");
 
 :root {
-  --ink-0: #0a0807;
-  --ink-1: #0f0d0a;
-  --ink-2: #15120e;
-  --ink-3: #1d1812;
-  --ink-4: #261f17;
-  --line-1: #1f1a14;
-  --line-2: #2e261c;
-  --paper: #f0ebe1;
-  --text-hi: #f5efe2;
-  --text-mid: #ddd5c4;
-  --text-dim: #b8ad97;
-  --text-faint: #7a705f;
-  --neon: #d4af37;
-  --neon-dim: #b89630;
-  --neon-deep: #5c4818;
-  --neon-glow: rgba(212,175,55,0.22);
-  --rust: #c2723d;
-  --ochre: #d4a24a;
-  --plum: #8d6f50;
-  --sky: #a89478;
-  --font-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
-  --font-body: "Inter", ui-sans-serif, system-ui;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Papel + tinta (paleta editorial) */
+  --paper:        oklch(95.5% 0.018 82);
+  --paper-deep:   oklch(92%   0.022 82);
+  --sand:         oklch(86%   0.030 80);
+  --stone:        oklch(68%   0.015 75);
+  --ink:          oklch(16%   0.022 55);
+  --ink-soft:     oklch(32%   0.020 55);
+  --ink-mute:     oklch(52%   0.016 68);
+  --line:         oklch(82%   0.012 75);
+  --line-soft:    oklch(88%   0.012 75);
+  /* Acento Musgo (escolha do criador. Substitui Terra) */
+  --moss:         oklch(34%   0.060 148);
+  --moss-deep:    oklch(28%   0.055 148);
+  --moss-soft:    oklch(86%   0.035 145);
+  --gold:         oklch(72%   0.110 86);
+  --ink-on-moss:  oklch(96.5% 0.015 78);
+  /* Aliases para reaproveitamento de codigo legado */
+  --ink-0: var(--paper);
+  --ink-1: var(--paper);
+  --ink-2: var(--paper-deep);
+  --ink-3: var(--paper-deep);
+  --ink-4: var(--sand);
+  --line-1: var(--line);
+  --line-2: var(--line);
+  --text-hi: var(--ink);
+  --text-mid: var(--ink-soft);
+  --text-dim: var(--ink-soft);
+  --text-faint: var(--ink-mute);
+  --neon: var(--moss);
+  --neon-dim: var(--moss-deep);
+  --neon-deep: var(--moss-deep);
+  --neon-glow: oklch(34% 0.060 148 / 0.18);
+  --rust: var(--moss);
+  --ochre: var(--gold);
+  --plum: var(--moss);
+  --sky: var(--moss);
+  /* Tipografia */
+  --font-display: "Instrument Serif", "Newsreader", Georgia, serif;
+  --font-serif:   "Newsreader", "Instrument Serif", Georgia, serif;
+  --font-body:    "Newsreader", "Instrument Serif", Georgia, serif;
+  --font-sans:    "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Espaco e raios */
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px;
   --s-6:24px; --s-7:32px; --s-8:40px; --s-9:56px; --s-10:80px;
   --r-sm:4px; --r-md:6px; --r-lg:10px;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
-  --shadow-md:0 4px 16px rgba(0,0,0,.5);
-  --shadow-glow:0 0 0 1px var(--neon-glow),0 0 28px rgba(212,175,55,.12);
-  --sidebar-w:220px;
+  --shadow-sm:0 1px 2px oklch(20% 0.02 60 / 0.06);
+  --shadow-md:0 6px 18px oklch(20% 0.02 60 / 0.08);
+  --shadow-glow:0 0 0 1px oklch(34% 0.06 148 / 0.18),0 0 28px oklch(34% 0.06 148 / 0.10);
+  --sidebar-w:232px;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
-html{scroll-behavior:smooth;color-scheme:dark;}
-body{background:var(--ink-0);color:var(--text-hi);font-family:var(--font-body);font-size:13px;line-height:1.6;font-weight:300;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11","tnum";overscroll-behavior:none;}
-*{scrollbar-width:thin;scrollbar-color:#2a2a2a transparent;}
-*::-webkit-scrollbar{width:4px;height:4px;}
+html{scroll-behavior:smooth;color-scheme:light;}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-serif);font-size:17px;line-height:1.55;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background-image:radial-gradient(oklch(20% 0.02 60 / 0.018) 1px, transparent 1.2px),radial-gradient(oklch(20% 0.02 60 / 0.012) 1px, transparent 1.4px);background-size:3px 3px, 7px 7px;background-position:0 0, 1px 1px;overscroll-behavior:none;}
+*{scrollbar-width:thin;scrollbar-color:oklch(70% 0.02 75) transparent;}
+*::-webkit-scrollbar{width:6px;height:6px;}
 *::-webkit-scrollbar-track{background:transparent;}
-*::-webkit-scrollbar-thumb{background:#1f1f1f;border-radius:999px;border:2px solid transparent;background-clip:padding-box;}
-*::-webkit-scrollbar-thumb:hover{background:#3a3a3a;background-clip:padding-box;border:2px solid transparent;}
+*::-webkit-scrollbar-thumb{background:oklch(70% 0.02 75 / 0.5);border-radius:999px;}
+*::-webkit-scrollbar-thumb:hover{background:oklch(60% 0.02 75 / 0.7);}
 *::-webkit-scrollbar-corner{background:transparent;}
-::selection{background:var(--neon);color:var(--ink-0);}
+::selection{background:var(--moss);color:var(--paper);}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;}
+.sparkle{display:inline-block;color:var(--moss);font-style:normal;}
 
 /* App shell */
 .app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh;}
 
 /* Sidebar */
-.sidebar{background:var(--ink-0);border-right:1px solid var(--line-1);padding:var(--s-7) 0 var(--s-5);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
-.brand{padding:0 var(--s-5) var(--s-7);display:flex;align-items:center;gap:var(--s-3);}
-.brand-mark{width:24px;height:24px;border-radius:3px;background:url("./painel-assets/logo-square.jpg") center/cover;flex-shrink:0;}
-.brand-text{font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:.04em;line-height:1.2;color:var(--text-hi);}
-.brand-text .tiny{display:block;color:var(--text-faint);font-weight:400;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-top:3px;}
+.sidebar{background:oklch(95% 0.020 82 / 0.92);backdrop-filter:blur(10px);border-right:1px solid var(--line);padding:var(--s-6) var(--s-5) var(--s-5);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.brand{padding:0 0 var(--s-7);display:flex;align-items:baseline;gap:var(--s-2);}
+.brand-mark{display:none;}
+.brand-text{font-family:var(--font-display);font-weight:400;font-size:24px;letter-spacing:-0.02em;line-height:1.0;color:var(--ink);}
+.brand-text::before{content:"✦";color:var(--moss);font-size:0.95em;margin-right:6px;font-style:normal;}
+.brand-text em{font-style:italic;}
+.brand-text .tiny{display:block;color:var(--ink-mute);font-family:var(--font-mono);font-weight:400;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-top:8px;}
 .sala-link{margin:0 var(--s-3) var(--s-5);padding:10px var(--s-3);background:var(--ink-2);border:1px solid var(--line-2);border-radius:var(--r-md);display:flex;align-items:center;gap:var(--s-2);cursor:pointer;color:var(--text-mid);font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;transition:border-color 120ms,color 120ms,background 120ms;}
 .sala-link:hover{border-color:var(--neon-deep);color:var(--neon);background:var(--ink-3);}
 .sala-link.active{border-color:var(--neon-deep);background:var(--ink-3);color:var(--neon);}
@@ -791,7 +821,7 @@ def build_shell(nome_produto: str, owner: str = "", timestamp: str = "") -> str:
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true"></div>
-      <div class="brand-text">mapa<br/>do criador<span class="tiny">Painel &middot; v1.0</span></div>
+      <div class="brand-text"><em>Mapa do Criador</em><span class="tiny">Painel &middot; v1.0</span></div>
     </div>
     <div class="sala-link" id="sala-link" data-id="sala-dos-agentes" onclick="showSala()" title="Ver agentes trabalhando ao vivo">
       <span>Sala dos Agentes</span>

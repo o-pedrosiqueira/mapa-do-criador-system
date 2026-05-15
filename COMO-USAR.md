@@ -1,20 +1,24 @@
-# Como Usar o Workshop Marketing IA — Guia Completo
+# Como Usar o Mapa do Criador. Guia Completo
 
-## Antes de comecar
+## Antes de começar
 
-### Opcao A. Claude Code (VS Code)
+### Opção A. Claude Code (VS Code) — recomendado
 
-1. VSCode instalado
-2. Extensao Claude Code instalada
-3. Pasta do projeto aberta no VSCode
+1. VS Code instalado
+2. Extensão Claude Code instalada (ou `npm install -g @anthropic-ai/claude-code`)
+3. Pasta `mapa-do-criador` aberta no VS Code
 
-### Opcao B. Cursor
+### Opção B. Cursor
 
 1. Cursor instalado ([cursor.com](https://cursor.com))
-2. **File → Open Folder** e escolha a pasta `workshop_inteligente`
-3. Pronto. As regras em `.cursor/rules/` e o `CLAUDE.md` orientam o chat. Veja tambem `AGENTS.md` para um mapa rapido de pastas.
+2. **File → Open Folder** e escolha a pasta `mapa-do-criador`
+3. Pronto. As regras em `.cursor/rules/` e o `CLAUDE.md` orientam o chat.
 
-**Comandos `/alguma-coisa` no Cursor:** a barra `/` nao e a mesma do Claude Code. Para seguir um fluxo (ex.: copy-pagina), diga no chat **"segue o comando copy-pagina"** ou anexe o arquivo **`.claude/commands/copy-pagina.md`** com `@`. O assistente executa o mesmo roteiro do `.md`.
+**Comandos `/alguma-coisa` no Cursor:** a barra `/` não é equivalente à do Claude Code. Para seguir um fluxo (ex: criar-newsletter), diga no chat **"segue o comando criar-newsletter"** ou anexe o arquivo **`.claude/commands/criar-newsletter.md`** com `@`. O assistente executa o mesmo roteiro do `.md`.
+
+### Conta no Notion
+
+O Mapa do Criador usa o Notion como **Oficina do Criador** (Caixa de Entrada de ideias). Se ainda não tem, crie uma conta gratuita em [notion.so](https://notion.so). Vai ser onde você captura ideias soltas durante a semana antes do Cure.
 
 ---
 
@@ -22,249 +26,311 @@
 
 ### 1. Abra o chat do assistente
 
-**No VSCode:** procure o icone do Claude Code na barra lateral.
+**No VS Code:** procure o ícone do Claude Code na barra lateral.
 
 **No Cursor:** use o chat do agente (Composer ou Chat) com o projeto aberto.
 
-### 2. Cadastre seu produto
+### 2. Configure seu DNA do Criador
 
-Na primeira mensagem o assistente ja inicia o fluxo automaticamente. Ou digite:
-
-```text
-/produto-concepcao
-```
+Na primeira mensagem, o assistente já inicia o fluxo automaticamente. O Mapa do Criador é um sistema personalizável: cada "produto" representa um **DNA do Criador**, ou seja, o perfil autoral de uma pessoa ou projeto editorial.
 
 O assistente vai te guiar com perguntas sobre:
 
-- Quadro (a transformacao principal do seu produto)
-- Furadeira (seu metodo estruturado)
-- Decorados (beneficios do produto)
-- Urgencias Ocultas (dores, desejos, duvidas do publico)
-- Identidade do consumidor (quem e seu publico)
+- Quem você é (nome, especialidade, posicionamento autoral)
+- Valores (3 a 5 valores nucleares)
+- Tom de voz (conversacional, primeira pessoa, humor, profundidade)
+- Linha editorial (o que publica, o que evita)
+- Cosmovisão (lente filosófica/religiosa, presente sem virar linguagem)
+- Mantras / jargões próprios (frases recorrentes que assinam seu estilo)
+- Vocabulário base
+- Lista de termos a evitar
+- Referências comunicacionais
+- CTA por tipo de conteúdo
 
-Responda uma pergunta por vez. Ao final, o painel de entregas e gerado automaticamente em `meus-produtos/{ativo}/painel-entregas.html`.
+Responda uma pergunta por vez. **Importante:** o assistente vai pedir que você cole entre 1 e 3 textos autênticos seus (post antigo, e-mail longo, mensagem de áudio transcrita, qualquer coisa que soe **você** de verdade). É a base da análise da voz. Sem isso, o DNA fica genérico.
 
-### 3. Crie seus materiais
+Ao final, o `dna-criativo.md` e o `painel-entregas.html` ficam salvos em `meus-produtos/{seu-slug}/`.
 
-Use os comandos na ordem que fizer sentido para voce.
+### 3. Faça a pesquisa de nicho
+
+Logo depois do DNA, rode `/pesquisa-mercado` e `/dados-nicho`. O primeiro mapeia o seu nicho (tamanho, concorrência, ângulos disponíveis). O segundo descobre de 10 a 20 perfis de referência no Brasil e no mundo. É importante para alimentar a sua Caixa de Entrada com ganchos jornalísticos da semana.
+
+### 4. Comece a capturar
+
+Da hora que o DNA está pronto, qualquer ideia que aparecer durante a semana vai pra Caixa de Entrada. Use:
+
+```text
+/capture
+```
+
+E descreva a ideia (uma frase, um gancho, uma pergunta de seguidor, qualquer coisa). Não edite, não julgue, não cure ainda. Só capture.
+
+### 5. Rode o primeiro Ritual 3x3
+
+No dia da sua sessão semanal (geralmente segunda de manhã, mas você escolhe), digite:
+
+```text
+/ritual-3x3
+```
+
+O assistente conduz a sessão inteira em 3 blocos:
+
+- **Cure (30 min).** Revisa a Caixa de Entrada com você, escolhe 4 a 5 ideias da semana e direciona cada uma para o formato certo.
+- **Crie principal (90 min).** Gera 1 newsletter completa + 2 a 3 carrosséis para Instagram.
+- **Crie complementar (60 min).** Gera 1 sequência de stories e finaliza ajustes na sua voz.
+
+Ao final, você tem a semana inteira de conteúdo pronta para revisar e publicar.
 
 ---
 
-## Fluxos recomendados
+## A semana típica do Mapa do Criador
 
-### Para quem quer comecar a vender
+### Capture (durante a semana, sem hora marcada)
 
-1. `/produto-concepcao` — Cadastrar produto e gerar identidade do consumidor
-2. `/copy-pagina` — Criar copy e pagina de vendas profissional
-3. `/copy-anuncio` — Criar anuncios para trafego pago
+Sempre que aparecer uma ideia (post de outro criador que provocou você, pergunta de seguidor, leitura, conversa, sentimento), abra o chat e:
 
-### Para quem vai lancar
+```text
+/capture
+```
 
-1. `/produto-concepcao` — Cadastrar produto e gerar identidade do consumidor
-2. `/estrategia-lancamento` — Planejar o evento completo
-3. `/copy-pagina` — Criar pagina do evento e pagina de vendas
-4. `/copy-anuncio` — Criar anuncios de captacao
-5. `/carrossel` — Criar conteudo pre-lancamento
+Cola a ideia em texto livre. O assistente registra no `banco-de-ideias.md` e, se você quiser, espelha no Notion.
 
-### Para quem quer vender no perpetuo
+Tempo médio: 30 segundos por ideia. Faz isso 2 a 5 vezes por semana e a Caixa de Entrada se enche sozinha.
 
-1. `/produto-concepcao` — Cadastrar produto e gerar identidade do consumidor
-2. `/estrategia-funil` — Mapear funil perpetuo
-3. `/copy-pagina` — Criar paginas (captura + vendas + obrigado)
-4. `/copy-anuncio` — Criar anuncios para cada fase do funil
+### Cure (30 min, início da sessão semanal)
 
-### Para quem quer vender low ticket
+```text
+/cure
+```
 
-1. `/produto-concepcao` — Cadastrar produto e gerar identidade do consumidor
-2. `/lt-funil` — Criar produto de entrada (quiz, desafio, agente GPT)
-3. `/lt-criar-produto` — Criar o conteudo real do produto digital
-4. `/lt-pagina` ou `/lt-quiz` — Gerar a pagina ou quiz de venda
-5. `/copy-anuncio` — Criar anuncios low ticket
-6. `/lt-otimizar` — Otimizar campanhas com planilha do Gerenciador
+O assistente lê a Caixa de Entrada inteira com você, mostra cada ideia e ajuda você a decidir:
 
-### Para quem quer vender high ticket
+- Vira newsletter (profunda, mais densa, com tese central)?
+- Vira carrossel (estruturada, sequencial, instagram-friendly)?
+- Vira stories (conversacional, bastidor, ampliação)?
+- Vira post avulso (ensaio breve, comentário afiado)?
+- Descarta (não amadureceu)?
 
-1. `/produto-concepcao` — Cadastrar produto e gerar identidade do consumidor
-2. `/estrategia-lancamento` — Planejar retiro ou evento online
-3. `/comercial-playbook` — Criar scripts SPIN para venda 1:1
-4. `/copy-pagina` — Criar pagina de inscricao do evento
+Você termina o Cure com 4 a 5 briefings prontos para o Crie.
+
+### Crie (2h30, bloco principal)
+
+```text
+/crie
+```
+
+Ou granular, um por vez:
+
+```text
+/criar-newsletter
+/criar-carrossel
+/criar-stories
+```
+
+O assistente usa o DNA Criativo configurado e gera cada peça aplicando o filtro de voz autoral. Você revisa, ajusta o que não soou você e publica.
 
 ---
 
 ## O que cada comando faz
 
-### /produto-concepcao
+### Ritual 3x3 (núcleo)
 
-Cadastra o produto usando a metodologia VTSD: Quadro, Furadeira, Decorados, 3 Identidades, Urgencias Ocultas, Identidade do Consumidor e Painel de Entregas. Tudo em fluxo unico.
+#### /ritual-3x3
 
-Resultado: `meus-produtos/{ativo}/perfil.md`, `meus-produtos/{ativo}/idconsumidor.md` e `meus-produtos/{ativo}/painel-entregas.html`
+Roda o ciclo completo da semana: Cure → Crie principal → Crie complementar. 3 horas guiadas.
 
-### /copy-pagina
+#### /capture
 
-Cria a copy completa da pagina de vendas (estrutura 8D, 11 secoes) e gera o HTML profissional pronto para uso. Tres tipos: vendas, captura e obrigado.
+Registra uma ideia solta na Caixa de Entrada. Não cura, só captura. Use entre sessões, durante a semana.
 
-Resultado: `meus-produtos/{ativo}/entregas/copy-pagina/copy-[produto].md` e `meus-produtos/{ativo}/entregas/paginas/[tipo]-[produto].html`
+Resultado: linha adicionada em `meus-produtos/{ativo}/banco-de-ideias.md`.
 
-Como ver: abra o arquivo `.html` no navegador.
+#### /cure
 
-### /copy-anuncio
+Revisa a Caixa de Entrada e seleciona 4 a 5 ideias da semana, criando um briefing por ideia (gancho + tese + ângulo + formato).
 
-Cria pacotes de anuncios usando a Mandala de 18 Tipos. Inclui copy, direcao criativa e estrategia de campanha para Meta Ads.
+Resultado: `meus-produtos/{ativo}/banco-de-ideias.md` atualizado + briefings no chat.
 
-Resultado: `meus-produtos/{ativo}/entregas/anuncios/anuncios-[plataforma]-[produto].md`
+#### /crie
 
-### /carrossel
+Bloco principal de criação. Lê os briefings curados e gera newsletter + carrosséis + stories em sequência.
 
-Cria carrosseis com 7 a 10 slides baseados nas urgencias ocultas do produto.
+### Criação por formato
 
-Resultado: `meus-produtos/{ativo}/entregas/conteudo-social/carrossel-[tema]-[produto].md`
+#### /criar-newsletter
 
-### /copy-social
+Newsletter editorial-jornalística no formato Bárbara Torres / BrandsDecoded / Dan Koe: gancho da semana + contexto + análise/opinião + provocação + CTA.
 
-Cria posts para redes sociais (Instagram, LinkedIn, Twitter) a partir das urgencias ocultas e decorados do produto.
+Resultado: `meus-produtos/{ativo}/entregas/newsletter/{AAAA-Www-tema}.md` (e `.html` publicável se você pedir).
 
-Resultado: `meus-produtos/{ativo}/entregas/conteudo-social/`
+#### /criar-carrossel
 
-### /estrategia-lancamento
+Carrossel autoral de 10 slides para Instagram com tese central, voz preservada e CTA do tipo certo (pitch só se o conteúdo levou naturalmente, senão convite à conversa).
 
-Planeja lancamento ou evento completo: Big Idea, cronograma, materiais necessarios, estrutura de campanha.
+Resultado: `meus-produtos/{ativo}/entregas/carrosseis/{AAAA-MM-DD-tema}.md`.
 
-Resultado: `meus-produtos/{ativo}/entregas/`
+#### /criar-stories
 
-### /estrategia-funil
+Sequência conversacional de stories para acompanhar uma newsletter ou um carrossel (bastidor / ampliação / contraponto).
 
-Mapeia funil completo: perpetuo, lancamento ou low ticket com quiz. Inclui todas as etapas e metricas.
+Resultado: `meus-produtos/{ativo}/entregas/stories/{AAAA-MM-DD-stories}.md`.
 
-Resultado: `meus-produtos/{ativo}/entregas/`
+#### /criar-post-avulso
 
-### /comercial-playbook
+Post curto autoral (ensaio breve, comentário cultural, observação afiada). Use entre os ciclos do Ritual, quando uma ideia exige resposta rápida.
 
-Cria scripts de venda 1:1 usando SPIN Selling: roteiro de call, pitch, quebra de objecoes, script de WhatsApp.
+Resultado: `meus-produtos/{ativo}/entregas/posts/{AAAA-MM-DD-tema}.md`.
 
-Resultado: `meus-produtos/{ativo}/entregas/comercial/playbook-[produto].html` (abrir no navegador; Imprimir → Salvar como PDF)
+### DNA Criativo
 
-### /criativo-estatico
+#### /dna-criativo
 
-Gera criativos estaticos para anuncios. Pergunta se voce quer apenas o prompt para colar em ferramenta externa (Midjourney, DALL-E, Freepik AI) ou geracao automatica via API (OpenRouter ou Freepik).
+Configura ou atualiza o DNA Criativo: tom, valores, mantras, vocabulário, linha editorial, cosmovisão, referências, CTA por tipo.
 
-Resultado: `meus-produtos/{ativo}/entregas/criativos/`
+Resultado: `meus-produtos/{ativo}/dna-criativo.md` + `perfil.md` atualizado.
 
-### /lt-funil
+#### /dna-revisar
 
-Cria produto de entrada usando a metodologia low ticket (R$37-97): define o formato (quiz, desafio ou agente GPT), estrategia e estrutura do funil.
+Audita o DNA atual contra o que você efetivamente tem publicado nas redes (Instagram, newsletter, posts recentes). Sugere ajustes se o DNA descrito divergir do DNA praticado.
 
-Resultado: definicao do funil e direcionamento para `/lt-criar-produto`, `/lt-quiz` ou `/lt-pagina`.
+### Gestão de DNA do Criador
 
-### /lt-criar-produto
+#### /produto-novo
 
-Cria o conteudo real do produto digital: e-book, checklist ou mini-curso pronto para entrega.
+Cria um novo DNA do Criador. Útil se você atende clientes (agência, ghostwriter de marca pessoal) ou opera mais de um projeto editorial. O novo DNA vira o ativo.
 
-Resultado: `meus-produtos/{ativo}/entregas/produto/`
+#### /produto-trocar
 
-### /lt-pagina
+Lista todos os DNAs cadastrados e troca o ativo.
 
-Gera as 4 leads do produto low ticket (pagina de vendas direta, sem quiz).
+#### /produto-excluir
 
-Resultado: `meus-produtos/{ativo}/entregas/paginas/`
+Remove um DNA e suas entregas. Atenção: irreversível.
 
-### /lt-otimizar
+#### /produto-zerar
 
-Analisa planilha exportada do Gerenciador de Anuncios e recomenda ajustes de campanha low ticket.
+Zera o `perfil.md` e/ou `idconsumidor.md` sem apagar o DNA. Útil quando você quer começar a configuração do zero.
 
-### /video-heygen
+#### /produto-concepcao
 
-Cria roteiro e aciona o HeyGen via API para gerar video com avatar IA.
+Roda a concepção VTSD herdada do fluxo-criativo (Quadro, Furadeira, Decorados, 3 Identidades, Urgências Ocultas, Identidade do Consumidor). Útil se você for **vender** um infoproduto a partir do seu conteúdo (curso, mentoria, e-book pago). Para o uso só editorial do Mapa, o `/dna-criativo` é suficiente.
 
-Resultado: `meus-produtos/{ativo}/entregas/videos/`
+### Pesquisa e inteligência
 
-### /video-remotion
+#### /pesquisa-mercado
 
-Cria video animado para Meta Ads usando Remotion (requer Node.js).
+Pesquisa de mercado completa do seu nicho (9 eixos): tamanho, concorrência, preços, público, objeções, assuntos virais, top 10 YouTube, biblioteca de anúncios, riscos regulatórios.
 
-### /video-editar
+#### /pesquisa-mercado-instagram
 
-Edita videos existentes com FFmpeg (corte, legenda, compressao).
+Descobre perfis de referência do seu nicho via Apify e analisa conteúdo dos top perfis. Gera dashboard HTML interativo.
 
-### /pagina-ajuste
+#### /dados-instagram
 
-Faz ajustes pontuais em uma pagina HTML ja gerada: headline, cores, CTA, FAQ, SEO, etc.
+Analisa um perfil específico do Instagram (o seu ou de um concorrente) com insights de copy e voz.
 
-### /pagina-lovable
+#### /dados-nicho
 
-Publica a pagina HTML diretamente no Lovable.
+Descobre de 10 a 20 perfis de referência do nicho no Brasil e no mundo via WebSearch. Entrega relatório com links, posicionamento, tipo de conteúdo e sugestões práticas.
 
-### /pagina-vercel
+### Dashboards de presença digital
 
-Publica a pagina HTML diretamente na Vercel.
+#### /instagram-dashboard, /tiktok-dashboard, /youtube-dashboard
 
-### /pagina-pixel
+Dashboards HTML de métricas das suas redes via Apify. O aluno roda o script manualmente para atualizar.
 
-Instala o Meta Pixel na pagina de vendas.
+### Criativos visuais
 
-### /pagina-checkout
+#### /criativo-estatico
 
-Conecta a pagina ao checkout (Hotmart, Kiwify, Eduzz, Cakto, Pepper, Stripe).
+Gera criativo estático (imagem para post ou anúncio). Pergunta se você quer apenas o prompt para colar em ferramenta externa ou geração automática via API.
 
-### /feedback-pagina
+#### /banner-visual
 
-Corrige e otimiza uma pagina de vendas existente (auditoria de copy + design + conversao).
+Banner estático para Instagram (1080x1350) com foto IA cinematográfica.
 
-### /feedback-low-ticket
+#### /carrossel-visual
 
-Corrige pagina de produto low ticket (copy, estrutura, design) e gera HTML novo.
+Carrossel com foto IA por card. Dois modos: criação do zero ou replicação fiel a partir de uma imagem de referência.
 
-### /elementos-literarios
+#### /usar-referencia-visual
 
-Aplica 1 a 3 dos 26 elementos literarios do Light Copy em um texto existente.
+Cria banner ou carrossel a partir de uma imagem de referência sua (troca personagem, altera texto, ajusta cor).
 
-### /gerar-furadeira
+### Páginas
 
-Gera a Furadeira (metodo) do produto ativo no perfil.md. Decide automaticamente qual das 6 mecanicas (Fases, Logica Condicional, Enquadramento, Listas, Empecilhos, Dinamica de Entrega) faz mais sentido para o nicho, sugere o nome do metodo e aplica o teste de eficiencia.
+#### /copy-pagina
 
-### /furadeira-visual
+Cria copy e/ou página HTML profissional. Três tipos: vendas (do seu produto), captura (de leitores da newsletter), obrigado.
 
-Le a Furadeira ja escrita no perfil.md, decide o layout visual conforme a mecanica + nicho, monta um prompt em ingles para o aluno colar no ChatGPT e salva a imagem PNG retornada em entregas/furadeira/furadeira.png.
+Resultado: `meus-produtos/{ativo}/entregas/paginas/[tipo]-[nome].html`. Como ver: abra no navegador.
 
-### /instagram-dashboard, /tiktok-dashboard, /youtube-dashboard
+#### /pagina-ajuste
 
-Gera dashboard HTML de metricas da plataforma via Apify. O aluno roda o script manualmente para atualizar os dados.
+Ajustes pontuais em uma página HTML já gerada: headline, cores, CTA, FAQ, SEO.
 
-### /ads-relatorio
+#### /pagina-performance, /pagina-pixel, /pagina-checkout, /pagina-active, /pagina-precheckout
 
-Cria rotina diaria automatica que busca metricas do Facebook Ads e envia relatorio pelo WhatsApp via Z-API. Agente agendado na nuvem, roda todo dia sem precisar do computador ligado.
+Infraestrutura pós-página: otimização de performance, instalação do Meta Pixel, conexão com checkout, lista de leitores no ActiveCampaign, pré-checkout com captura de leads.
 
-### /toolkit-novo, /toolkit-planejar, /toolkit-executar...
+#### /pagina-lovable, /pagina-vercel
 
-Fluxo proprietario para projetos grandes (lancamentos, funis completos, reestruturacoes). Quebra o objetivo em etapas, aciona as skills certas e mantém estado entre sessoes. Use `/toolkit-progresso` para retomar de onde parou.
+Publicação da página no Lovable ou Vercel.
+
+#### /pagina-visual
+
+Reproduz seções de página HTML a partir de prints de referência que você envia.
+
+### Toolkit (projetos editoriais estruturados)
+
+Para projetos grandes (lançamento de newsletter, série temática de 6 carrosséis, ciclo trimestral de pilares, e-book a partir de newsletters acumuladas):
+
+#### /toolkit-novo, /toolkit-planejar, /toolkit-executar, /toolkit-verificar, /toolkit-progresso, /toolkit-anotar, /toolkit-pausar, /toolkit-retomar
+
+Fluxo proprietário com estado persistente entre sessões. Quebra o objetivo em etapas, aciona as skills certas e mantém o `roteiro.md`, `plano.md` e `estado.md` em `meus-produtos/{ativo}/projeto/{slug}/`. Use `/toolkit-progresso` para retomar de onde parou.
+
+### Skills do fluxo-criativo em transição
+
+`/copy-anuncio`, `/copy-carrossel`, `/copy-social`, `/copy-roteiro`, `/copy-variacao-post`, `/comercial-playbook`, `/lt-*`, `/ht-*`, `/trafego-*`, `/vsl-*`, `/feedback-pagina`, `/feedback-low-ticket`, `/elementos-literarios`, `/criar-gpt`, `/adaptar-plataforma` continuam funcionando. Foram herdadas do fluxo-criativo e ainda não foram adaptadas ao tom do Mapa. Use sob demanda, mas saiba que estão na fila para curadoria.
 
 ---
 
 ## Dicas para melhores resultados
 
-1. Quanto mais detalhes voce der, melhor o resultado.
-2. Peca alteracoes: "mude o titulo", "adicione depoimentos", "troque a cor".
-3. Use os comandos na ordem sugerida — cada um usa informacoes dos anteriores.
-4. Revise antes de publicar.
-5. Atualize seu produto com `/produto-concepcao` quando mudar algo.
+1. **Configure o DNA Criativo com calma.** É a base de tudo. 30 minutos bem investidos no `/dna-criativo` poupam horas de retrabalho nos Crie de cada semana.
+2. **Cole textos autênticos.** Quando o `/dna-criativo` pedir, cole 1 a 3 textos que soem você de verdade. Não cole texto editado para soar profissional. Cole o que parecer áudio transcrito, conversa em DM, ensaio cru. A IA precisa ler o você sem filtro.
+3. **Capture sem julgar.** A regra do Capture é capturar. Curar é outra etapa, em outro momento. Não tente decidir "isso vale a pena?" na hora. Captura tudo, depois o Cure escolhe.
+4. **Revise tudo na sua voz.** O assistente entrega "está perto". Leia em voz alta antes de publicar. Se travar em alguma frase, é porque ela não soou você. Ajuste.
+5. **Não force o Ritual em um dia que está ruim.** Se a Caixa de Entrada da semana está fraca, é melhor pular um ciclo do que produzir conteúdo medíocre. O Mapa não é prisão.
+6. **Use o `/dna-revisar` a cada 4 a 6 semanas.** Sua voz evolui. O DNA precisa acompanhar.
 
 ---
 
 ## Perguntas frequentes
 
 **Preciso saber programar?**
-Nao. Tudo funciona por conversa.
+Não. Tudo funciona por conversa.
 
-**Posso usar as paginas geradas?**
-Sim. Os arquivos HTML podem ser hospedados em qualquer servico ou publicados na Vercel com `/pagina-vercel`. Voce tambem pode copiar os textos para WordPress, Elementor, Carrd, etc.
+**Posso usar as newsletters geradas em qualquer ferramenta?**
+Sim. O Markdown é universal: cola no Substack, Beehiiv, ConvertKit, Mailchimp, ActiveCampaign, ou em qualquer editor de texto. O HTML pode ser publicado direto ou hospedado em Vercel / Lovable.
 
-**Posso pedir alteracoes?**
-Sim. Basta pedir no chat: "mude a cor para azul", "adicione FAQ", etc. Ou use `/pagina-ajuste` para um fluxo guiado de edicao.
+**Posso pedir alterações?**
+Sim. Basta pedir no chat: "deixa a abertura mais provocativa", "tira o CTA, esse conteúdo é cultural", "encurta o terceiro parágrafo". Ou use `/pagina-ajuste` para edição guiada em páginas HTML.
 
 **Onde ficam meus arquivos?**
-Na pasta `meus-produtos/{ativo}/entregas/`, organizada por tipo. O painel de entregas em `meus-produtos/{ativo}/painel-entregas.html` mostra tudo centralizado.
+Na pasta `meus-produtos/{seu-slug}/entregas/`, organizada por formato (newsletter, carrosseis, stories, posts, paginas, criativos). O painel de entregas em `meus-produtos/{seu-slug}/painel-entregas.html` mostra tudo centralizado.
 
-**O que e a metodologia VTSD?**
-Venda Todo Santo Dia — metodologia de Leandro Ladeira para infoprodutores venderem no perpetuo com copy argumentativa e logica. Inclui conceitos como Quadro, Furadeira, Decorados, Light Copy, Mandala de Anuncios e Estrutura 8D.
+**O que é o método Mapa do Criador?**
+Sistema próprio para criadores de conteúdo: Capture, Cure, Crie (Ritual 3x3). Produz 1 newsletter + 2 a 3 carrosséis + 1 sequência de stories por semana em 3 horas, preservando a voz do criador. Não inclui vídeo, Reels nem edição.
 
-**Tenho varios produtos. Como alterno entre eles?**
-Use `/produto-trocar` para listar os produtos cadastrados e ativar outro. O seletor no painel de entregas tambem permite navegar entre produtos.
+**Tenho mais de um perfil de criador (atendo clientes). Como organizo?**
+Crie um DNA do Criador para cada um com `/produto-novo`. Cada DNA tem perfil, banco de ideias e entregas isoladas. Use `/produto-trocar` para alternar entre eles. O seletor no painel também navega entre os DNAs cadastrados.
+
+**O que diferencia o Mapa do Criador dos outros cursos de IA?**
+Foco explícito em preservação de voz. Enquanto a maioria entrega volume e escala em modo agência, o Mapa entrega consistência com identidade. Stack-específico: Claude + Skills personalizadas + Notion, não 7 ferramentas conectadas no improviso.
+
+**Como vendo o que eu criar?**
+O Mapa cobre a produção textual e visual estática (newsletter + carrosséis + stories). Para vender um infoproduto a partir do seu conteúdo (curso, mentoria, e-book pago), use também `/produto-concepcao`, `/copy-pagina`, `/pagina-checkout` e os comandos de tráfego herdados do fluxo-criativo.
+
+**E se eu também usar Substack / Beehiiv para a newsletter?**
+Sem problema. O Markdown da newsletter cola direto. O HTML também. O Mapa não força você a usar nenhuma plataforma de envio específica.

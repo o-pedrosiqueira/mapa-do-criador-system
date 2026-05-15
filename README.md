@@ -1,67 +1,94 @@
-# Workshop Inteligente. Assistente de Marketing IA
+# Mapa do Criador. Sistema de Criação de Conteúdo Autoral com IA
 
-Toolkit completo de marketing digital, copy e infoprodutos baseado nas metodologias **VTSD (Venda Todo Santo Dia)**, **Light Copy**, **C10X (High Ticket)** e **Low Ticket**. Roda dentro do **Claude Code** (VS Code) ou no **Cursor**, transformando o chat em um consultor especialista que entrega materiais prontos para uso.
+Toolkit completo para produzir uma semana inteira de conteúdo (1 newsletter + 2 a 3 carrosséis + 1 sequência de stories) em até 3 horas semanais, **preservando a voz do criador**. Baseado no método proprietário **Mapa do Criador**: Capture, Cure, Crie (Ritual 3x3).
 
-Não é software tradicional: é um sistema de prompts estruturados (CLAUDE.md, regras, comandos, agentes, skills e scripts) que orquestra o assistente do início ao fim de um funil.
+Roda dentro do **Claude Code** (VS Code) ou do **Cursor**, transformando o chat em um parceiro de criação autoral que conhece sua voz, seu nicho e sua linha editorial, e que escreve **com você**, não no seu lugar.
+
+Não é software tradicional: é um sistema de prompts estruturados (CLAUDE.md, regras, comandos, agentes, skills e scripts) que orquestra o assistente do Capture (durante a semana) ao Crie (sessão semanal de 3 horas).
 
 ## Por onde começar
 
 | Arquivo | Para quê serve |
 |---|---|
-| `COMO-USAR.md` | Guia passo a passo para o usuário final. Inclui seção Cursor. |
+| `COMO-USAR.md` | Guia passo a passo para o aluno. Inclui o primeiro Ritual 3x3 e a configuração do DNA Criativo. |
 | `CLAUDE.md` | Instruções e regras do assistente. Autoritativo, lido em toda conversa. |
 | `AGENTS.md` | Mapa rápido para agentes de IDEs (Cursor, etc.) |
 | `ARQUITETURA.md` | Visão técnica da arquitetura. Como inserir novas capacidades. |
-| `scripts/README-creative.md` | Processo de geração de criativos via `generate-creative.py`. |
-| `/configurar-heygen` | Setup de vídeo com avatar IA (slash command). |
-| `/configurar-imagens` | Setup de geração de imagens para anúncios (slash command). |
-| `/gerar-furadeira` | Gerar a Furadeira (método) do produto ativo no `perfil.md`. Decide automaticamente qual das 6 mecânicas (Fases, Lógica Condicional, Enquadramento, Listas, Empecilhos, Dinâmica de Entrega) cabe melhor no nicho. |
-| `/furadeira-visual` | Gerar a imagem PNG da Furadeira já escrita no `perfil.md`. Monta um prompt em inglês para o aluno colar no ChatGPT, recebe a imagem de volta e salva no projeto + painel de entregas. |
+| `/dna-criativo` | Configurar a voz autoral do criador (tom, valores, mantras, vocabulário, linha editorial). |
+| `/ritual-3x3` | Rodar a sessão semanal completa de 3 horas (Capture, Cure, Crie). |
 
 ## Onde roda
 
 ### Claude Code (VS Code)
-Abra a pasta do projeto, instale a extensão Claude Code, use os slash commands `/copy-pagina`, `/lt-funil`, etc.
+Abra a pasta do projeto, instale a extensão Claude Code, use os slash commands `/ritual-3x3`, `/criar-newsletter`, `/capture`, etc.
 
 ### Cursor
-Abra a pasta com **File → Open Folder**. As regras em `.cursor/rules/` e o `CLAUDE.md` passam a orientar o chat. No Cursor, a barra `/` não é equivalente à do Claude Code. Para seguir um fluxo, diga no chat "segue o comando copy-pagina" ou anexe o arquivo `.claude/commands/copy-pagina.md` com `@`.
+Abra a pasta com **File → Open Folder**. As regras em `.cursor/rules/` e o `CLAUDE.md` passam a orientar o chat. No Cursor, a barra `/` não é equivalente à do Claude Code. Para seguir um fluxo, diga no chat "segue o comando criar-newsletter" ou anexe o arquivo `.claude/commands/criar-newsletter.md` com `@`.
 
 ## Pré-requisitos
 
-### Obrigatórios (o toolkit não funciona sem eles)
+### Obrigatórios
 
 | Ferramenta | Como instalar | Para que serve |
 |---|---|---|
 | **Claude Code** | Extensão do VS Code (recomendado) ou `npm install -g @anthropic-ai/claude-code` | Runtime do assistente |
-| **Python 3** | 3.10+ — o assistente guia a instalação se necessário | Scripts do painel, playbook e páginas |
-| **Git** | [git-scm.com](https://git-scm.com) | Clonar e atualizar o repositório |
+| **Python 3** | 3.10+ (o assistente guia a instalação se necessário) | Scripts do painel e dashboards |
+| **Git** | [git-scm.com](https://git-scm.com) | Versionar o projeto |
+| **Notion** | [notion.so](https://notion.so), conta gratuita | Oficina do Criador (Capture e Caixa de Entrada) |
 
-### Opcionais (instalados automaticamente pelo assistente quando necessário)
+### Opcionais (instalados sob demanda)
 
 | Ferramenta | Ativa |
 |---|---|
-| **Vercel CLI** | `/pagina-vercel` (publicar páginas) |
-| **FFmpeg** | `/video-editar` (corte, legenda, compressão) |
-| **Remotion** | `/video-remotion` (vídeo animado para Ads) |
+| **Vercel CLI** | `/pagina-vercel` (publicar newsletter como página ou página de captura) |
+| **Apify** | Dashboards de Instagram, TikTok e YouTube |
 
-### APIs (todas opcionais — o toolkit funciona 100% sem nenhuma)
+### APIs (todas opcionais. O toolkit funciona 100% sem nenhuma)
 
-Copie `.env.example` para `.env` e preencha apenas o que for usar:
+Copie `.env.example` para `.env` e preencha só o que for usar:
 
 | Nível | O que preencher | O que desbloqueia |
 |---|---|---|
-| **Básico** | Nada | Todos os entregáveis em arquivo local |
-| **Intermediário** | `VERCEL_TOKEN`, `FREEPIK_API_KEY` ou `OPENROUTER_API_KEY` | Páginas publicadas + criativos automáticos |
-| **Avançado** | `HEYGEN_API_KEY`, `FB_ACCESS_TOKEN_PERMANENTE`, `TELEGRAM_BOT_TOKEN` | Vídeo com avatar IA + relatório diário de Ads automático |
+| **Básico** | Nada | Todas as entregas em arquivo local (Markdown + HTML) |
+| **Intermediário** | `APIFY_API_TOKEN`, `OPENROUTER_API_KEY` | Dashboards das redes + criativos visuais com IA |
+| **Avançado** | `VERCEL_TOKEN`, `HEYGEN_API_KEY` | Newsletter publicada como página + vídeo curto autoral com avatar |
 
-Para configurar qualquer integração, use o comando correspondente no chat (`/configurar-heygen`, `/configurar-apify`, `/ads-relatorio`, etc.) — ele guia o processo completo.
+Para configurar qualquer integração, use o comando correspondente no chat (`/configurar-apify`, `/configurar-imagens`, etc.). Ele guia o processo completo.
 
-## Metodologias base
+## Método base
 
-- **VTSD (Venda Todo Santo Dia).** Quadro (transformação), Furadeira (método), Decorados (50 benefícios), 3 Identidades (Comunicador, Consumidor, Produto), Urgências Ocultas (7 categorias x 10 itens = 70 itens por produto), Mandala da Criatividade (18 tipos de anúncio x 4 objetivos x 3 momentos), Estrutura 8D (11 seções de página de vendas), VVV (vídeo de vendas), 26 Elementos Literários.
-- **Light Copy.** Argumentativa, lógica, conversacional, não óbvia. Proibições duras: travessão, ponto de exclamação, pergunta no gancho, "Não é X. É Y.", "mesmo que", "sem precisar", nome do produto no lead.
-- **C10X (High Ticket).** Retiros online, webinar, pitch de palco, call SPIN, WhatsApp, proposta comercial, follow-up pós-evento.
-- **Low Ticket.** Produto de entrada (R$37-97) com quiz ou página direta, desafio, agente GPT, copy para Hotmart/Kiwify, otimização de Ads.
+### Mapa do Criador. Ritual 3x3
+
+3 horas por semana, divididas em 3 momentos:
+
+1. **Capture (durante a semana, 0 horas dedicadas).** Você percebe ideias e captura no Notion em segundos. Frases que vieram no banho, perguntas de seguidores, trechos de leitura, conversas. Sem julgar, sem editar.
+2. **Cure (início da sessão, 30 minutos).** Revisa a Caixa de Entrada, escolhe 4 a 5 ideias e direciona cada uma para o formato certo: profunda vira newsletter, estruturada vira carrossel, conversacional vira stories.
+3. **Crie (bloco principal, 2h30).** Usa o Claude com as skills personalizadas do Mapa para transformar cada briefing em conteúdo pronto: 1 newsletter completa, 2 a 3 carrosséis para Instagram e 1 sequência de stories. Revisa, ajusta na própria voz e publica.
+
+### DNA Criativo
+
+Antes do primeiro ciclo, o aluno configura o **DNA Criativo** do seu perfil de criador. Inclui:
+
+- Identidade do Comunicador (nome, especialidade, posicionamento autoral)
+- Valores (3 a 5 valores nucleares)
+- Tom de voz (conversacional, primeira pessoa, humor, profundidade)
+- Linha editorial (o que publica, o que evita)
+- Cosmovisão (lente filosófica/religiosa, presente sem virar linguagem)
+- Mantras / jargões próprios
+- Vocabulário base
+- Lista de termos a evitar
+- Referências comunicacionais (autores e perfis de inspiração de estrutura, não de imitação)
+- CTA por tipo de conteúdo (quando pitchar, quando convidar à conversa)
+
+É o que separa um conteúdo que parece IA genérica de um conteúdo que soa como você.
+
+### 3 Formatos da semana
+
+Newsletter, Carrossel, Stories. Não inclui vídeo, Reels nem edição. O sistema cobre produção textual e visual estática.
+
+- **Newsletter.** Editorial-jornalística (gancho + contexto + análise/opinião + provocação + CTA). Inspiração de estrutura: Bárbara Torres, BrandsDecoded, Dan Koe.
+- **Carrossel.** 10 slides com tese central, voz autoral preservada.
+- **Stories.** Sequência conversacional de bastidor / ampliação / contraponto.
 
 ## Regras absolutas de estilo
 
@@ -70,9 +97,9 @@ Para configurar qualquer integração, use o comando correspondente no chat (`/c
 3. **Nunca mostrar código HTML no chat.** Salvar silenciosamente e informar o caminho.
 4. **Sempre pedir aprovação antes de salvar.** Resumo + opções numeradas.
 5. **Uma pergunta por vez** nas entrevistas, com progresso visual entre blocos.
-6. **Produto não aparece no lead.** Sem "curso", "treinamento", nome do produto ou sigla no início da copy.
+6. **Voz autoral acima de tudo.** Filtro de DNA Criativo aplicado a todo conteúdo antes de entregar.
 
-Checklists completos (Light Copy + Design HTML) estão no topo do `CLAUDE.md`.
+Checklists completos (Voz Autoral + Design HTML) estão no topo do `CLAUDE.md`.
 
 ## Arquitetura
 
@@ -81,7 +108,7 @@ Checklists completos (Light Copy + Design HTML) estão no topo do `CLAUDE.md`.
 | Componente | Local | Papel |
 |---|---|---|
 | **CLAUDE.md** | raiz | Persona, regras globais, fluxo padrão. Lido em toda conversa. |
-| **Commands** | `.claude/commands/*.md` | Slash commands interativos (`/copy-pagina`, `/lt-funil`, etc.) |
+| **Commands** | `.claude/commands/*.md` | Slash commands interativos (`/ritual-3x3`, `/criar-newsletter`, etc.) |
 | **Agents** | `.claude/agents/*.md` | Subprocessos autônomos (orquestradores e especialistas) |
 | **Skills** | `.claude/skills/` | Base de conhecimento consultada por commands e agents |
 
@@ -89,18 +116,19 @@ Checklists completos (Light Copy + Design HTML) estão no topo do `CLAUDE.md`.
 ```
 Usuário digita /comando
   → Command carrega .md correspondente
-  → Lê meus-produtos/{ativo}/perfil.md e idconsumidor.md (contexto)
-  → Consulta a skill relevante (conhecimento)
+  → Lê meus-produtos/{ativo}/perfil.md, idconsumidor.md e banco-de-ideias.md
+  → Aplica o DNA Criativo como filtro
   → Roda entrevista (perguntas uma por vez)
+  → Gera o conteúdo aplicando o filtro de voz autoral
   → Pede aprovação
   → Salva em meus-produtos/{ativo}/entregas/[tipo]/
-  → Sugere próximo comando
+  → Sugere próximo comando do Ritual
 ```
 
 ## Estrutura de pastas
 
 ```
-workshop_inteligente/
+mapa-do-criador/
 ├── CLAUDE.md                    Regras e papel do assistente (autoritativo)
 ├── AGENTS.md                    Mapa para IDEs
 ├── ARQUITETURA.md               Guia técnico completo
@@ -108,167 +136,122 @@ workshop_inteligente/
 ├── README.md                    Este arquivo
 │
 ├── .claude/                     Núcleo do assistente
-│   ├── commands/                Slash commands (60+ arquivos .md)
+│   ├── commands/                Slash commands (.md)
 │   ├── agents/                  Agentes orquestradores e especialistas
-│   ├── skills/                  Base de conhecimento (vtsd-completo, paginas, anuncios, etc.)
+│   ├── skills/                  Base de conhecimento (Capture, Cure, Crie, DNA Criativo, etc.)
 │   └── settings.json            Permissões
 │
-├── .cursor/rules/               Regras específicas do Cursor (.mdc)
-│
-├── scripts/                     Utilitários Python e PowerShell
-│   ├── README-creative.md           Processo de criação de criativos
-│   ├── painel-incremental.py        Gera/atualiza painel-entregas.html por produto (seção a seção)
-│   ├── painel_template.py           Shell HTML e renderers de cada seção do painel
+├── scripts/                     Utilitários Python
+│   ├── painel-incremental.py        Gera/atualiza painel-entregas.html por DNA
+│   ├── painel_template.py           Shell HTML e renderers de cada seção
 │   ├── painel-atualizar.py          Regenera manifest meus-produtos/index.js
-│   ├── montar-pagina-copias.py      Monta HTML final a partir das cópias de seção (/pagina-visual)
-│   ├── playbook-montar.py           Monta HTML do playbook comercial
-│   ├── playbook-briefing.py         Gera briefing do playbook a partir do perfil
-│   ├── generate-avatar-video.py     Aciona HeyGen via API
-│   ├── generate-creative.py         Geração de criativos visuais
-│   ├── relatorio-ads.ps1            Rotina diária de relatório Facebook Ads
-│   └── creative-templates/
+│   ├── montar-pagina-copias.py      Monta HTML final a partir de cópias de seção
+│   └── ...
 │
-├── meus-produtos/               Produtos do aluno (ignorado pelo git)
-│   ├── .ativo                   Slug do produto ativo
+├── meus-produtos/               DNAs do Criador (ignorado pelo git)
+│   ├── .ativo                   Slug do DNA ativo
 │   ├── index.js                 Manifest gerado pelo painel-atualizar.py
-│   └── {slug-do-produto}/
-│       ├── perfil.md            Quadro, Furadeira, Decorados, Urgências
-│       ├── idconsumidor.md      Identidade do consumidor
-│       ├── pesquisa-mercado.md  Pesquisa de nicho
-│       ├── tipo.md              Low/Middle/High ticket
-│       ├── nome.txt             Nome amigável (opcional, override)
-│       ├── painel-entregas.html Painel do produto (gerado por /produto-concepcao)
-│       └── entregas/            Output do assistente (por produto)
-│           ├── paginas/         HTML de vendas, captura, obrigado
-│           │   └── copias/      Cópias de seção geradas por /pagina-visual
-│           ├── copy-pagina/     Copy markdown por bloco
-│           ├── anuncios/        Pacotes de anúncios
-│           ├── conteudo-social/ Posts, carrosséis, Reels
-│           ├── criativos/       Prompts de imagem e referências
-│           ├── comercial/       Scripts de venda 1:1 (HTML)
-│           ├── videos/          HeyGen, Remotion, roteiros
-│           └── produto/         E-book, checklist, mini-curso final
+│   └── {slug-do-criador}/
+│       ├── perfil.md                Quadro, Furadeira, Identidades, Decorados, Urgências
+│       ├── idconsumidor.md          Identidade do leitor-alvo
+│       ├── dna-criativo.md          DNA Criativo (será gerado pelo /dna-criativo)
+│       ├── banco-de-ideias.md       Caixa de Entrada (Capture)
+│       ├── pesquisa-mercado.md      Pesquisa de nicho
+│       ├── painel-entregas.html     Painel visual do DNA
+│       └── entregas/                Output do assistente
+│           ├── newsletter/          Newsletters semanais
+│           ├── carrosseis/          Carrosséis para Instagram
+│           ├── stories/             Sequências de stories
+│           ├── posts/               Posts avulsos e ensaios curtos
+│           ├── criativos/           Prompts de imagem e referências
+│           ├── paginas/             HTML de captura, vendas, obrigado
+│           ├── instagram-dashboard/ Dashboard IG
+│           ├── tiktok-dashboard/    Dashboard TT
+│           └── youtube-dashboard/   Dashboard YT
 │
-├── docs/                        Área local de desenvolvimento (ignorada pelo git)
-├── _prompts-gpt/                Material complementar do workshop
+├── painel/                      Painel global (lista de DNAs)
+├── instalador/                  Scripts de instalação Mac/Windows
 ├── package.json
 ├── vercel.json
 └── .env.example                 Modelo de chaves de API
 ```
 
-Observação: a pasta `meus-produtos/` contém os dados de cada aluno e não sobe para o git. A `docs/` também é ignorada e serve para plans/rascunhos locais.
+A pasta `meus-produtos/` contém os dados de cada aluno e não sobe para o git.
 
 ## Painel de entregas
 
-Cada produto tem seu `painel-entregas.html` em `meus-produtos/{slug}/`. O painel é gerado e atualizado seção a seção pelo `painel-incremental.py` conforme o aluno avança nos commands. Inclui um seletor de produto no sidebar para navegar entre todos os produtos cadastrados.
+Cada DNA do Criador tem seu `painel-entregas.html` em `meus-produtos/{slug}/`. O painel é gerado e atualizado seção a seção pelo `painel-incremental.py` conforme o aluno avança nos commands. Inclui um seletor de DNA no sidebar quando há mais de um cadastrado (útil para criadores que atendem clientes).
 
-- **Gerar/atualizar uma seção:** `py -3 scripts/painel-incremental.py --secao quadro`
-- **Atualizar o manifest:** `py -3 scripts/painel-atualizar.py` (ou `/painel-atualizar` no chat)
+- **Gerar/atualizar uma seção:** `python3 scripts/painel-incremental.py --secao quadro`
+- **Atualizar o manifest:** `python3 scripts/painel-atualizar.py` (ou `/painel-atualizar` no chat)
 
-## Comandos disponíveis
+## Comandos principais
 
-### Produto
-`/produto-novo`, `/produto-concepcao`, `/produto-trocar`, `/produto-excluir`, `/produto-zerar`
+### Ritual 3x3 (núcleo do método)
+`/ritual-3x3`, `/capture`, `/cure`, `/crie`
 
-### Copy
-`/copy-pagina`, `/copy-anuncio`, `/copy-social`, `/copy-roteiro`, `/copy-variacao-post`, `/elementos-literarios`
+### Criação por formato
+`/criar-newsletter`, `/criar-carrossel`, `/criar-stories`, `/criar-post-avulso`
 
-### Imagem e vídeo
-`/criativo-estatico`, `/criativo`, `/avat-whisk`, `/furadeira-visual`, `/video-heygen`, `/video-remotion`, `/video-editar`
+### DNA Criativo
+`/dna-criativo`, `/dna-revisar`
 
-### Low Ticket
-`/lt-funil`, `/lt-criar-produto`, `/lt-quiz`, `/lt-pagina`, `/lt-otimizar`
+### Gestão de DNA do Criador
+`/produto-novo`, `/produto-trocar`, `/produto-excluir`, `/produto-zerar`, `/produto-concepcao`
 
-### Estratégia
-`/estrategia-funil`, `/estrategia-lancamento`
+### Pesquisa e inteligência de nicho
+`/pesquisa-mercado`, `/pesquisa-mercado-instagram`, `/dados-instagram`, `/dados-nicho`
 
-### Comercial
-`/comercial-playbook`
-
-### Infraestrutura de página (após gerar o HTML)
-`/pagina-ajuste`, `/pagina-performance`, `/pagina-pixel`, `/pagina-checkout`, `/pagina-active`, `/pagina-precheckout`, `/pagina-lovable`, `/pagina-vercel`, `/pagina-visual`
-
-### Feedback e auditoria
-`/feedback-pagina`, `/feedback-low-ticket`
-
-### Toolkit (projetos estruturados)
-`/toolkit-novo`, `/toolkit-planejar`, `/toolkit-executar`, `/toolkit-verificar`, `/toolkit-progresso`, `/toolkit-anotar`, `/toolkit-pausar`, `/toolkit-retomar`
-
-Fluxo proprietário para conduzir projetos grandes (lançamento, funil completo, reestruturação). Quebra o objetivo em etapas, aciona as skills certas uma a uma e mantém o estado em `meus-produtos/{ativo}/projeto/{slug}/` entre sessões. Não use para tarefa simples de uma skill só.
-
-### Dados e automações
-`/ads-relatorio`, `/enviar-relatorio-ads`, `/dados-instagram`, `/app-saas`, `/criar-gpt`, `/adaptar-plataforma`
-
-### Dashboards de redes sociais
+### Dashboards de presença digital
 `/instagram-dashboard`, `/tiktok-dashboard`, `/youtube-dashboard`
 
-Dashboards HTML com métricas de Instagram, TikTok e YouTube via Apify. O aluno roda o script de cada plataforma para atualizar os dados manualmente.
+### Criativos visuais
+`/criativo-estatico`, `/banner-visual`, `/carrossel-visual`, `/usar-referencia-visual`
+
+### Páginas
+`/copy-pagina`, `/pagina-ajuste`, `/pagina-performance`, `/pagina-pixel`, `/pagina-checkout`, `/pagina-active`, `/pagina-precheckout`, `/pagina-lovable`, `/pagina-vercel`, `/pagina-visual`
+
+### Toolkit (projetos editoriais estruturados)
+`/toolkit-novo`, `/toolkit-planejar`, `/toolkit-executar`, `/toolkit-verificar`, `/toolkit-progresso`, `/toolkit-anotar`, `/toolkit-pausar`, `/toolkit-retomar`
 
 ### Configuração de integrações
-`/configurar-apify`, `/configurar-zapi`, `/configurar-heygen`, `/configurar-imagens`, `/gerar-token-permanente-facebook-ads`, `/obter-id-conta-anuncios`, `/criar-aplicativo-analise-ads`
+`/configurar-apify`, `/configurar-heygen`, `/configurar-imagens`, `/configurar-telegram`, `/configurar-zapi`
 
 A lista completa com descrições está no `CLAUDE.md`.
+
+> **Skills em transição (fluxo-criativo).** As skills `/copy-anuncio`, `/copy-carrossel`, `/copy-variacao-post`, `/copy-social`, `/copy-roteiro`, `/comercial-playbook`, `/lt-*`, `/ht-*`, `/trafego-*`, `/vsl-*`, `/feedback-pagina`, `/feedback-low-ticket`, `/elementos-literarios`, `/criar-gpt` continuam invocáveis. Foram herdadas do fluxo-criativo e ainda não foram adaptadas ao tom do Mapa. Use sob demanda, mas saiba que estão na fila para curadoria.
 
 ## Agentes especialistas
 
 Orquestradores autônomos que executam tarefas completas acionando múltiplas skills:
 
-- `estrategista-de-produto`. Sessão completa de concepção VTSD.
-- `estrategista-low-ticket`. Funil low ticket do zero à página publicável.
-- `estrategista-middle-ticket`. Funil perpétuo de produto principal.
-- `construtor-de-paginas`. Páginas profissionais do zero.
-- `clonador-de-bloco-visual`. Reproduz seções de página a partir de prints de referência (usado internamente por `/pagina-visual`).
-- `criador-de-campanhas`. Campanha de tráfego completa.
-- `consultor-comercial`. Playbook comercial 1:1.
-- `copywriter`. Orquestrador de copy (página, anúncio, roteiro, social).
-- `video-maker`. Orquestrador de produção de vídeo.
+- `produtor-de-conteudo`. Sessão completa de criação semanal (a ser criado na Fase 3, hoje use `copywriter` como reserva).
+- `construtor-de-paginas`. Páginas profissionais do zero (newsletter como página, captura de leitores, vendas do Mapa).
+- `clonador-de-bloco-visual`. Reproduz seções de página a partir de prints de referência (usado por `/pagina-visual`).
 - `executor-de-plano-de-acao`. Executa plano de ação acionando skills e agentes.
 
-Para tarefas complexas multi-etapas (lançamentos, funis inteiros, reestruturações), use os comandos `/toolkit-*` (fluxo proprietário do workshop com estado persistente).
+> Agentes herdados do fluxo-criativo (`estrategista-de-produto`, `estrategista-low-ticket`, `estrategista-middle-ticket`, `consultor-comercial`, `criador-de-campanhas`, `copywriter`, `video-maker`) continuam disponíveis e serão classificados como manter, adaptar ou remover na Fase 3.
 
-## Skills (base de conhecimento)
-
-Dentro de `.claude/skills/`:
-
-- `vtsd-completo/`. Metodologia VTSD integral.
-- `concepcao-produto/`. Quadro, Furadeira, 3 Identidades, Urgências Ocultas.
-- `paginas/`. Estrutura 8D, design system, referências de blocos atômicos.
-- `anuncios/`, `anuncios-texto/`, `anuncios-video/`. Mandala, formatos Meta Ads e Google Ads.
-- `conteudo/`. Frameworks de copy, gatilhos, exemplos de VSL.
-- `trafego-pago/`. Pixel, métricas, campanhas.
-- `instagram-dashboard/`, `tiktok-dashboard/`, `youtube-dashboard/`. Dashboards de métricas por plataforma via Apify.
-- `revisora/`. Checklist Light Copy e manual de copy aplicado a todo material gerado.
-- `ferramentas/`. Integrações externas.
-
-Skills não são acionadas pelo usuário: são consultadas pelos commands e agents quando precisam de conhecimento especializado.
+Para projetos editoriais multi-etapas (lançamento de newsletter, série temática de 6 carrosséis, ciclo trimestral), use os comandos `/toolkit-*` (fluxo proprietário com estado persistente).
 
 ## Scripts principais
 
 ### Painel de entregas
 ```
-py -3 scripts/painel-incremental.py --secao quadro
-py -3 scripts/painel-atualizar.py
+python3 scripts/painel-incremental.py --secao quadro
+python3 scripts/painel-atualizar.py
 ```
-O primeiro atualiza uma seção específica do `painel-entregas.html` do produto ativo. O segundo regenera o manifest `meus-produtos/index.js` (lista de produtos usada pelo seletor no painel).
+O primeiro atualiza uma seção específica do `painel-entregas.html` do DNA ativo. O segundo regenera o manifest `meus-produtos/index.js` usado pelo seletor.
 
-### Páginas de vendas (fluxo visual)
+### Páginas (fluxo visual)
 ```
-py -3 scripts/montar-pagina-copias.py --slug {slug}
+python3 scripts/montar-pagina-copias.py --slug {slug}
 ```
-Monta o HTML final a partir das cópias de seção geradas por `/pagina-visual` em `meus-produtos/{slug}/entregas/paginas/copias/`.
+Monta o HTML final a partir das cópias de seção geradas por `/pagina-visual`.
 
-### Playbook comercial
-```
-py -3 scripts/playbook-briefing.py --slug {slug}
-py -3 scripts/playbook-montar.py --slug {slug}
-```
-
-### Geração de vídeo e imagens
-- `scripts/generate-avatar-video.py`. HeyGen via API.
-- `scripts/generate-creative.py` e `generate-openrouter-nano-banana-images.py`. Criativos via OpenRouter.
-
-### Relatório diário de Ads
-- `scripts/relatorio-ads.ps1`. Busca métricas do Facebook Ads e envia no WhatsApp via Z-API, agendado na nuvem do Claude.
+### Geração de criativos visuais
+- `scripts/generate-creative.py`. Banners e fotos com IA via OpenRouter.
+- `scripts/gerar-carrossel-foto.py`. Carrossel com foto IA por card.
 
 ## Integrações externas (opcionais)
 
@@ -276,68 +259,59 @@ Configuradas via `.env` (veja `.env.example`):
 
 | Integração | Finalidade | Comando de setup |
 |---|---|---|
-| Facebook Marketing API | Relatório diário de Ads, otimização low ticket | `/gerar-token-permanente-facebook-ads`, `/criar-aplicativo-analise-ads` |
-| Z-API | Envio de mensagens WhatsApp automatizadas | `/configurar-zapi` |
 | Apify | Coleta de dados do Instagram, TikTok e YouTube | `/configurar-apify` |
-| HeyGen | Vídeo com avatar IA | `/configurar-heygen` |
-| OpenRouter | Geração de imagens via nano-banana | `/configurar-imagens` |
-| Lovable / Vercel | Publicação de páginas | `/pagina-lovable`, `/pagina-vercel` |
-| Hotmart, Kiwify, Eduzz, Cakto, Pepper, Stripe | Checkout das páginas | `/pagina-checkout` |
-| ActiveCampaign | Lista de leads e automação de email | `/pagina-active` |
+| OpenRouter | Geração de imagens IA | `/configurar-imagens` |
+| HeyGen | Vídeo curto autoral com avatar IA | `/configurar-heygen` |
+| Lovable / Vercel | Publicação de páginas (newsletter publicável, captura) | `/pagina-lovable`, `/pagina-vercel` |
+| Hotmart, Kiwify, Eduzz, Cakto, Pepper, Stripe | Checkout das páginas do criador | `/pagina-checkout` |
+| ActiveCampaign | Lista de leitores e automação de email | `/pagina-active` |
+| Telegram | Notificações de routine | `/configurar-telegram` |
 
 ## Fluxos recomendados
 
-### Começar a vender
-1. `/produto-novo` ou `/produto-concepcao` (gera perfil + identidade do consumidor + painel)
-2. `/copy-pagina`
-3. `/copy-anuncio`
+### Primeiro uso (onboarding)
 
-### Lançamento
-1. `/produto-concepcao`
-2. `/estrategia-lancamento`
-3. `/copy-pagina` (evento + vendas)
-4. `/copy-anuncio`
-5. `/carrossel`
+1. `/produto-novo` (cria o DNA do Criador. Roda na abertura da sessão automaticamente)
+2. `/dna-criativo` (configura voz autoral, tom, mantras, linha editorial)
+3. `/pesquisa-mercado` (mapeia o nicho)
+4. `/dados-nicho` (descobre 10 a 20 perfis de referência)
 
-### Perpétuo
-1. `/produto-concepcao`
-2. `/estrategia-funil`
-3. `/copy-pagina` (captura + vendas + obrigado)
-4. `/copy-anuncio`
+### Semana típica (Ritual 3x3)
 
-### Low Ticket
-1. `/produto-concepcao`
-2. `/lt-funil`
-3. `/lt-criar-produto` (e-book, checklist, agente GPT)
-4. `/lt-pagina` ou `/lt-quiz`
-5. `/copy-anuncio` (formatos low ticket)
-6. `/lt-otimizar` (com planilha do Gerenciador)
+1. **Durante a semana:** `/capture` para registrar ideias soltas
+2. **Sessão semanal (3 horas):** `/ritual-3x3` (roda Cure → Crie completo)
+3. Ou granular: `/cure` → `/criar-newsletter` → `/criar-carrossel` (1 ou 2 vezes) → `/criar-stories`
 
-### High Ticket C10X
-1. `/ht-big-idea`
-2. `/ht-oferta`
-3. `/ht-pagina-inscricao`
-4. `/ht-comunicacao-pre`
-5. `/ht-cronograma` e `/ht-conteudo`
-6. `/ht-pitch-palco`
-7. `/ht-spin`, `/ht-fechamento`, `/ht-objecoes`, `/ht-whatsapp`
-8. `/ht-follow-up`
+### Lançamento de newsletter
+
+1. `/dna-criativo` (DNA bem afiado)
+2. `/copy-pagina` (página de captura de leitores)
+3. `/pagina-active` (lista + automação de boas-vindas)
+4. `/criar-newsletter` (primeira edição)
+
+### Venda do próprio infoproduto (a partir do conteúdo)
+
+1. `/produto-concepcao` (estruturar o produto digital com VTSD, herdado do fluxo-criativo)
+2. `/copy-pagina` (página de vendas)
+3. `/pagina-checkout` (checkout Hotmart/Kiwify)
+4. `/criar-carrossel` (lançamento via Instagram)
+5. `/criar-newsletter` (ensaio sobre o produto, fechando com pitch natural)
 
 ## Fluxo padrão de qualquer comando (6 passos)
 
-1. **Contexto.** Ler `meus-produtos/.ativo`, depois `perfil.md` e `idconsumidor.md`.
-2. **Entrevista.** 3 a 5 perguntas, uma por vez, com progresso visual.
+1. **Contexto.** Ler `meus-produtos/.ativo`, depois `perfil.md`, `idconsumidor.md` e `banco-de-ideias.md`.
+2. **Entrevista.** 2 a 4 perguntas, uma por vez, com progresso visual.
 3. **Confirmação.** Resumo do que vai criar, pedir OK numerado.
-4. **Geração.** Criar o entregável aplicando a metodologia VTSD.
+4. **Geração.** Criar o entregável aplicando o DNA Criativo e o filtro de voz autoral.
 5. **Aprovação.** Mostrar o resultado e perguntar `1. Aprovar e salvar / 2. Ajustar`.
-6. **Entrega.** Salvar, informar caminho, sugerir próximo comando.
+6. **Entrega.** Salvar, informar caminho absoluto, sugerir próximo comando do Ritual.
 
 ## O que sobe para o git
 
-**Sobe:** `.claude/commands/`, `.claude/agents/`, `.claude/skills/`, `.claude/settings.json`, `CLAUDE.md`, `AGENTS.md`, `ARQUITETURA.md`, `README.md`, `COMO-USAR.md`, `.env.example`, `scripts/`.
+**Sobe:** `.claude/commands/`, `.claude/agents/`, `.claude/skills/`, `.claude/settings.json`, `CLAUDE.md`, `AGENTS.md`, `ARQUITETURA.md`, `README.md`, `COMO-USAR.md`, `.env.example`, `scripts/`, `painel/`.
 
-**Não sobe:** `.env`, `meus-produtos/` (dados do aluno), `docs/` (plans e rascunhos locais), `deploy-painel-workshop/`, `.claude/projects/` e demais arquivos de runtime.
+**Não sobe:** `.env`, `meus-produtos/` (dados do aluno), `node_modules/` e demais arquivos de runtime.
 
 ## Adicionando novas capacidades
 
-Para criar um novo command, agent, skill ou integração, siga o guia completo em `ARQUITETURA.md` (seções 5 a 8). Inclui frontmatter obrigatório, checklist e exemplo completo de como adicionar suporte a um novo domínio (ex: webinars).
+Para criar um novo command, agent, skill ou integração, siga o guia completo em `ARQUITETURA.md`. Inclui frontmatter obrigatório, checklist e exemplo de como adicionar suporte a um novo domínio editorial (ex: ensaio longo, série de e-mails, podcast roteirizado).

@@ -35,6 +35,7 @@ import json
 import re
 import shutil
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
@@ -1044,6 +1045,208 @@ def parse_comercial_playbook(slug: str, produto_dir: Path) -> dict:
     }
 
 
+# ----- Mapa do Criador: parsers de Caixa de Entrada, entregas e Ritual -----
+
+def _iso_week_hoje() -> tuple[int, int, str]:
+    """Retorna (ano_iso, semana_iso, slug 'AAAA-Wnn') da data corrente."""
+    hoje = datetime.now()
+    iso = hoje.isocalendar()
+    return iso.year, iso.week, f"{iso.year}-W{iso.week:02d}"
+
+
+def parse_banco_de_ideias(produto_dir: Path) -> dict:
+    """Le banco-de-ideias.md e devolve listas de ideias.
+    Estrutura esperada das linhas (entre seções):
+        - [ ] **{slug}**
+          - data: AAAA-MM-DD
+          - texto: ...
+          - origem: ...
+          - tom inicial: ...
+    Itens marcados [x] entram em historico.
+    """
+    arq = produto_dir / "banco-de-ideias.md"
+    texto = ler_arquivo(arq)
+    if not texto.strip():
+        return {"caixa_entrada": [], "historico": [], "total_caixa": 0}
+
+    bloco_caixa = extrair_secao(texto, "Caixa de Entrada")
+    bloco_hist = extrair_secao(texto, "Historico") or extrair_secao(texto, "Histórico (já curadas)") or extrair_secao(texto, "Historico (ja curadas)")
+
+    def _parse_bloco(bloco: str) -> list[dict]:
+        if not bloco.strip():
+            return []
+        ideias: list[dict] = []
+        # Cada ideia começa com "- [ ]" ou "- [x]"
+        # Vamos quebrar em segmentos por linha de cabeçalho de ideia
+        partes = re.split(r"^(?=\s*- \[[ x]\])", bloco, flags=re.MULTILINE)
+        for parte in partes:
+            parte = parte.strip()
+            if not parte or not re.match(r"\s*- \[[ x]\]", parte):
+                continue
+            curada = "[x]" in parte.split("\n", 1)[0]
+            slug_m = re.search(r"\*\*([^*]+)\*\*", parte)
+            slug = (slug_m.group(1) if slug_m else "").strip()
+            destino = ""
+            destino_m = re.search(r"→\s*(.+?)(?:\n|$)", parte)
+            if destino_m:
+                destino = destino_m.group(1).strip()
+            campos = {}
+            for m in re.finditer(r"-\s+(data|texto|origem|tom inicial):\s*(.+?)(?=\n\s+-\s|\n\n|\Z)", parte, re.DOTALL):
+                campos[m.group(1)] = m.group(2).strip()
+            ideias.append({
+                "slug": slug,
+                "curada": curada,
+                "destino": destino,
+                "data": campos.get("data", ""),
+                "texto": campos.get("texto", ""),
+                "origem": campos.get("origem", ""),
+                "tom_inicial": campos.get("tom inicial", ""),
+            })
+        return ideias
+
+    caixa = _parse_bloco(bloco_caixa)
+    historico = _parse_bloco(bloco_hist)
+    return {
+        "caixa_entrada": caixa,
+        "historico": historico,
+        "total_caixa": len(caixa),
+        "total_historico": len(historico),
+    }
+
+
+def parse_entregas_pasta(produto_dir: Path, subpasta: str) -> list[dict]:
+    """Le arquivos .md de meus-produtos/{slug}/entregas/{subpasta}/ e extrai metadata.
+    Convencao de nome:
+      AAAA-Www-tema-em-slug.md   (newsletters por semana ISO)
+      AAAA-MM-DD-tema-em-slug.md (carrosseis, stories, posts por data exata)
+    """
+    pasta = produto_dir / "entregas" / subpasta
+    if not pasta.exists() or not pasta.is_dir():
+        return []
+    arquivos = sorted([p for p in pasta.glob("*.md")], reverse=True)
+    entregas: list[dict] = []
+    for arq in arquivos:
+        nome = arq.stem
+        # Tentar parsear AAAA-Www-... ou AAAA-MM-DD-...
+        m_week = re.match(r"^(\d{4})-W(\d{2})-(.+)$", nome)
+        m_date = re.match(r"^(\d{4})-(\d{2})-(\d{2})-(.+)$", nome)
+        ano = ""
+        semana = ""
+        data_iso = ""
+        tema_slug = nome
+        if m_week:
+            ano = m_week.group(1)
+            semana = m_week.group(2)
+            tema_slug = m_week.group(3)
+        elif m_date:
+            ano = m_date.group(1)
+            data_iso = f"{ano}-{m_date.group(2)}-{m_date.group(3)}"
+            tema_slug = m_date.group(4)
+            try:
+                d = datetime(int(ano), int(m_date.group(2)), int(m_date.group(3)))
+                semana = f"{d.isocalendar().week:02d}"
+            except ValueError:
+                pass
+        # Tentar extrair titulo do primeiro # H1 do arquivo
+        try:
+            conteudo = arq.read_text(encoding="utf-8")
+        except OSError:
+            conteudo = ""
+        titulo = ""
+        m_h1 = re.search(r"^#\s+(.+)$", conteudo, re.MULTILINE)
+        if m_h1:
+            titulo = m_h1.group(1).strip()
+            titulo = re.sub(r"^(Newsletter|Carrossel|Stories|Post)\.\s*", "", titulo)
+        if not titulo:
+            titulo = tema_slug.replace("-", " ").title()
+        # Excerpt: primeiros 180 chars de texto não-cabeçalho
+        excerpt = ""
+        for linha in conteudo.split("\n"):
+            linha_lim = linha.strip()
+            if not linha_lim or linha_lim.startswith("#") or linha_lim.startswith("**") or linha_lim.startswith("---"):
+                continue
+            excerpt = linha_lim[:200]
+            break
+        entregas.append({
+            "slug": tema_slug,
+            "nome_arquivo": arq.name,
+            "caminho": arq.relative_to(produto_dir).as_posix(),
+            "titulo": titulo,
+            "ano": ano,
+            "semana": semana,
+            "data_iso": data_iso,
+            "excerpt": excerpt,
+        })
+    return entregas
+
+
+def parse_esta_semana(produto_dir: Path) -> dict:
+    """Status do Ritual da semana corrente: Capture, Cure, Crie."""
+    ano, semana, semana_slug = _iso_week_hoje()
+    banco = parse_banco_de_ideias(produto_dir)
+    # Cure: existe briefings/{AAAA-Www}-briefings.md?
+    briefings_path = produto_dir / "briefings" / f"{semana_slug}-briefings.md"
+    cure_pronto = briefings_path.exists()
+    # Crie: contar entregas da semana corrente
+    def _esta_semana(entregas: list[dict]) -> list[dict]:
+        return [e for e in entregas if str(e.get("ano")) == str(ano) and str(e.get("semana", "")).lstrip("0") == str(semana).lstrip("0")]
+    newsletter = _esta_semana(parse_entregas_pasta(produto_dir, "newsletter"))
+    carrosseis = _esta_semana(parse_entregas_pasta(produto_dir, "carrosseis"))
+    stories = _esta_semana(parse_entregas_pasta(produto_dir, "stories"))
+    # Ritual: existe ritual/{AAAA-Www}-ritual.md?
+    ritual_path = produto_dir / "ritual" / f"{semana_slug}-ritual.md"
+    ritual_status = "nao iniciado"
+    if ritual_path.exists():
+        try:
+            txt = ritual_path.read_text(encoding="utf-8")
+            if "Status: concluido" in txt or "Status: concluído" in txt:
+                ritual_status = "concluido"
+            elif "Status: em andamento" in txt:
+                ritual_status = "em andamento"
+            else:
+                ritual_status = "em andamento"
+        except OSError:
+            ritual_status = "em andamento"
+    return {
+        "ano": ano,
+        "semana": semana,
+        "semana_slug": semana_slug,
+        "capture_total": banco["total_caixa"],
+        "capture_ideias": banco["caixa_entrada"][:6],
+        "cure_pronto": cure_pronto,
+        "cure_arquivo": str(briefings_path.relative_to(produto_dir)) if cure_pronto else "",
+        "crie_newsletter": newsletter,
+        "crie_carrosseis": carrosseis,
+        "crie_stories": stories,
+        "crie_total": len(newsletter) + len(carrosseis) + len(stories),
+        "ritual_status": ritual_status,
+    }
+
+
+def parse_calendario(produto_dir: Path) -> dict:
+    """Agrupa todas as entregas em uma grade visual por ano-semana."""
+    formatos = {
+        "newsletter": parse_entregas_pasta(produto_dir, "newsletter"),
+        "carrosseis": parse_entregas_pasta(produto_dir, "carrosseis"),
+        "stories": parse_entregas_pasta(produto_dir, "stories"),
+        "posts": parse_entregas_pasta(produto_dir, "posts"),
+    }
+    # Coletar todas as semanas que aparecem em qualquer formato
+    semanas: dict[str, dict] = {}
+    for tipo, lista in formatos.items():
+        for e in lista:
+            key = f"{e.get('ano') or '----'}-W{(e.get('semana') or '--'):>02}"
+            if key not in semanas:
+                semanas[key] = {"ano": e.get("ano"), "semana": e.get("semana"), "newsletter": [], "carrosseis": [], "stories": [], "posts": []}
+            semanas[key][tipo].append(e)
+    # Ordenar por ano-semana desc
+    ordem = sorted(semanas.keys(), reverse=True)
+    return {
+        "semanas": [{"key": k, **semanas[k]} for k in ordem],
+        "total_pecas": sum(len(v) for v in formatos.values()),
+    }
+
+
 # ----- monta dados por secao -----
 
 def montar_dados(secao: str, produto_dir: Path, slug: str) -> tuple[dict, str]:
@@ -1116,6 +1319,19 @@ def montar_dados(secao: str, produto_dir: Path, slug: str) -> tuple[dict, str]:
         # Conteúdo gerenciado pelo painel-trafego.py. Retorna dict vazio
         # para que render_analise_trafego entregue o placeholder inicial.
         return {}, nome_produto
+    # ----- Mapa do Criador: novas secoes editoriais -----
+    if secao == "esta-semana":
+        return parse_esta_semana(produto_dir), nome_produto
+    if secao == "calendario":
+        return parse_calendario(produto_dir), nome_produto
+    if secao == "banco-de-ideias":
+        return parse_banco_de_ideias(produto_dir), nome_produto
+    if secao == "newsletter":
+        return {"entregas": parse_entregas_pasta(produto_dir, "newsletter")}, nome_produto
+    if secao == "carrosseis":
+        return {"entregas": parse_entregas_pasta(produto_dir, "carrosseis")}, nome_produto
+    if secao == "stories":
+        return {"entregas": parse_entregas_pasta(produto_dir, "stories")}, nome_produto
     raise ValueError(f"Secao desconhecida: {secao}")
 
 

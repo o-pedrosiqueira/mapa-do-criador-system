@@ -2347,6 +2347,302 @@ def render_analise_trafego(dados: dict) -> str:
     )
 
 
+# ============================================================
+# Mapa do Criador: renderers editoriais das secoes novas
+# ============================================================
+
+_MAPA_CSS_INJECTED = """
+<style>
+  .mapa-section .mapa-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:16px;}
+  .mapa-block{border:1px solid var(--line);background:var(--paper);padding:24px;position:relative;}
+  .mapa-block .mapa-kicker{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+  .mapa-block .mapa-kicker .sp{color:var(--moss);font-size:1.3em;}
+  .mapa-block h3{font-family:var(--font-display);font-size:28px;font-weight:400;letter-spacing:-0.02em;line-height:1;margin-bottom:8px;color:var(--ink);}
+  .mapa-block h3 em{font-style:italic;color:var(--moss);}
+  .mapa-block .mapa-metric{font-family:var(--font-display);font-style:italic;font-size:56px;line-height:1;color:var(--moss);margin:8px 0 4px;}
+  .mapa-block .mapa-status{font-family:var(--font-mono);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-mute);}
+  .mapa-block .mapa-status.done{color:var(--moss);}
+  .mapa-block p{font-family:var(--font-serif);font-size:15px;line-height:1.55;color:var(--ink-soft);margin-top:8px;}
+  .mapa-block ul.mapa-list{list-style:none;padding:0;margin:12px 0 0;}
+  .mapa-block ul.mapa-list li{font-family:var(--font-serif);font-size:14px;font-style:italic;color:var(--ink-soft);padding:6px 0;border-bottom:1px solid var(--line-soft);line-height:1.4;}
+  .mapa-block ul.mapa-list li:last-child{border-bottom:0;}
+
+  .mapa-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-top:16px;}
+  .mapa-card{border:1px solid var(--line);background:var(--paper);padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;}
+  .mapa-card .mapa-card-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);}
+  .mapa-card .mapa-card-titulo{font-family:var(--font-display);font-size:24px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;color:var(--ink);}
+  .mapa-card .mapa-card-titulo em{font-style:italic;color:var(--moss);}
+  .mapa-card .mapa-card-excerpt{font-family:var(--font-serif);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.5;}
+  .mapa-card .mapa-card-meta{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mute);border-top:1px solid var(--line-soft);padding-top:10px;margin-top:auto;display:flex;justify-content:space-between;}
+  .mapa-card .mapa-card-meta .sp{color:var(--moss);}
+
+  .mapa-empty{padding:48px 0;text-align:center;border-top:1px solid var(--line);}
+  .mapa-empty .mapa-empty-sp{font-family:var(--font-display);font-size:64px;color:var(--moss);line-height:1;opacity:0.4;margin-bottom:16px;}
+  .mapa-empty .mapa-empty-title{font-family:var(--font-display);font-size:24px;font-style:italic;color:var(--ink-soft);margin-bottom:8px;}
+  .mapa-empty .mapa-empty-sub{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mute);}
+
+  .mapa-cal-grid{display:flex;flex-direction:column;gap:16px;margin-top:16px;}
+  .mapa-cal-week{border:1px solid var(--line);background:var(--paper);padding:20px 24px;display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start;}
+  .mapa-cal-week .mapa-cal-num{font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);border-top:1.5px solid var(--moss);padding-top:8px;}
+  .mapa-cal-week .mapa-cal-num .ano{display:block;color:var(--ink);font-family:var(--font-display);font-style:italic;font-size:28px;margin-top:4px;line-height:1;}
+  .mapa-cal-formatos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .mapa-cal-formato{display:flex;flex-direction:column;gap:4px;}
+  .mapa-cal-formato .formato-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);}
+  .mapa-cal-formato .formato-item{font-family:var(--font-serif);font-size:13px;font-style:italic;color:var(--ink);line-height:1.4;}
+  .mapa-cal-formato .formato-vazio{font-family:var(--font-mono);font-size:11px;color:var(--ink-mute);opacity:0.5;}
+
+  .ideia-card{border-bottom:1px solid var(--line);padding:20px 0;display:grid;grid-template-columns:80px 1fr auto;gap:24px;align-items:start;}
+  .ideia-card .ideia-data{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--moss);padding-top:4px;}
+  .ideia-card .ideia-meio{display:flex;flex-direction:column;gap:6px;}
+  .ideia-card .ideia-slug{font-family:var(--font-display);font-style:italic;font-size:20px;line-height:1.1;letter-spacing:-0.015em;color:var(--ink);}
+  .ideia-card .ideia-texto{font-family:var(--font-serif);font-size:15px;line-height:1.5;color:var(--ink-soft);}
+  .ideia-card .ideia-origem{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mute);}
+  .ideia-card .ideia-status{font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--moss);border:1px solid var(--moss);padding:4px 8px;}
+  .ideia-card .ideia-status.curada{color:var(--ink-mute);border-color:var(--ink-mute);}
+</style>
+"""
+
+
+def _render_secao(sid: str, miolo: str) -> str:
+    return f'<!-- SECTION:{sid} -->\n<div class="mapa-section">{_MAPA_CSS_INJECTED}{miolo}</div>\n<!-- /SECTION:{sid} -->'
+
+
+def _empty_state(titulo: str, sub: str) -> str:
+    return (
+        '<div class="mapa-empty">'
+        '<div class="mapa-empty-sp">✦</div>'
+        f'<div class="mapa-empty-title">{_escape(titulo)}</div>'
+        f'<div class="mapa-empty-sub">{_escape(sub)}</div>'
+        '</div>'
+    )
+
+
+def render_esta_semana(dados: dict) -> str:
+    semana_slug = dados.get("semana_slug", "")
+    capture_total = dados.get("capture_total", 0)
+    capture_ideias = dados.get("capture_ideias", [])
+    cure_pronto = dados.get("cure_pronto", False)
+    crie_newsletter = dados.get("crie_newsletter", [])
+    crie_carrosseis = dados.get("crie_carrosseis", [])
+    crie_stories = dados.get("crie_stories", [])
+    crie_total = dados.get("crie_total", 0)
+    ritual_status = dados.get("ritual_status", "nao iniciado")
+
+    capture_status = "ATIVO" if capture_total > 0 else "AGUARDANDO"
+    capture_status_cls = "done" if capture_total >= 5 else ""
+    capture_lista = "".join(
+        f'<li>{_escape(i.get("slug", "") or i.get("texto", "")[:60])}</li>'
+        for i in capture_ideias[:5]
+    ) or '<li style="font-style:italic;opacity:0.5;">Nenhuma ideia capturada ainda nesta semana</li>'
+
+    cure_status = "PRONTO" if cure_pronto else "PENDENTE"
+    cure_status_cls = "done" if cure_pronto else ""
+    cure_desc = (
+        "Briefings da semana ja gerados. Prossiga para o Crie."
+        if cure_pronto
+        else "Rode /cure para revisar a Caixa de Entrada e gerar 4 a 5 briefings da semana."
+    )
+
+    crie_status = f"{crie_total} de 4 a 5"
+    crie_status_cls = "done" if crie_total >= 3 else ""
+    crie_lista_html = ""
+    for n in crie_newsletter:
+        crie_lista_html += f'<li>Newsletter. {_escape(n.get("titulo", "")[:60])}</li>'
+    for c in crie_carrosseis:
+        crie_lista_html += f'<li>Carrossel. {_escape(c.get("titulo", "")[:60])}</li>'
+    for s in crie_stories:
+        crie_lista_html += f'<li>Stories. {_escape(s.get("titulo", "")[:60])}</li>'
+    if not crie_lista_html:
+        crie_lista_html = '<li style="font-style:italic;opacity:0.5;">Nenhuma peca criada nesta semana</li>'
+
+    cabecalho = (
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:32px;color:var(--ink);">Semana <em style="color:var(--moss);">{_escape(semana_slug)}</em></div>'
+        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);">Ritual {_escape(ritual_status)}</div>'
+        '</div>'
+    )
+
+    miolo = (
+        cabecalho
+        + '<div class="mapa-grid-3">'
+        + '<div class="mapa-block">'
+        + '<div class="mapa-kicker"><span class="sp">✦</span><span>Coordenada 01</span></div>'
+        + '<h3>Capture</h3>'
+        + f'<div class="mapa-metric">{capture_total}</div>'
+        + f'<div class="mapa-status {capture_status_cls}">{_escape(capture_status)}</div>'
+        + '<p>Ideias na Caixa de Entrada nesta semana. Capture sempre que aparecer fagulha.</p>'
+        + f'<ul class="mapa-list">{capture_lista}</ul>'
+        + '</div>'
+        + '<div class="mapa-block">'
+        + '<div class="mapa-kicker"><span class="sp">✦</span><span>Coordenada 02</span></div>'
+        + '<h3>Cure</h3>'
+        + f'<div class="mapa-metric">{"✓" if cure_pronto else "·"}</div>'
+        + f'<div class="mapa-status {cure_status_cls}">{_escape(cure_status)}</div>'
+        + f'<p>{_escape(cure_desc)}</p>'
+        + '</div>'
+        + '<div class="mapa-block">'
+        + '<div class="mapa-kicker"><span class="sp">✦</span><span>Coordenada 03</span></div>'
+        + '<h3>Crie</h3>'
+        + f'<div class="mapa-metric">{crie_total}</div>'
+        + f'<div class="mapa-status {crie_status_cls}">{_escape(crie_status).upper()} PECAS</div>'
+        + '<p>Pecas geradas para publicacao nesta semana editorial.</p>'
+        + f'<ul class="mapa-list">{crie_lista_html}</ul>'
+        + '</div>'
+        + '</div>'
+    )
+    return _render_secao("esta-semana", miolo)
+
+
+def render_calendario(dados: dict) -> str:
+    semanas = dados.get("semanas", [])
+    total = dados.get("total_pecas", 0)
+    if not semanas:
+        miolo = _empty_state("Calendario vazio", "Comece a publicar e o calendario aparece aqui")
+        return _render_secao("calendario", miolo)
+
+    cabecalho = (
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{total} pecas <em style="color:var(--moss);">publicadas</em></div>'
+        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">{len(semanas)} semanas</div>'
+        '</div>'
+    )
+
+    weeks_html = ""
+    for sem in semanas:
+        ano = sem.get("ano") or "----"
+        semana = sem.get("semana") or "--"
+        formatos = {
+            "Newsletter": sem.get("newsletter", []),
+            "Carrosseis": sem.get("carrosseis", []),
+            "Stories": sem.get("stories", []),
+            "Posts": sem.get("posts", []),
+        }
+        formatos_html = ""
+        for label, lista in formatos.items():
+            if lista:
+                itens_html = "".join(f'<div class="formato-item">{_escape(e.get("titulo", "")[:48])}</div>' for e in lista)
+            else:
+                itens_html = '<div class="formato-vazio">·</div>'
+            formatos_html += (
+                f'<div class="mapa-cal-formato">'
+                f'<div class="formato-label">{label}</div>'
+                f'{itens_html}'
+                f'</div>'
+            )
+        weeks_html += (
+            f'<div class="mapa-cal-week">'
+            f'<div class="mapa-cal-num">Semana {_escape(str(semana))}<span class="ano">{_escape(str(ano))}</span></div>'
+            f'<div class="mapa-cal-formatos">{formatos_html}</div>'
+            f'</div>'
+        )
+    miolo = cabecalho + f'<div class="mapa-cal-grid">{weeks_html}</div>'
+    return _render_secao("calendario", miolo)
+
+
+def render_banco_de_ideias(dados: dict) -> str:
+    caixa = dados.get("caixa_entrada", [])
+    historico = dados.get("historico", [])
+    total_caixa = dados.get("total_caixa", 0)
+
+    if not caixa and not historico:
+        miolo = _empty_state("Caixa vazia", "Use /capture para registrar a primeira ideia")
+        return _render_secao("banco-de-ideias", miolo)
+
+    cabecalho = (
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{total_caixa} ideias na <em style="color:var(--moss);">Caixa</em></div>'
+        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">{len(historico)} curadas no historico</div>'
+        '</div>'
+    )
+
+    def _card_ideia(i: dict, curada: bool = False) -> str:
+        data = i.get("data") or "—"
+        slug = i.get("slug") or ""
+        texto = i.get("texto") or ""
+        origem = i.get("origem") or ""
+        status_lbl = "Curada" if curada else "Nova"
+        status_cls = "curada" if curada else ""
+        meta_origem = f"De: {_escape(origem)}" if origem and origem.lower() not in ("indefinida", "") else ""
+        return (
+            '<div class="ideia-card">'
+            f'<div class="ideia-data">{_escape(data)}</div>'
+            '<div class="ideia-meio">'
+            f'<div class="ideia-slug">{_escape(slug)}</div>'
+            f'<div class="ideia-texto">{_escape(texto)}</div>'
+            f'<div class="ideia-origem">{meta_origem}</div>'
+            '</div>'
+            f'<div class="ideia-status {status_cls}">{status_lbl}</div>'
+            '</div>'
+        )
+
+    caixa_html = "".join(_card_ideia(i, curada=False) for i in caixa)
+    hist_html = "".join(_card_ideia(i, curada=True) for i in historico[:8])
+
+    secoes_html = ""
+    if caixa:
+        secoes_html += (
+            '<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin:24px 0 8px;">Caixa de Entrada</div>'
+            f'{caixa_html}'
+        )
+    if hist_html:
+        secoes_html += (
+            '<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin:32px 0 8px;">Historico (ultimas 8)</div>'
+            f'{hist_html}'
+        )
+
+    return _render_secao("banco-de-ideias", cabecalho + secoes_html)
+
+
+def _render_entregas_lista(sid: str, dados: dict, formato_nome: str, comando: str) -> str:
+    entregas = dados.get("entregas", [])
+    if not entregas:
+        miolo = _empty_state(
+            f"Nenhuma {formato_nome.lower()} ainda",
+            f"Rode {comando} para gerar a primeira"
+        )
+        return _render_secao(sid, miolo)
+
+    cabecalho = (
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{len(entregas)} {_escape(formato_nome.lower())} <em style="color:var(--moss);">publicadas</em></div>'
+        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">Nova: {_escape(comando)}</div>'
+        '</div>'
+    )
+
+    cards_html = ""
+    for e in entregas:
+        ano = e.get("ano") or ""
+        semana = e.get("semana") or ""
+        data_iso = e.get("data_iso") or ""
+        meta_inicio = f"{ano}-W{semana}" if semana and not data_iso else data_iso or ano
+        cards_html += (
+            '<div class="mapa-card">'
+            f'<div class="mapa-card-tag"><span style="color:var(--moss);">✦</span> {_escape(formato_nome)}</div>'
+            f'<div class="mapa-card-titulo">{_escape(e.get("titulo", ""))}</div>'
+            f'<div class="mapa-card-excerpt">{_escape(e.get("excerpt", "")[:200])}</div>'
+            '<div class="mapa-card-meta">'
+            f'<span>{_escape(meta_inicio)}</span>'
+            f'<span class="sp">{_escape(e.get("nome_arquivo", ""))}</span>'
+            '</div>'
+            '</div>'
+        )
+
+    miolo = cabecalho + f'<div class="mapa-cards-grid">{cards_html}</div>'
+    return _render_secao(sid, miolo)
+
+
+def render_newsletter(dados: dict) -> str:
+    return _render_entregas_lista("newsletter", dados, "Newsletter", "/criar-newsletter")
+
+
+def render_carrosseis(dados: dict) -> str:
+    return _render_entregas_lista("carrosseis", dados, "Carrossel", "/criar-carrossel")
+
+
+def render_stories(dados: dict) -> str:
+    return _render_entregas_lista("stories", dados, "Stories", "/criar-stories")
+
+
 RENDERS = {
     "quadro": render_quadro,
     "furadeira": render_furadeira,
@@ -2360,4 +2656,11 @@ RENDERS = {
     "comercial-playbook": render_comercial_playbook,
     "dashboards": render_dashboards,
     "analise-trafego": render_analise_trafego,
+    # Mapa do Criador
+    "esta-semana": render_esta_semana,
+    "calendario": render_calendario,
+    "banco-de-ideias": render_banco_de_ideias,
+    "newsletter": render_newsletter,
+    "carrosseis": render_carrosseis,
+    "stories": render_stories,
 }

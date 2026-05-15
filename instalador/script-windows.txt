@@ -1,15 +1,15 @@
-; Workshop IA - Kit de Instalacao Windows
+; Mapa do Criador - Kit de Instalacao Windows
 
 [Setup]
-AppName=Workshop IA
+AppName=Mapa do Criador
 AppVersion=1.0
-AppPublisher=Workshop IA
+AppPublisher=Pedro Siqueira
 WizardStyle=modern
-DefaultDirName={tmp}\workshop-ia-setup
+DefaultDirName={tmp}\mapa-do-criador-setup
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=dist
-OutputBaseFilename=workshop-ia-setup-windows
+OutputBaseFilename=mapa-do-criador-setup-windows
 Compression=lzma2
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -23,9 +23,9 @@ WizardSmallImageFile=wizard-icon.bmp
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Messages]
-WelcomeLabel1=Kit de Instalacao do Workshop IA
-WelcomeLabel2=Este assistente vai instalar automaticamente as ferramentas necessarias para o Workshop IA:%n%n  - Python 3%n  - Git%n  - Node.js%n  - Claude (app Anthropic)%n  - Workshop IA (painel local)%n%nO Workshop IA sera instalado em:%n  Documentos\workshop-ia%n%nTempo estimado: cerca de 10 minutos.%nMantenha a internet conectada durante o processo.%n%nClique em Avancar para continuar.
-FinishedLabel=Instalacao concluida com sucesso!%n%nO Workshop IA foi instalado em:%n  %USERPROFILE%\Documents\workshop-ia%n%nUm atalho "Workshop IA" foi criado na sua Area de Trabalho.%nClique duas vezes nele para abrir o painel.
+WelcomeLabel1=Kit de Instalacao do Mapa do Criador
+WelcomeLabel2=Este assistente vai instalar automaticamente as ferramentas necessarias para o Mapa do Criador:%n%n  - Python 3%n  - Git%n  - Node.js%n  - Claude (app Anthropic)%n  - Mapa do Criador (sistema de criacao de conteudo)%n%nO Mapa do Criador sera instalado em:%n  Documentos\mapa-do-criador%n%nTempo estimado: cerca de 10 minutos.%nMantenha a internet conectada durante o processo.%n%nClique em Avancar para continuar.
+FinishedLabel=Instalacao concluida com sucesso!%n%nO Mapa do Criador foi instalado em:%n  %USERPROFILE%\Documents\mapa-do-criador%n%nUm atalho "Mapa do Criador" foi criado na sua Area de Trabalho.%nClique duas vezes nele para abrir o painel.%n%nPara comecar a operar o Ritual 3x3, abra o Claude na pasta e rode /dna-criativo.
 
 [Code]
 procedure RunStep(Msg: String; Cmd: String; StepNum: Integer; Total: Integer);
@@ -50,7 +50,7 @@ begin
     WizardForm.ProgressGauge.Max := 100;
 
     PathRefresh := '$env:Path=[System.Environment]::GetEnvironmentVariable(''Path'',''Machine'')+'';''+[System.Environment]::GetEnvironmentVariable(''Path'',''User''); ';
-    InstallDir := '$p=$env:USERPROFILE+''\Documents\workshop-ia''; ';
+    InstallDir := '$p=$env:USERPROFILE+''\Documents\mapa-do-criador''; ';
 
     RunStep('Instalando Python 3... (passo 1 de 7)',
       'winget install Python.Python.3.12 --silent --accept-package-agreements --accept-source-agreements',
@@ -64,14 +64,14 @@ begin
       'winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements',
       3, 7);
 
-    RunStep('Instalando Claude... (passo 4 de 7)',
+    RunStep('Instalando Claude da Anthropic... (passo 4 de 7)',
       'winget install Anthropic.Claude --silent --accept-package-agreements --accept-source-agreements',
       4, 7);
 
-    RunStep('Baixando o Workshop IA... (passo 5 de 7)',
+    RunStep('Baixando o Mapa do Criador... (passo 5 de 7)',
       PathRefresh +
       InstallDir +
-      'if (Test-Path ($p+''\.git'')) { Set-Location $p; git pull } else { git clone -b main https://github.com/engdailyapp-rlv/workshop_inteligente.git $p }',
+      'if (Test-Path ($p+''\.git'')) { Set-Location $p; git pull } else { git clone -b main https://github.com/pedrosiqueira/mapa-do-criador.git $p }',
       5, 7);
 
     RunStep('Instalando dependencias do painel... (passo 6 de 7)',
@@ -82,10 +82,10 @@ begin
 
     RunStep('Criando atalho na area de trabalho... (passo 7 de 7)',
       InstallDir +
-      'Set-Content -Path ($p+''\iniciar-workshop.bat'') -Value (''@echo off''+[char]13+[char]10+''npm start'') -Encoding ASCII; ' +
+      'Set-Content -Path ($p+''\iniciar-mapa.bat'') -Value (''@echo off''+[char]13+[char]10+''npm start'') -Encoding ASCII; ' +
       '$sh=New-Object -ComObject WScript.Shell; ' +
-      '$sc=$sh.CreateShortcut($env:USERPROFILE+''\Desktop\Workshop IA.lnk''); ' +
-      '$sc.TargetPath=$p+''\iniciar-workshop.bat''; ' +
+      '$sc=$sh.CreateShortcut($env:USERPROFILE+''\Desktop\Mapa do Criador.lnk''); ' +
+      '$sc.TargetPath=$p+''\iniciar-mapa.bat''; ' +
       '$sc.WorkingDirectory=$p; ' +
       '$sc.WindowStyle=1; ' +
       '$sc.Save()',

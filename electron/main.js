@@ -1,0 +1,310 @@
+const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron')
+const path = require('path')
+const os = require('os')
+const fs = require('fs')
+const vm = require('vm')
+const { exec, spawn } = require('child_process')
+const { install, DEFAULT_INSTALL_DIR } = require('./installer')
+
+function getConfigPath() {
+  return path.join(app.getPath('userData'), 'install-path.txt')
+}
+
+function getSavedInstallDir() {
+  try {
+    const p = fs.readFileSync(getConfigPath(), 'utf8').trim()
+    if (p && fs.existsSync(path.join(p, '.installed'))) return p
+  } catch {}
+  return null
+}
+
+function getRepoDir() {
+  const saved = getSavedInstallDir()
+  if (saved) return saved
+  if (!app.isPackaged) return path.join(__dirname, '..')
+  return DEFAULT_INSTALL_DIR
+}
+
+function getPanelPath() {
+  return path.join(getRepoDir(), 'painel', 'index.html')
+}
+
+function isInstalled() {
+  if (process.argv.includes('--force-setup')) return false
+  if (!app.isPackaged) return fs.existsSync(path.join(__dirname, '..', 'painel', 'index.html'))
+  return fs.existsSync(path.join(getRepoDir(), '.installed'))
+}
+
+let mainWindow = null
+
+// Detecta Claude no Windows via MSIX (Get-AppxPackage) ou Squirrel legado
+function isClaudeInstalledWin() {
+  return new Promise(resolve => {
+    // MSIX: verifica pelo pacote instalado (funciona mesmo sem acesso a Program Files\WindowsApps)
+    exec(
+      'powershell -NoProfile -ExecutionPolicy Bypass -Command "if (Get-AppxPackage -Name \'*Claude*\' -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }"',
+      { timeout: 8000 },
+      (err) => {
+        if (!err) { resolve(true); return }
+
+        // Fallback Squirrel legado: subpastas app-x.y.z
+        const local = path.join(os.homedir(), 'AppData', 'Local')
+        const squirrelRoots = [path.join(local, 'AnthropicClaude'), path.join(local, 'Claude')]
+        for (const root of squirrelRoots) {
+          if (!fs.existsSync(root)) continue
+          try {
+            const appDirs = fs.readdirSync(root).filter(e => e.startsWith('app-'))
+            for (const dir of appDirs) {
+              if (fs.existsSync(path.join(root, dir, 'Claude.exe'))) { resolve(true); return }
+            }
+            if (fs.existsSync(path.join(root, 'Claude.exe'))) { resolve(true); return }
+          } catch {}
+        }
+
+        resolve(false)
+      }
+    )
+  })
+}
+
+function isClaudeInstalled() {
+  if (process.platform === 'darwin') {
+    return Promise.resolve([
+      '/Applications/Claude.app',
+      path.join(os.homedir(), 'Applications', 'Claude.app'),
+    ].some(p => fs.existsSync(p)))
+  }
+  if (process.platform === 'win32') return isClaudeInstalledWin()
+  return Promise.resolve(false)
+}
+
+function silentPull(callback) {
+  exec(`git -C "${getRepoDir()}" pull origin main`, { timeout: 20000 }, (err, stdout) => {
+    const updated = !err && stdout && !stdout.trim().endsWith('Already up to date.')
+    callback(updated)
+  })
+}
+
+
+function injectUpdateToast(win) {
+  win.webContents.executeJavaScript(`
+    (function() {
+      const t = document.createElement('div');
+      t.style.cssText = [
+        'position:fixed','bottom:20px','left:50%','transform:translateX(-50%)',
+        'z-index:99999','background:rgba(52,211,153,0.1)',
+        'border:1px solid rgba(52,211,153,0.35)','border-radius:20px',
+        'padding:7px 18px','color:#34d399','font-size:12px','font-weight:600',
+        'font-family:-apple-system,sans-serif','backdrop-filter:blur(8px)',
+        'transition:opacity 0.5s','pointer-events:none'
+      ].join(';');
+      t.textContent = '✓ Mapa do Criador atualizado';
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity='0'; }, 3000);
+      setTimeout(() => t.remove(), 3600);
+    })();
+  `).catch(() => {})
+}
+
+let _manifestWatcher = null
+let _manifestDebounce = null
+
+function watchManifest() {
+  if (_manifestWatcher) return
+  const dir = path.join(getRepoDir(), 'meus-produtos')
+
+  function tryWatch() {
+    if (!fs.existsSync(dir)) { setTimeout(tryWatch, 3000); return }
+    try {
+      _manifestWatcher = fs.watch(dir, (_, filename) => {
+        if (filename !== 'index.js') return
+        clearTimeout(_manifestDebounce)
+        _manifestDebounce = setTimeout(() => {
+          if (mainWindow) mainWindow.webContents.send('manifest-changed')
+        }, 300)
+      })
+    } catch { setTimeout(tryWatch, 3000) }
+  }
+
+  tryWatch()
+}
+
+let _painelWatcher = null
+let _painelDebounce = null
+
+function watchPainel(filePath) {
+  if (_painelWatcher) { try { _painelWatcher.close() } catch {} _painelWatcher = null }
+  if (!filePath) return
+  const dir = path.dirname(filePath)
+  const base = path.basename(filePath)
+  function tryWatch() {
+    if (!fs.existsSync(dir)) { setTimeout(tryWatch, 3000); return }
+    try {
+      _painelWatcher = fs.watch(dir, (_, filename) => {
+        if (filename !== base) return
+        clearTimeout(_painelDebounce)
+        _painelDebounce = setTimeout(() => {
+          if (mainWindow) mainWindow.webContents.send('painel-changed')
+        }, 400)
+      })
+    } catch { setTimeout(tryWatch, 3000) }
+  }
+  tryWatch()
+}
+
+ipcMain.on('set-painel-watch', (_, filePath) => watchPainel(filePath))
+
+function createPanelWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    minWidth: 900,
+    minHeight: 600,
+    title: 'Mapa do Criador',
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: false,
+      preload: path.join(__dirname, 'preload-panel.js')
+    }
+  })
+  mainWindow.loadFile(getPanelPath())
+  mainWindow.setMenuBarVisibility(false)
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    watchManifest()
+    silentPull((updated) => {
+      if (updated && mainWindow) injectUpdateToast(mainWindow)
+    })
+  })
+}
+
+function createSetupWindow() {
+  mainWindow = new BrowserWindow({
+    width: 540,
+    height: 520,
+    resizable: false,
+    title: 'Mapa do Criador — Configuração',
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
+  mainWindow.loadFile(path.join(__dirname, 'setup.html'))
+  mainWindow.setMenuBarVisibility(false)
+}
+
+ipcMain.handle('check-claude', () => isClaudeInstalled())
+
+ipcMain.handle('get-default-folder', () => DEFAULT_INSTALL_DIR)
+
+ipcMain.handle('choose-folder', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory', 'createDirectory'],
+    title: 'Escolher pasta de instalação',
+    defaultPath: path.dirname(DEFAULT_INSTALL_DIR),
+    buttonLabel: 'Selecionar pasta'
+  })
+  if (result.canceled || !result.filePaths[0]) return null
+  return path.join(result.filePaths[0], 'mapa-do-criador')
+})
+
+ipcMain.handle('get-manifest', () => {
+  const manifestPath = path.join(getRepoDir(), 'meus-produtos', 'index.js')
+  try {
+    const code = fs.readFileSync(manifestPath, 'utf8')
+    const ctx = { window: {} }
+    vm.createContext(ctx)
+    vm.runInContext(code, ctx)
+    return ctx.window.MEUS_PRODUTOS || null
+  } catch {
+    return null
+  }
+})
+
+ipcMain.handle('get-product-path', (_, relUrl) => {
+  return path.join(getRepoDir(), 'meus-produtos', relUrl)
+})
+
+ipcMain.on('open-download-claude', () => {
+  shell.openExternal('https://claude.ai/download')
+})
+
+ipcMain.on('setup:start', async (_, chosenDir) => {
+  const destDir = chosenDir || DEFAULT_INSTALL_DIR
+  try {
+    await install((step, msg, pct) => {
+      if (mainWindow) mainWindow.webContents.send('setup:progress', { step, msg, pct })
+    }, destDir)
+    fs.mkdirSync(path.dirname(getConfigPath()), { recursive: true })
+    fs.writeFileSync(getConfigPath(), destDir, 'utf8')
+    if (mainWindow) mainWindow.webContents.send('setup:done')
+  } catch (err) {
+    if (mainWindow) mainWindow.webContents.send('setup:error', err.message)
+  }
+})
+
+ipcMain.on('setup:open-panel', () => {
+  if (mainWindow) mainWindow.close()
+  createPanelWindow()
+})
+
+ipcMain.on('open-claude', () => {
+  const dir = getRepoDir()
+  const escaped = dir.replace(/"/g, '\\"')
+
+  if (process.platform === 'darwin') {
+    const safeDir = dir.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+    const script = [
+      'tell application "Claude"',
+      '  activate',
+      'end tell',
+      `do shell script "open -a Claude \\"${safeDir}\\""`,
+      'delay 0.8',
+      'tell application "System Events"',
+      '  tell process "Claude"',
+      '    try',
+      '      set codeBtn to first button of window 1 whose name contains "Code"',
+      '      click codeBtn',
+      '    end try',
+      '  end tell',
+      'end tell',
+    ].join('\n')
+    const tmpFile = path.join(os.tmpdir(), 'mapa-do-criador-claude.scpt')
+    fs.writeFileSync(tmpFile, script, 'utf8')
+    exec(`/usr/bin/osascript "${tmpFile}"`, (err) => {
+      if (err) {
+        console.error('[open-claude] osascript error:', err.message)
+        exec(`open -a "Claude" "${safeDir}"`, (err2) => {
+          if (err2) exec(`open -a "Claude"`)
+        })
+      }
+    })
+
+  } else if (process.platform === 'win32') {
+    exec(`cmd /c start "" claude "${escaped}"`, { shell: true }, (err) => {
+      if (err) {
+        exec('explorer.exe "shell:AppsFolder\\Claude_pzs8sxrjxfjjc!App"', (err2) => {
+          if (err2) shell.openExternal('https://claude.ai/download')
+        })
+      }
+    })
+  }
+})
+
+function launch() {
+  if (isInstalled()) createPanelWindow()
+  else createSetupWindow()
+}
+
+app.whenReady().then(() => {
+  launch()
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) launch()
+  })
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})

@@ -2540,12 +2540,38 @@ def _render_secao(sid: str, miolo: str) -> str:
     return f'<!-- SECTION:{sid} -->\n<div class="mapa-section">{_MAPA_CSS_INJECTED}{miolo}</div>\n<!-- /SECTION:{sid} -->'
 
 
-def _empty_state(titulo: str, sub: str) -> str:
+def _empty_state(titulo: str, sub: str, cta_comando: str = "", cta_label: str = "", contexto: str = "") -> str:
+    """Empty state com CTA opcional. cta_comando aparece em mono moss destacado.
+    contexto e uma linha adicional em italic mais sutil acima do CTA.
+    """
+    contexto_html = (
+        f'<div class="mapa-empty-contexto">{_escape(contexto)}</div>' if contexto else ""
+    )
+    cta_html = ""
+    if cta_comando:
+        label = cta_label or f"Rode {cta_comando} para comecar"
+        cta_html = (
+            '<div class="mapa-empty-cta">'
+            f'<div class="mapa-empty-cta-label">{_escape(label)}</div>'
+            f'<code class="mapa-empty-cta-cmd">{_escape(cta_comando)}</code>'
+            '</div>'
+        )
+    extra_css = (
+        '<style>'
+        '.mapa-empty-contexto{font-family:var(--font-serif);font-size:14px;font-style:italic;color:var(--ink-mute);margin:8px auto 0;max-width:440px;line-height:1.5;}'
+        '.mapa-empty-cta{margin-top:32px;display:inline-flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:24px;}'
+        '.mapa-empty-cta-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);}'
+        '.mapa-empty-cta-cmd{font-family:var(--font-mono);font-size:14px;color:var(--ink);background:var(--paper-deep);border:1px solid var(--moss);padding:8px 16px;border-radius:4px;user-select:all;cursor:text;letter-spacing:-0.005em;}'
+        '</style>'
+    )
     return (
+        f'{extra_css}'
         '<div class="mapa-empty">'
         '<div class="mapa-empty-sp">✦</div>'
         f'<div class="mapa-empty-title">{_escape(titulo)}</div>'
         f'<div class="mapa-empty-sub">{_escape(sub)}</div>'
+        f'{contexto_html}'
+        f'{cta_html}'
         '</div>'
     )
 
@@ -2767,7 +2793,13 @@ def render_banco_de_ideias(dados: dict) -> str:
     total_caixa = dados.get("total_caixa", 0)
 
     if not caixa and not historico:
-        miolo = _empty_state("Caixa vazia", "Use /capture para registrar a primeira ideia")
+        miolo = _empty_state(
+            "Caixa vazia",
+            "A primeira coordenada do Mapa do Criador e Capture",
+            contexto="Durante a semana, qualquer ideia que aparecer vai pra aqui. Frase no banho, pergunta de seguidor, observacao afiada. Nao edita, nao julga. Captura.",
+            cta_comando="/capture",
+            cta_label="Comece capturando",
+        )
         return _render_secao("banco-de-ideias", miolo)
 
     cabecalho = (
@@ -2817,10 +2849,18 @@ def render_banco_de_ideias(dados: dict) -> str:
 
 def _render_entregas_lista(sid: str, dados: dict, formato_nome: str, comando: str) -> str:
     entregas = dados.get("entregas", [])
+    contextos_por_formato = {
+        "Newsletter": "Editorial-jornalistica de 800 a 1500 palavras. Gancho + contexto + analise + provocacao. Formato Barbara Torres / BrandsDecoded / Dan Koe.",
+        "Carrossel": "10 slides com tese central. Capa que para o scroll, contexto, argumento e fechamento autoral.",
+        "Stories": "3 a 6 frames conversacionais. Bastidor, ampliacao ou contraponto. Tom de audio para amigo.",
+    }
     if not entregas:
         miolo = _empty_state(
             f"Nenhuma {formato_nome.lower()} ainda",
-            f"Rode {comando} para gerar a primeira"
+            f"Cada {formato_nome.lower()} salva aqui vira card editorial e entra no calendario",
+            contexto=contextos_por_formato.get(formato_nome, ""),
+            cta_comando=comando,
+            cta_label=f"Crie a primeira {formato_nome.lower()}",
         )
         return _render_secao(sid, miolo)
 

@@ -2629,19 +2629,102 @@ def render_esta_semana(dados: dict) -> str:
 def render_calendario(dados: dict) -> str:
     semanas = dados.get("semanas", [])
     total = dados.get("total_pecas", 0)
-    if not semanas:
-        miolo = _empty_state("Calendario vazio", "Comece a publicar e o calendario aparece aqui")
-        return _render_secao("calendario", miolo)
+    grade = dados.get("mes_grade", [])
+    mes_nome = dados.get("mes_nome", "")
+    mes_ano = dados.get("mes_ano", "")
+
+    # Calendario sempre mostra a grade do mes corrente, mesmo vazia. Estimula publicacao.
 
     cabecalho = (
         '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
-        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{total} pecas <em style="color:var(--moss);">publicadas</em></div>'
-        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">{len(semanas)} semanas</div>'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{total} pecas <em style="color:var(--moss);">no fluxo editorial</em></div>'
+        f'<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">{len(semanas)} semanas mapeadas</div>'
         '</div>'
     )
 
+    # ----- Grade mensal (Notion-style) -----
+    grade_html = ""
+    if grade:
+        dias_semana = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"]
+        header_dias = "".join(
+            f'<div class="cal-dow">{d}</div>' for d in dias_semana
+        )
+        celulas_html = ""
+        cores_tipo = {
+            "newsletter": "var(--moss)",
+            "carrosseis": "var(--moss-deep)",
+            "stories": "var(--ink-soft)",
+            "posts": "var(--ink-mute)",
+        }
+        for linha in grade:
+            for celula in linha:
+                dia = celula.get("dia", 0)
+                if dia == 0:
+                    celulas_html += '<div class="cal-cel cal-cel--vazia"></div>'
+                    continue
+                eh_hoje = celula.get("hoje", False)
+                pecas = celula.get("pecas", [])
+                cls_hoje = " cal-cel--hoje" if eh_hoje else ""
+                pecas_html = ""
+                for p in pecas[:3]:
+                    tipo = p.get("tipo", "")
+                    cor = cores_tipo.get(tipo, "var(--ink-mute)")
+                    titulo_curto = _escape(p.get("titulo", "")[:24])
+                    pecas_html += (
+                        f'<div class="cal-peca" style="border-left-color:{cor};" title="{_escape(p.get("titulo", ""))}">'
+                        f'{titulo_curto}</div>'
+                    )
+                if len(pecas) > 3:
+                    pecas_html += f'<div class="cal-peca-mais">+{len(pecas)-3}</div>'
+                celulas_html += (
+                    f'<div class="cal-cel{cls_hoje}">'
+                    f'<div class="cal-dia">{dia}</div>'
+                    f'{pecas_html}'
+                    f'</div>'
+                )
+        legenda_html = (
+            '<div class="cal-legenda">'
+            f'<span><span class="cal-leg-dot" style="background:var(--moss);"></span>Newsletter</span>'
+            f'<span><span class="cal-leg-dot" style="background:var(--moss-deep);"></span>Carrossel</span>'
+            f'<span><span class="cal-leg-dot" style="background:var(--ink-soft);"></span>Stories</span>'
+            f'<span><span class="cal-leg-dot" style="background:var(--ink-mute);"></span>Post avulso</span>'
+            '</div>'
+        )
+        grade_html = (
+            '<style>'
+            '.cal-mes-titulo{font-family:var(--font-display);font-style:italic;font-size:48px;color:var(--ink);letter-spacing:-0.025em;margin-bottom:16px;line-height:1;}'
+            '.cal-mes-titulo em{color:var(--moss);font-style:italic;}'
+            '.cal-mes-meta{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:24px;}'
+            '.cal-grade{border:1px solid var(--line);background:var(--paper);}'
+            '.cal-header{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line);background:var(--paper-deep);}'
+            '.cal-dow{padding:10px 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);text-align:left;border-right:1px solid var(--line);}'
+            '.cal-dow:last-child{border-right:0;}'
+            '.cal-body{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(120px,auto);}'
+            '.cal-cel{padding:10px 12px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:6px;position:relative;}'
+            '.cal-cel:nth-child(7n){border-right:0;}'
+            '.cal-cel--vazia{background:repeating-linear-gradient(45deg,transparent 0 6px,oklch(60% 0.04 75 / 0.04) 6px 7px);}'
+            '.cal-cel--hoje{background:var(--moss-soft);}'
+            '.cal-cel--hoje .cal-dia{color:var(--moss-deep);font-weight:500;}'
+            '.cal-dia{font-family:var(--font-display);font-style:italic;font-size:22px;color:var(--ink);line-height:1;letter-spacing:-0.015em;}'
+            '.cal-peca{font-family:var(--font-sans);font-size:11px;color:var(--ink-soft);background:var(--paper);border-left:3px solid var(--moss);padding:4px 8px;line-height:1.3;border-radius:2px;cursor:default;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+            '.cal-peca-mais{font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;color:var(--ink-mute);padding:0 8px;}'
+            '.cal-legenda{display:flex;gap:24px;justify-content:flex-end;margin-top:16px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mute);}'
+            '.cal-legenda span{display:flex;align-items:center;gap:8px;}'
+            '.cal-leg-dot{width:8px;height:8px;border-radius:2px;display:inline-block;}'
+            '.cal-historico-titulo{font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin:48px 0 16px;border-top:1px solid var(--line);padding-top:32px;}'
+            '</style>'
+            f'<h2 class="cal-mes-titulo"><em>{_escape(mes_nome)}</em> {_escape(str(mes_ano))}</h2>'
+            f'<div class="cal-mes-meta">Mes corrente · grade Notion-style</div>'
+            f'<div class="cal-grade">'
+            f'<div class="cal-header">{header_dias}</div>'
+            f'<div class="cal-body">{celulas_html}</div>'
+            f'</div>'
+            f'{legenda_html}'
+        )
+
+    # ----- Historico semanal (compacto, abaixo da grade) -----
     weeks_html = ""
-    for sem in semanas:
+    for sem in semanas[:8]:  # ultimas 8 semanas
         ano = sem.get("ano") or "----"
         semana = sem.get("semana") or "--"
         formatos = {
@@ -2668,7 +2751,13 @@ def render_calendario(dados: dict) -> str:
             f'<div class="mapa-cal-formatos">{formatos_html}</div>'
             f'</div>'
         )
-    miolo = cabecalho + f'<div class="mapa-cal-grid">{weeks_html}</div>'
+    historico_html = ""
+    if weeks_html:
+        historico_html = (
+            '<div class="cal-historico-titulo">Historico recente por semana</div>'
+            f'<div class="mapa-cal-grid">{weeks_html}</div>'
+        )
+    miolo = cabecalho + grade_html + historico_html
     return _render_secao("calendario", miolo)
 
 

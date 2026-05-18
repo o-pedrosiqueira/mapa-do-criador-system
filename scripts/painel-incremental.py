@@ -1167,15 +1167,43 @@ def parse_entregas_pasta(produto_dir: Path, subpasta: str) -> list[dict]:
                 continue
             excerpt = linha_lim[:200]
             break
+        # Extrair metadata de agendamento (publicar_em, plataforma, status) das primeiras 20 linhas
+        publicar_em = ""
+        plataforma = ""
+        status = "rascunho"
+        for linha in conteudo.split("\n")[:20]:
+            m_pub = re.match(r"\*\*publicar_em:\*\*\s*(.+)", linha)
+            if m_pub:
+                publicar_em = m_pub.group(1).strip()
+            m_plat = re.match(r"\*\*plataforma:\*\*\s*(.+)", linha)
+            if m_plat:
+                plataforma = m_plat.group(1).strip()
+            m_status = re.match(r"\*\*status:\*\*\s*(.+)", linha)
+            if m_status:
+                status = m_status.group(1).strip().lower()
+        # Se publicar_em foi definido, sobrescreve a data efetiva da entrega
+        data_efetiva = publicar_em.split(" ")[0] if publicar_em else data_iso
+        ano_efetivo = ano
+        semana_efetiva = semana
+        if data_efetiva and re.match(r"^\d{4}-\d{2}-\d{2}$", data_efetiva):
+            try:
+                d = datetime.strptime(data_efetiva, "%Y-%m-%d")
+                ano_efetivo = str(d.year)
+                semana_efetiva = f"{d.isocalendar().week:02d}"
+            except ValueError:
+                pass
         entregas.append({
             "slug": tema_slug,
             "nome_arquivo": arq.name,
             "caminho": arq.relative_to(produto_dir).as_posix(),
             "titulo": titulo,
-            "ano": ano,
-            "semana": semana,
-            "data_iso": data_iso,
+            "ano": ano_efetivo,
+            "semana": semana_efetiva,
+            "data_iso": data_efetiva,
             "excerpt": excerpt,
+            "publicar_em": publicar_em,
+            "plataforma": plataforma,
+            "status": status,
         })
     return entregas
 
@@ -1224,14 +1252,68 @@ def parse_esta_semana(produto_dir: Path) -> dict:
 
 
 def parse_calendario(produto_dir: Path) -> dict:
-    """Agrupa todas as entregas em uma grade visual por ano-semana."""
+    """Agrupa todas as entregas em duas vistas: grade mensal (mes corrente)
+    e lista por semana (historico completo).
+    """
+    from calendar import monthcalendar, month_name
+    import locale
+
     formatos = {
         "newsletter": parse_entregas_pasta(produto_dir, "newsletter"),
         "carrosseis": parse_entregas_pasta(produto_dir, "carrosseis"),
         "stories": parse_entregas_pasta(produto_dir, "stories"),
         "posts": parse_entregas_pasta(produto_dir, "posts"),
     }
-    # Coletar todas as semanas que aparecem em qualquer formato
+
+    # ----- Vista 1. Grade mensal do mes corrente -----
+    hoje = datetime.now()
+    ano_corrente = hoje.year
+    mes_corrente = hoje.month
+    # Tentar usar locale pt_BR para nome do mes
+    nomes_mes_pt = [
+        "", "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+    ]
+    nome_mes = nomes_mes_pt[mes_corrente]
+
+    # Mapear dia ISO -> [entregas] para o mes corrente
+    dias_mes: dict[str, list[dict]] = {}
+    for tipo, lista in formatos.items():
+        for e in lista:
+            data_iso = e.get("data_iso") or ""
+            if not data_iso or len(data_iso) < 10:
+                continue
+            try:
+                d = datetime.strptime(data_iso[:10], "%Y-%m-%d")
+            except ValueError:
+                continue
+            if d.year == ano_corrente and d.month == mes_corrente:
+                key_dia = data_iso[:10]
+                if key_dia not in dias_mes:
+                    dias_mes[key_dia] = []
+                e_marcado = dict(e)
+                e_marcado["tipo"] = tipo
+                dias_mes[key_dia].append(e_marcado)
+
+    # Gerar a grade 6x7 (semanas do calendario, com weekday 0=segunda)
+    grade = monthcalendar(ano_corrente, mes_corrente)  # lista de listas
+    grade_celulas: list[list[dict]] = []
+    for week in grade:
+        linha = []
+        for day_num in week:
+            if day_num == 0:
+                linha.append({"dia": 0, "iso": "", "pecas": [], "hoje": False})
+            else:
+                iso = f"{ano_corrente}-{mes_corrente:02d}-{day_num:02d}"
+                linha.append({
+                    "dia": day_num,
+                    "iso": iso,
+                    "pecas": dias_mes.get(iso, []),
+                    "hoje": (day_num == hoje.day),
+                })
+        grade_celulas.append(linha)
+
+    # ----- Vista 2. Historico por semana (mantido para compat) -----
     semanas: dict[str, dict] = {}
     for tipo, lista in formatos.items():
         for e in lista:
@@ -1242,6 +1324,12 @@ def parse_calendario(produto_dir: Path) -> dict:
     # Ordenar por ano-semana desc
     ordem = sorted(semanas.keys(), reverse=True)
     return {
+        # Vista mensal (grade Notion-style do mes corrente)
+        "mes_grade": grade_celulas,
+        "mes_nome": nome_mes,
+        "mes_ano": ano_corrente,
+        "mes_num": mes_corrente,
+        # Vista historica por semana
         "semanas": [{"key": k, **semanas[k]} for k in ordem],
         "total_pecas": sum(len(v) for v in formatos.values()),
     }

@@ -1,27 +1,36 @@
 # Arquitetura do Repositorio. Guia Tecnico Completo
 
-Este documento explica como o repositorio `workshop_inteligente` esta estruturado e como inserir novas capacidades (commands, agents, skills, ferramentas). Escrito para ser lido por humanos e LLMs que precisem entender, manter ou expandir o projeto.
+Este documento explica como o repositorio `mapa-do-criador` esta estruturado e como inserir novas capacidades (commands, agents, skills, ferramentas). Escrito para ser lido por humanos e LLMs que precisem entender, manter ou expandir o projeto.
+
+> **Nota de origem.** O Mapa do Criador foi construido sobre a base tecnica do fluxo-criativo (toolkit VTSD herdado). A infraestrutura (sistema de painel, hooks, parsers, design system) e em grande parte reaproveitada. A camada de skills, commands, agents e checklists foi reescrita para a metodologia editorial do Mapa do Criador (Capture-Cure-Crie, DNA Criativo, voz autoral). Partes deste documento que ainda usem terminologia VTSD herdada estao em fase de adaptacao incremental.
 
 ---
 
 ## 1. Visao Geral do Projeto
 
-Este repositorio e um **toolkit de marketing digital para infoprodutores** que roda dentro do **Claude Code** (extensao do VSCode). Nao e um projeto de software tradicional com codigo executavel. e um sistema de prompts estruturados que transforma o Claude em um consultor de marketing.
+Este repositorio e um **sistema de criacao de conteudo autoral com IA** que roda dentro do **Claude Code** (extensao do VSCode) ou do **Cursor**. Nao e um projeto de software tradicional com codigo executavel. e um sistema de prompts estruturados que transforma o Claude em um parceiro de criacao editorial que conhece a voz do criador (DNA Criativo) e produz semanalmente newsletter + carrosseis + stories preservando essa voz.
 
-**Cursor:** o mesmo toolkit funciona no **Cursor** com a pasta do projeto aberta. O runtime e o chat do Cursor; regras em `.cursor/rules/*.mdc` e `CLAUDE.md` substituem a extensao. Os arquivos em `.claude/commands/` **nao** viram slash automaticamente no Cursor: o agente deve **ler o `.md`** correspondente quando o usuario pedir o fluxo (ou usar `@` no arquivo).
+**Cursor:** o mesmo sistema funciona no **Cursor** com a pasta do projeto aberta. O runtime e o chat do Cursor; regras em `.cursor/rules/*.mdc` e `CLAUDE.md` substituem a extensao. Os arquivos em `.claude/commands/` **nao** viram slash automaticamente no Cursor: o agente deve **ler o `.md`** correspondente quando o usuario pedir o fluxo (ou usar `@` no arquivo).
 
 **Stack:**
 - Claude Code (extensao VSCode) ou Cursor como runtime do chat
 - Arquivos Markdown como instrucoes (prompts)
-- HTML/CSS como output (paginas de vendas)
-- Metodologia VTSD (Venda Todo Santo Dia) como base de conhecimento
+- HTML/CSS como output (newsletters publicaveis, paginas, painel de entregas)
+- Metodologia Mapa do Criador (Capture-Cure-Crie / DNA Criativo / Voz Autoral) como base de conhecimento
 
-**O que o toolkit produz:**
-- Paginas de vendas, captura e obrigado (HTML)
-- Textos persuasivos (copy, headlines, VSL)
-- Anuncios para Meta Ads e Google Ads
-- Conteudo para redes sociais (carrosseis, Reels)
-- Scripts comerciais (SPIN Selling)
+**O que o sistema produz (escopo padrao do Mapa):**
+- Newsletter editorial-jornalistica semanal (Markdown e opcionalmente HTML)
+- Carrosseis autorais de 10 slides para Instagram (Markdown + briefing visual)
+- Sequencias conversacionais de stories (Markdown)
+- Posts avulsos (ensaios breves)
+- DNA Criativo do criador (configuracao da voz, base de toda producao)
+- Caixa de Entrada (banco de ideias capturadas durante a semana)
+- Painel HTML de entregas com calendario editorial e status do Ritual 3x3
+
+**O que o sistema produz (escopo herdado, opcional):**
+- Paginas de vendas, captura e obrigado (caso o criador lance infoproduto a partir da newsletter)
+- Anuncios para Meta Ads e Google Ads (caso decida investir em trafego pago)
+- Scripts comerciais SPIN Selling (caso venda high ticket 1:1)
 - Sequencias de email
 - Roteiros de video
 

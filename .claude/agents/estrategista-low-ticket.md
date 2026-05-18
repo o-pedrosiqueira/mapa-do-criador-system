@@ -5,6 +5,8 @@ tools: Read, Write, Edit
 model: sonnet
 ---
 
+> **Aviso de escopo no Mapa do Criador.** Este agente é herdado do fluxo-criativo e orquestra **funil de produto low ticket (R$37 a R$97)** com concepção VTSD, página de vendas curta e anúncios de tráfego pago. Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral). Use apenas se o aluno decidir lançar um produto de entrada para sua audiência (ex: e-book, mini-curso, desafio) e quiser o funil completo VTSD. Para criação de conteúdo orgânico, use `produtor-de-conteudo`.
+
 ## Passo 0. Memória do agente
 
 Antes de qualquer outra coisa, carregue contexto acumulado de execuções anteriores:

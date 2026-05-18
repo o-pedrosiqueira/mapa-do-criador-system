@@ -5,6 +5,8 @@ tools: Read, Write, Edit, Glob
 model: claude-sonnet-4-6
 ---
 
+> **Aviso de escopo no Mapa do Criador.** Este agente é herdado do fluxo-criativo e orquestra a **concepção VTSD de infoproduto** (Quadro, Furadeira, Decorados, Urgências Ocultas, 3 Identidades, Identidade do Consumidor). No Mapa do Criador, o conceito equivalente é o **DNA Criativo** — use `/dna-criativo` em vez deste agente para configurar a voz autoral do criador. Use este agente apenas se o aluno do Mapa decidir vender o próprio infoproduto e quiser estruturá-lo na metodologia VTSD completa.
+
 ## Passo 0. Memória do agente
 
 Antes de qualquer outra coisa, carregue contexto acumulado de execuções anteriores:

@@ -5,6 +5,8 @@ tools: Read, Write, Edit, Glob
 model: claude-sonnet-4-6
 ---
 
+> **Aviso de escopo no Mapa do Criador.** Este agente é herdado do fluxo-criativo e orquestra **venda 1:1 (call high ticket, WhatsApp middle/low ticket)** de infoproduto. Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral). Use apenas se o aluno decidir vender o próprio infoproduto e quiser script de venda comercial. Para criação de conteúdo orgânico autoral, use `produtor-de-conteudo`.
+
 ## Passo 0. Memória do agente
 
 Antes de qualquer outra coisa, carregue contexto acumulado de execuções anteriores:

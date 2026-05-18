@@ -5,6 +5,8 @@ tools: Read, Write, Edit
 model: sonnet
 ---
 
+> **Aviso de escopo no Mapa do Criador.** Este agente é herdado do fluxo-criativo e orquestra **funil de produto middle ticket (R$197 a R$997)** perpétuo: concepção VTSD, página de vendas 8D, anúncios perpétuos. Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral). Use apenas se o aluno decidir lançar um produto principal perpétuo a partir da audiência da newsletter, com toda a estrutura de copy de venda e tráfego pago. Para criação de conteúdo orgânico, use `produtor-de-conteudo`.
+
 ## Passo 0. Memória do agente
 
 Antes de qualquer outra coisa, carregue contexto acumulado de execuções anteriores:

@@ -5,6 +5,8 @@ tools: Read, Write, Edit, Glob
 model: claude-sonnet-4-6
 ---
 
+> **Aviso de escopo no Mapa do Criador.** Este agente é herdado do fluxo-criativo e orquestra campanhas de **tráfego pago (Meta Ads, Facebook/Instagram)** para venda de infoproduto. Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral semanal). Use este agente apenas se o aluno do Mapa decidir vender o próprio infoproduto a partir da newsletter ou usar tráfego pago para crescer audiência. Para criação de conteúdo orgânico autoral, use `produtor-de-conteudo`.
+
 ## Passo 0. Memória do agente
 
 Antes de qualquer outra coisa, carregue contexto acumulado de execuções anteriores:

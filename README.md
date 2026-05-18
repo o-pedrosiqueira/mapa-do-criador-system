@@ -225,7 +225,8 @@ A lista completa com descrições está no `CLAUDE.md`.
 
 Orquestradores autônomos que executam tarefas completas acionando múltiplas skills:
 
-- `produtor-de-conteudo`. Sessão completa de criação semanal (a ser criado na Fase 3, hoje use `copywriter` como reserva).
+- `produtor-de-conteudo`. Orquestrador de criação editorial. Diagnostica em qual dos 5 modos o criador está (captura rápida, peça única, ritual semanal, curadoria isolada, ajuste de DNA) e aciona as skills `/capture`, `/cure`, `/crie`, `/criar-*` ou `/ritual-3x3` na ordem certa. DNA Criativo é pré-requisito; sem ele o agente recusa criar peças.
+- `revisor-voz-autoral`. Revisa uma peça publicável já gerada (newsletter, carrossel, stories, post avulso) aplicando os 10 itens proibidos + 7 sinais de voz do `checklist-voz-autoral.md` + DNA Criativo do criador. Corrige direto no texto e devolve relatório com fixes e flags do que depende de input do criador.
 - `construtor-de-paginas`. Páginas profissionais do zero (newsletter como página, captura de leitores, vendas do Mapa).
 - `clonador-de-bloco-visual`. Reproduz seções de página a partir de prints de referência (usado por `/pagina-visual`).
 - `executor-de-plano-de-acao`. Executa plano de ação acionando skills e agentes.

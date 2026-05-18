@@ -5,6 +5,8 @@ description: Criar produto low ticket completo usando a metodologia low ticket d
 
 # Low Ticket (low ticket). Produto de Entrada Rápido e Lucrativo
 
+> **Aviso de escopo no Mapa do Criador.** Este command é herdado do fluxo-criativo e cria **funil low ticket VTSD** (produto digital de entrada R$37 a R$97 + quiz/página + anúncios). Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral semanal). Use apenas se decidir lançar um produto de entrada para a audiência da sua newsletter. Para criação de conteúdo, use `/ritual-3x3`, `/criar-newsletter`, `/criar-carrossel`, `/criar-stories` ou `/criar-post-avulso`.
+
 Cria produtos low ticket usando a metodologia low ticket do VTSD: produto de entrada, página de quiz, anúncios low ticket e copy para plataforma.
 
 ## Usage

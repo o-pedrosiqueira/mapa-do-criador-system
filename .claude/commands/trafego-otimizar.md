@@ -7,6 +7,8 @@ model: sonnet
 
 # Trafego Otimizar. Diagnóstico de Campanhas Meta Ads
 
+> **Aviso de escopo no Mapa do Criador.** Este command é herdado do fluxo-criativo e faz **diagnóstico/otimização de campanhas Meta Ads** (Facebook + Instagram). Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral orgânica). Use apenas se decidir investir em tráfego pago para crescer audiência da newsletter ou vender infoproduto. Para criação de conteúdo orgânico, use `/ritual-3x3` e os commands `/criar-*`.
+
 Diagnostica campanhas Meta Ads em veiculação, identifica onde está o problema (criativo, técnico, página, checkout, leilão, saturação) e propõe ações graduais que preservam aprendizado. Quando a campanha está madura e estável, emite sinal explícito de prontidão para `/trafego-escalar`.
 
 A especificação técnica completa está em `.claude/skills/trafego-otimizar/SKILL.md`. Este command é o orquestrador.

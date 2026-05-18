@@ -5,6 +5,8 @@ description: Gerar o playbook comercial completo de venda 1:1 por WhatsApp (midd
 
 # Playbook Comercial. Venda 1:1 por WhatsApp (Middle e Low Ticket)
 
+> **Aviso de escopo no Mapa do Criador.** Este command é herdado do fluxo-criativo e gera **script de venda 1:1 por WhatsApp** (metodologia DEF + SPIN). Não faz parte do escopo padrão do Mapa do Criador (produção editorial autoral). Use apenas se decidir vender produto pelo WhatsApp para a audiência da newsletter. Para criação de conteúdo orgânico, use `/ritual-3x3` e os commands `/criar-*`.
+
 Gera o **playbook comercial completo** de venda 1:1 por WhatsApp do produto ativo, usando toda a identidade do produto, do consumidor e do comunicador já cadastrada. **Escopo:** abordagem ativa (outbound), abordagem receptiva (inbound) e recuperação de carrinho. Produtos middle ou low ticket.
 
 **Fora de escopo:** call de venda presencial ou por vídeo, venda high ticket (C10X), pitch de palco, proposta formal de consultoria. Para esses, ver `/ht-*`.

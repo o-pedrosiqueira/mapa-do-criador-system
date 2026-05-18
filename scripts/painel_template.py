@@ -1045,51 +1045,84 @@ def _pills(items: Iterable[str], cls: str = "") -> str:
 # ----- renders por secao -----
 
 def render_visao_geral(dados: dict) -> str:
-    nome = dados.get("nome_produto") or "(sem nome)"
-    tipo = dados.get("tipo") or "a definir"
-    preco = dados.get("preco") or "a definir"
-    quadro = dados.get("quadro") or "Quadro ainda nao definido."
-    nicho = dados.get("nicho") or "a definir"
-    diferencial = dados.get("diferencial") or "a definir"
-    secoes_prontas: list[str] = dados.get("secoes_prontas") or []
+    """Capa editorial da Visao Geral. Estilo zine: eyebrow + manchete em
+    Instrument Serif + lede em Newsreader italic + meta-grid mono. Substitui
+    os cards VTSD por uma capa que parece a primeira pagina de uma revista.
+    """
+    nome = dados.get("nome_produto") or "(criador sem nome)"
+    tipo = dados.get("tipo") or "—"
+    preco = dados.get("preco") or "—"
+    quadro = dados.get("quadro") or ""
+    nicho = dados.get("nicho") or "—"
+    diferencial = dados.get("diferencial") or ""
 
-    chips_prontas = "".join(
-        f'<span class="chip active"><span class="dot"></span>{_escape(s)}</span>'
-        for s in secoes_prontas
-    )
-    chips_base = (
-        f'<span class="chip active"><span class="dot"></span>produto ativo</span>'
-        f'<span class="chip">{_escape(tipo)}</span>'
-        f'<span class="chip">{_escape(preco)}</span>'
+    css = (
+        '<style>'
+        '.cap-cover{border:1px solid var(--ink);padding:56px 40px 32px;position:relative;margin-bottom:48px;background:var(--paper);}'
+        '.cap-cover::before{content:"";position:absolute;inset:12px;border:1px solid var(--ink);pointer-events:none;}'
+        '.cap-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:24px;}'
+        '.cap-eyebrow .sp{color:var(--moss);font-size:1.4em;}'
+        '.cap-titulo{font-family:var(--font-display);font-size:clamp(48px,7vw,84px);line-height:0.95;letter-spacing:-0.035em;font-weight:400;margin-bottom:20px;max-width:14ch;color:var(--ink);}'
+        '.cap-titulo em{font-style:italic;color:var(--moss);}'
+        '.cap-lede{font-family:var(--font-serif);font-style:italic;font-size:22px;line-height:1.4;color:var(--ink-soft);max-width:56ch;margin-bottom:36px;}'
+        '.cap-lede em{color:var(--moss);font-style:italic;}'
+        '.cap-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid var(--ink);padding-top:20px;}'
+        '.cap-meta-col{display:flex;flex-direction:column;gap:4px;}'
+        '.cap-meta-kicker{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);}'
+        '.cap-meta-val{font-family:var(--font-serif);font-style:italic;font-size:17px;color:var(--ink);}'
+        '.cap-cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;}'
+        '.cap-card{border:1px solid var(--line);padding:24px;background:var(--paper);}'
+        '.cap-card .label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:10px;}'
+        '.cap-card .conteudo{font-family:var(--font-display);font-style:italic;font-size:22px;line-height:1.2;letter-spacing:-0.015em;color:var(--ink);}'
+        '</style>'
     )
 
-    grid1 = (
-        '<div class="grid grid-3" style="margin-bottom:var(--s-7)">'
-        f'<div class="card"><span class="card-label">Nome do produto</span>'
-        f'<div class="card-headline">{_escape(nome)}</div></div>'
-        f'<div class="card"><span class="card-label">Tipo</span>'
-        f'<div class="card-headline">{_escape(tipo)}</div></div>'
-        f'<div class="card"><span class="card-label">Preco</span>'
-        f'<div class="metric" style="font-size:32px">{_escape(preco)}</div></div>'
-        "</div>"
+    quadro_text = quadro if quadro else "Configure o Quadro do criador em /produto-concepcao para ver a transformacao aqui."
+    capa_html = (
+        '<div class="cap-cover">'
+        '<div class="cap-eyebrow">'
+        '<span class="sp">✦</span>'
+        '<span>Mapa do Criador &middot; Painel Editorial</span>'
+        '</div>'
+        f'<h1 class="cap-titulo">{_escape(nome)}</h1>'
+        f'<p class="cap-lede">{_escape(quadro_text)}</p>'
+        '<div class="cap-meta">'
+        '<div class="cap-meta-col">'
+        '<div class="cap-meta-kicker">Nicho</div>'
+        f'<div class="cap-meta-val">{_escape(nicho)}</div>'
+        '</div>'
+        '<div class="cap-meta-col">'
+        '<div class="cap-meta-kicker">Tipo</div>'
+        f'<div class="cap-meta-val">{_escape(tipo)}</div>'
+        '</div>'
+        '<div class="cap-meta-col">'
+        '<div class="cap-meta-kicker">Preço</div>'
+        f'<div class="cap-meta-val">{_escape(preco)}</div>'
+        '</div>'
+        '</div>'
+        '</div>'
     )
-    quadro_box = (
-        f'<div class="quadro-card" style="margin-bottom:var(--s-7)">'
-        f'<div class="big-quote">{_escape(quadro)}</div>'
-        "</div>"
-    )
-    grid2 = (
-        '<div class="grid grid-2" style="margin-bottom:var(--s-5)">'
-        f'<div class="card"><span class="card-label">Nicho</span>'
-        f'<div class="card-headline" style="font-size:20px">{_escape(nicho)}</div></div>'
-        f'<div class="card glow"><span class="card-label">Diferencial</span>'
-        f'<div class="card-headline" style="font-size:20px;color:var(--neon)">{_escape(diferencial)}</div></div>'
-        "</div>"
-    )
-    status = f'<div class="chip-group">{chips_base}{chips_prontas}</div>'
+
+    if diferencial:
+        diferencial_card = (
+            '<div class="cap-cards">'
+            '<div class="cap-card">'
+            '<div class="label">Diferencial editorial</div>'
+            f'<div class="conteudo">{_escape(diferencial)}</div>'
+            '</div>'
+            '<div class="cap-card">'
+            '<div class="label">Posicionamento</div>'
+            '<div class="conteudo">Voz autoral acima de tudo. A IA escreve <em>com</em> o criador, nao no lugar dele.</div>'
+            '</div>'
+            '</div>'
+        )
+    else:
+        diferencial_card = ""
 
     return (
-        f'<!-- SECTION:visao-geral -->\n{grid1}{quadro_box}{grid2}{status}\n<!-- /SECTION:visao-geral -->'
+        f'<!-- SECTION:visao-geral -->\n'
+        f'{css}{capa_html}{diferencial_card}\n'
+        f'<!-- /SECTION:visao-geral -->'
     )
 
 

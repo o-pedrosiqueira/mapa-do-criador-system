@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Logotipo Mapa do Criador.
+  Sinete acima + nome do projeto em Instrument Serif italic.
+  Use em capa de PDF, social card, header de pagina especial.
+  Pode ser usado em fundo creme (default) ou tinta (invertido via CSS).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="400" height="220" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap");
+      .logo-title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; }
+    </style>
+  </defs>
+  <!-- Sinete reaproveitado, escalado e centralizado -->
+  <g transform="translate(200,70)" fill="#3d5a3d">
+    <path d="M 0,-32 Q 3,-8 0,0 Q -3,-8 0,-32 Z M 0,32 Q 3,8 0,0 Q -3,8 0,32 Z"/>
+    <path d="M 32,0 Q 8,-3 0,0 Q 8,3 32,0 Z M -32,0 Q -8,-3 0,0 Q -8,3 -32,0 Z"/>
+    <g opacity="0.7">
+      <path d="M 19,-19 Q 6,-6 0,0 Q 6,-6 19,-19 Z M -19,19 Q -6,6 0,0 Q -6,6 -19,19 Z"/>
+      <path d="M -19,-19 Q -6,-6 0,0 Q -6,-6 -19,-19 Z M 19,19 Q 6,6 0,0 Q 6,6 19,19 Z"/>
+    </g>
+    <circle r="2.5" fill="#d4af37"/>
+  </g>
+  <!-- Wordmark em Instrument Serif -->
+  <text x="200" y="155" text-anchor="middle" class="logo-title" font-size="44" fill="#1a1410" letter-spacing="-0.025em">
+    Mapa do <tspan font-style="italic" fill="#3d5a3d">Criador</tspan>
+  </text>
+  <!-- Tagline em mono pequeno -->
+  <text x="200" y="190" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" letter-spacing="3" fill="#7a705f">
+    TRES HORAS, SETE DIAS
+  </text>
+</svg>

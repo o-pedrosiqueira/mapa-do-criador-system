@@ -55,3 +55,26 @@ Quando um agente cria a primeira memória, usa este template:
 ## Limpar memórias
 
 Pra zerar tudo, basta apagar os arquivos `.md` dentro desta pasta e dentro de `meus-produtos/*/agentes/`. A pasta e o README continuam de pé.
+
+## Agentes ativos no Mapa do Criador
+
+Agentes criados especificamente para o método do Mapa do Criador (Capture-Cure-Crie, DNA Criativo, voz autoral):
+
+| Agente | Função | Memória armazena |
+|---|---|---|
+| `produtor-de-conteudo` | Orquestrador editorial. Diagnostica em qual dos 5 modos o criador está (captura, peça única, ritual semanal, curadoria isolada, ajuste de DNA) e aciona as skills corretas. | Padrões de produção do criador, formatos preferidos, peças que ressoaram, decisões editoriais recorrentes. |
+| `revisor-voz-autoral` | Aplica os 10 itens proibidos + 7 sinais de voz + DNA Criativo em peça já gerada. Corrige in-place. | Padrões de erro recorrentes da IA com o DNA específico do criador, vocabulário que precisa ser inserido manualmente, sinais de voz frequentemente ausentes. |
+
+Agentes herdados do fluxo-criativo (continuam funcionais, mas operam em metodologia VTSD/Light Copy — usar com consciência):
+
+| Agente | Escopo | Quando usar no Mapa |
+|---|---|---|
+| `copywriter` | Orquestra `/copy-*` (página de vendas, anúncio, carrossel VTSD) | Só se o criador for vender infoproduto a partir da audiência |
+| `criador-de-campanhas` | Campanhas de tráfego pago Meta Ads | Só se decidir investir em tráfego pago |
+| `consultor-comercial` | Venda 1:1 (high/low ticket) | Só se vender com call ou WhatsApp |
+| `estrategista-de-produto` | Concepção VTSD (Quadro, Furadeira, Decorados, Urgências) | Equivalente Mapa é `/dna-criativo` |
+| `estrategista-low-ticket` | Funil low ticket R$37-97 | Só se lançar produto de entrada |
+| `estrategista-middle-ticket` | Funil middle ticket perpétuo | Só se lançar produto principal |
+| `construtor-de-paginas`, `clonador-de-bloco-visual`, `executor-de-plano-de-acao`, `video-maker`, `pesquisa-mercado`, `revisor-*` (perfil/idconsumidor/pesquisa), `gerador-*` | Infraestrutura técnica reutilizável | Continuam servindo no Mapa quando relevante |
+
+Cada agente acima tem seu próprio aviso de escopo no início do `.md` correspondente em `.claude/agents/`.

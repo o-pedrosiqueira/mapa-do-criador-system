@@ -956,10 +956,9 @@ def build_shell(nome_produto: str, owner: str = "", timestamp: str = "") -> str:
       <div class="brand-mark" aria-hidden="true"></div>
       <div class="brand-text"><em>Mapa do Criador</em><span class="tiny">Painel &middot; v1.0</span></div>
     </div>
-    <div class="sala-link" id="sala-link" data-id="sala-dos-agentes" onclick="showSala()" title="Ver agentes trabalhando ao vivo">
-      <span>Sala dos Agentes</span>
-      <span class="live-pulse" aria-hidden="true"></span>
-    </div>
+    <!-- Sala dos Agentes desabilitada no Mapa do Criador
+         (era feature do fluxo-criativo via workshop-live-office.html). -->
+    <!-- <div class="sala-link" id="sala-link" data-id="sala-dos-agentes" onclick="showSala()">Sala dos Agentes</div> -->
     <div class="user-block">
       <div class="label">Produto ativo</div>
       <div class="product" id="sidebar-product">{_escape(nome_produto)}</div>

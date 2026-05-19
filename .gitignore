@@ -143,3 +143,6 @@ entregas/instagram-dashboard/imagens/
 *.cer
 *.certSigningRequest
 *.pem
+
+# Marker de instalacao concluida (criado pelo installer.js apos o setup)
+.installed

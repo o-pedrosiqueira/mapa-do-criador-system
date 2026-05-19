@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Social card / Open Graph image do Mapa do Criador. 1200x630 (padrao OG).
+  Use no <meta property="og:image"> de qualquer pagina publica.
+  Estilo editorial zine: paper cream + moldura ink + sinete moss gigante.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist+Mono:wght@500&amp;display=swap");
+      .og-display { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; }
+      .og-mono { font-family: "Geist Mono", ui-monospace, monospace; }
+    </style>
+    <pattern id="grain" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="#1a1410" opacity="0.05"/>
+    </pattern>
+  </defs>
+  <!-- Fundo paper cream com grain -->
+  <rect width="1200" height="630" fill="#f0e8d6"/>
+  <rect width="1200" height="630" fill="url(#grain)"/>
+  <!-- Moldura dupla -->
+  <rect x="24" y="24" width="1152" height="582" fill="none" stroke="#1a1410" stroke-width="1.5"/>
+  <rect x="36" y="36" width="1128" height="558" fill="none" stroke="#1a1410" stroke-width="1"/>
+  <!-- Sinete gigante decorativo no canto direito -->
+  <g transform="translate(980,310)" fill="#3d5a3d" opacity="0.95">
+    <path d="M 0,-180 Q 12,-30 0,0 Q -12,-30 0,-180 Z M 0,180 Q 12,30 0,0 Q -12,30 0,180 Z"/>
+    <path d="M 180,0 Q 30,-12 0,0 Q 30,12 180,0 Z M -180,0 Q -30,-12 0,0 Q -30,12 -180,0 Z"/>
+    <g opacity="0.6">
+      <path d="M 110,-110 Q 24,-24 0,0 Q 24,-24 110,-110 Z M -110,110 Q -24,24 0,0 Q -24,24 -110,110 Z"/>
+      <path d="M -110,-110 Q -24,-24 0,0 Q -24,-24 -110,-110 Z M 110,110 Q 24,24 0,0 Q 24,24 110,110 Z"/>
+    </g>
+    <circle r="10" fill="#d4af37"/>
+  </g>
+  <!-- Eyebrow -->
+  <text x="80" y="110" class="og-mono" font-size="16" letter-spacing="4" fill="#3d5a3d">
+    ✦ &#160;&#160; MAPA DO CRIADOR
+  </text>
+  <!-- Manchete principal -->
+  <text x="80" y="240" class="og-display" font-size="92" fill="#1a1410" letter-spacing="-3">
+    Três horas.
+  </text>
+  <text x="80" y="340" class="og-display" font-size="92" font-style="italic" fill="#3d5a3d" letter-spacing="-3">
+    Sete dias.
+  </text>
+  <!-- Lede -->
+  <text x="80" y="420" class="og-display" font-style="italic" font-size="32" fill="#4a3f30" letter-spacing="-0.5">
+    Criação de conteúdo autoral com IA,
+  </text>
+  <text x="80" y="460" class="og-display" font-style="italic" font-size="32" fill="#4a3f30" letter-spacing="-0.5">
+    preservando a voz do criador.
+  </text>
+  <!-- Assinatura inferior -->
+  <line x1="80" y1="530" x2="600" y2="530" stroke="#1a1410" stroke-width="1"/>
+  <text x="80" y="565" class="og-mono" font-size="14" letter-spacing="3" fill="#7a705f">
+    PEDRO SIQUEIRA · CAPTURE · CURE · CRIE
+  </text>
+</svg>

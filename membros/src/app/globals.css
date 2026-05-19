@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Paleta editorial */
+  --paper: oklch(95.5% 0.018 82);
+  --paper-deep: oklch(92% 0.022 82);
+  --sand: oklch(86% 0.030 80);
+  --ink: oklch(16% 0.022 55);
+  --ink-soft: oklch(32% 0.020 55);
+  --ink-mute: oklch(52% 0.016 68);
+  --line: oklch(82% 0.012 75);
+  --line-soft: oklch(88% 0.012 75);
+  --moss: oklch(34% 0.060 148);
+  --moss-deep: oklch(28% 0.055 148);
+  --moss-soft: oklch(86% 0.035 145);
+  --gold: oklch(72% 0.110 86);
+
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", monospace;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-sand: var(--sand);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-moss: var(--moss);
+  --color-moss-deep: var(--moss-deep);
+  --color-moss-soft: var(--moss-soft);
+  --color-gold: var(--gold);
+  --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  background-image:
+    radial-gradient(oklch(20% 0.02 60 / 0.018) 1px, transparent 1.2px),
+    radial-gradient(oklch(20% 0.02 60 / 0.012) 1px, transparent 1.4px);
+  background-size: 3px 3px, 7px 7px;
+  min-height: 100vh;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-serif { font-family: var(--font-serif); }
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--moss);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow .sp { color: var(--moss); font-size: 1.3em; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-sans); font-size: 15px; font-weight: 500;
+  padding: 12px 24px; border-radius: 4px;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: background 0.15s ease;
+}
+.btn-primary:hover { background: var(--moss-deep); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--ink-soft);
+  font-family: var(--font-sans); font-size: 14px;
+  padding: 8px 14px; border: 1px solid var(--line);
+  border-radius: 4px; cursor: pointer; text-decoration: none;
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover { border-color: var(--moss); color: var(--moss); }
+
+input[type="email"], input[type="password"], input[type="text"] {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+  outline: none; border-color: var(--moss);
+}

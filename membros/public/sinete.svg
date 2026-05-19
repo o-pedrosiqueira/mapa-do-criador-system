@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sinete ✦ do Mapa do Criador.
+  Quatro pontas, quatro significados: Norte/direcao, Sul/base, Leste/captura, Oeste/entrega.
+  Use como marca de pontuacao, favicon, social card.
+  Cor moss (oklch 34% 0.060 148 / aproximado #2f4f2f / #3d5a3d).
+  Versao vetorial em escala generosa para qualquer tamanho.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="moss-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d5a3d"/>
+      <stop offset="100%" stop-color="#2f4828"/>
+    </linearGradient>
+  </defs>
+  <!--
+    Sinete quadripontiagudo. Construido com duas elipses cruzadas + circulo central pequeno.
+    Imita o glifo unicode ✦ mas em geometria pura.
+  -->
+  <g transform="translate(50,50)" fill="url(#moss-grad)">
+    <!-- Eixo Norte-Sul (vertical, mais longo) -->
+    <path d="M 0,-46 Q 4,-12 0,0 Q -4,-12 0,-46 Z M 0,46 Q 4,12 0,0 Q -4,12 0,46 Z"/>
+    <!-- Eixo Leste-Oeste (horizontal) -->
+    <path d="M 46,0 Q 12,-4 0,0 Q 12,4 46,0 Z M -46,0 Q -12,-4 0,0 Q -12,4 -46,0 Z"/>
+    <!-- Diagonais menores (NE-SW e NW-SE) -->
+    <g opacity="0.7">
+      <path d="M 28,-28 Q 9,-9 0,0 Q 9,-9 28,-28 Z M -28,28 Q -9,9 0,0 Q -9,9 -28,28 Z"/>
+      <path d="M -28,-28 Q -9,-9 0,0 Q -9,-9 -28,-28 Z M 28,28 Q 9,9 0,0 Q 9,9 28,28 Z"/>
+    </g>
+    <!-- Centro -->
+    <circle r="3.5" fill="#d4af37"/>
+  </g>
+</svg>

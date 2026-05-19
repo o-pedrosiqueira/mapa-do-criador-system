@@ -1,0 +1,23 @@
+# DMGs grandes ficam no GitHub Release, nao na Vercel
+dist-electron/
+
+# Build artifacts e node_modules
+node_modules/
+build/
+.git/
+
+# Arquivos de produto local (gitignored, mas explicito)
+meus-produtos/
+
+# Codigo Electron e backend (so a pasta painel/ vai pro deploy via outputDirectory)
+electron/
+scripts/
+.claude/
+assets/
+instalador/
+
+# Workshop e arquivos legados
+workshop-live-office.html
+
+# Markdown da raiz
+*.md

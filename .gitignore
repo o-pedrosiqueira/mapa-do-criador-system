@@ -146,3 +146,4 @@ entregas/instagram-dashboard/imagens/
 
 # Marker de instalacao concluida (criado pelo installer.js apos o setup)
 .installed
+.vercel

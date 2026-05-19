@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Apple touch icon (iOS home screen, social share large preview).
+  180x180. Fundo paper, sinete moss centralizado, border ink sutil.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="ati-paper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0e8d6"/>
+      <stop offset="100%" stop-color="#e6dcc4"/>
+    </linearGradient>
+    <pattern id="ati-grain" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="#1a1410" opacity="0.06"/>
+    </pattern>
+  </defs>
+  <!-- Squircle iOS-friendly (cantos arredondados) -->
+  <rect width="180" height="180" rx="40" fill="url(#ati-paper)"/>
+  <rect width="180" height="180" rx="40" fill="url(#ati-grain)"/>
+  <!-- Moldura dupla interna -->
+  <rect x="14" y="14" width="152" height="152" rx="28" fill="none" stroke="#1a1410" stroke-width="1.2"/>
+  <rect x="20" y="20" width="140" height="140" rx="22" fill="none" stroke="#1a1410" stroke-width="0.6" opacity="0.6"/>
+  <!-- Sinete centralizado -->
+  <g transform="translate(90,86)" fill="#3d5a3d">
+    <path d="M 0,-46 Q 4,-12 0,0 Q -4,-12 0,-46 Z M 0,46 Q 4,12 0,0 Q -4,12 0,46 Z"/>
+    <path d="M 46,0 Q 12,-4 0,0 Q 12,4 46,0 Z M -46,0 Q -12,-4 0,0 Q -12,4 -46,0 Z"/>
+    <g opacity="0.7">
+      <path d="M 28,-28 Q 9,-9 0,0 Q 9,-9 28,-28 Z M -28,28 Q -9,9 0,0 Q -9,9 -28,28 Z"/>
+      <path d="M -28,-28 Q -9,-9 0,0 Q -9,-9 -28,-28 Z M 28,28 Q 9,9 0,0 Q 9,9 28,28 Z"/>
+    </g>
+    <circle r="3.5" fill="#d4af37"/>
+  </g>
+  <!-- Wordmark embaixo do sinete -->
+  <text x="90" y="152" font-family="'Instrument Serif', Georgia, serif" font-size="13" font-style="italic" fill="#1a1410" text-anchor="middle" letter-spacing="-0.3">
+    Mapa do Criador
+  </text>
+</svg>

@@ -1,5 +1,7 @@
 {
   "outputDirectory": "painel",
+  "buildCommand": "echo 'static site, no build needed'",
+  "installCommand": "echo 'no deps to install'",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [

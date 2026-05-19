@@ -1420,7 +1420,87 @@ def montar_dados(secao: str, produto_dir: Path, slug: str) -> tuple[dict, str]:
         return {"entregas": parse_entregas_pasta(produto_dir, "carrosseis")}, nome_produto
     if secao == "stories":
         return {"entregas": parse_entregas_pasta(produto_dir, "stories")}, nome_produto
+    if secao in ("anthem", "arquetipo", "pilares", "manifesto"):
+        return parse_posicao_autoral(produto_dir, secao), nome_produto
     raise ValueError(f"Secao desconhecida: {secao}")
+
+
+def parse_posicao_autoral(produto_dir: Path, secao: str) -> dict:
+    """Le meus-produtos/{slug}/posicao-autoral.md e extrai a secao pedida.
+
+    Estrutura esperada do arquivo:
+        # Posicao Autoral
+
+        ## Anthem
+        {frase de posicionamento, 1 a 3 frases}
+
+        ## Arquetipo
+        - **Brand Archetype:** {Hero | Sage | Outlaw | Magician | etc}
+        - **Vantagem Primaria:** {Innovation | Passion | Power | Prestige | Trust | Mystique | Alert}
+        - **Vantagem Secundaria:** {idem}
+        - **Combinacao:** {nome da combinacao Sally Hogshead, ex: 'The Catalyst'}
+        - **Como aparece:** {2 a 4 frases descrevendo como a combinacao se manifesta}
+
+        ## Pilares de Conteudo
+        1. **{Nome do pilar}** — {descricao em 1 linha}
+        2. **{Nome do pilar}** — {descricao}
+        ...
+
+        ## Manifesto
+        ### O que defendo
+        {texto narrativo curto}
+        ### O que rejeito
+        {texto narrativo curto}
+    """
+    arq = produto_dir / "posicao-autoral.md"
+    texto = ler_arquivo(arq)
+    if not texto.strip():
+        return {}
+
+    bloco = extrair_secao(texto, secao.capitalize()) or extrair_secao(texto, secao.title())
+    # Tentativas adicionais com casing variado
+    candidatos = {
+        "anthem": ["Anthem"],
+        "arquetipo": ["Arquetipo", "Arquétipo"],
+        "pilares": ["Pilares de Conteudo", "Pilares de Conteúdo", "Pilares"],
+        "manifesto": ["Manifesto"],
+    }
+    for titulo in candidatos.get(secao, []):
+        b = extrair_secao(texto, titulo)
+        if b.strip():
+            bloco = b
+            break
+
+    if secao == "anthem":
+        return {"texto": bloco.strip()}
+
+    if secao == "arquetipo":
+        kv = kv_bullets(bloco)
+        return {
+            "brand_archetype": kv.get("Brand Archetype", ""),
+            "vantagem_primaria": kv.get("Vantagem Primaria", "") or kv.get("Vantagem Primária", ""),
+            "vantagem_secundaria": kv.get("Vantagem Secundaria", "") or kv.get("Vantagem Secundária", ""),
+            "combinacao": kv.get("Combinacao", "") or kv.get("Combinação", ""),
+            "como_aparece": kv.get("Como aparece", ""),
+        }
+
+    if secao == "pilares":
+        # Linhas numeradas com **Nome** — descricao
+        pilares = []
+        for linha in bloco.split("\n"):
+            m = re.match(r"^\s*\d+\.\s*\*\*([^*]+)\*\*\s*[-—]\s*(.+)$", linha.strip())
+            if m:
+                pilares.append({"nome": m.group(1).strip(), "descricao": m.group(2).strip()})
+        return {"pilares": pilares}
+
+    if secao == "manifesto":
+        defendo = extrair_subsecao(bloco, "O que defendo")
+        rejeito = extrair_subsecao(bloco, "O que rejeito") or extrair_subsecao(bloco, "O que contraponho")
+        return {
+            "defendo": defendo.strip(),
+            "rejeito": rejeito.strip(),
+        }
+    return {}
 
 
 # ----- visao geral (derivada) -----

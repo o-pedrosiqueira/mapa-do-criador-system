@@ -63,16 +63,22 @@ SECOES: list[dict] = [
     {"id": "identidade-consumidor", "grupo": "DNA", "titulo": "Identidade do Leitor", "ix": "10",
      "subtitulo": "Perfil detalhado do leitor-alvo da newsletter e do conteudo autoral.",
      "proxima": "Sera preenchida automaticamente no Passo 4C de /produto-concepcao."},
-    {"id": "quadro", "grupo": "METODO", "titulo": "Transformacao", "ix": "11",
-     "subtitulo": "A transformacao que o criador entrega ao leitor da sua audiencia.",
-     "proxima": "Sera preenchida ao rodar /produto-concepcao no Claude."},
-    {"id": "furadeira", "grupo": "METODO", "titulo": "Metodo", "ix": "12",
-     "subtitulo": "O Ritual 3x3 do criador: Capture, Cure, Crie. Tres horas, sete dias.",
-     "proxima": "Sera preenchida ao rodar /produto-concepcao no Claude."},
-    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Nicho", "ix": "13",
+    {"id": "anthem", "grupo": "POSICAO AUTORAL", "titulo": "Anthem", "ix": "11",
+     "subtitulo": "Frase de posicionamento. Voce e mais fascinante quando e mais distinto (Sally Hogshead).",
+     "proxima": "Sera preenchida ao rodar /definir-anthem no Claude."},
+    {"id": "arquetipo", "grupo": "POSICAO AUTORAL", "titulo": "Arquetipo", "ix": "12",
+     "subtitulo": "Combinacao de Brand Archetypes (Jung / Mark & Pearson) + Vantagens da Fascinacao (Sally Hogshead).",
+     "proxima": "Sera preenchida ao rodar /escolher-arquetipo no Claude."},
+    {"id": "pilares", "grupo": "POSICAO AUTORAL", "titulo": "Pilares de Conteudo", "ix": "13",
+     "subtitulo": "3 a 5 temas recorrentes que o criador aborda. A grade editorial do mapa.",
+     "proxima": "Sera preenchida ao rodar /definir-pilares no Claude."},
+    {"id": "manifesto", "grupo": "POSICAO AUTORAL", "titulo": "Manifesto", "ix": "14",
+     "subtitulo": "O que o criador defende publicamente e o que ele se contrapoe.",
+     "proxima": "Sera preenchido ao rodar /escrever-manifesto no Claude."},
+    {"id": "pesquisa", "grupo": "PESQUISA", "titulo": "Pesquisa de Nicho", "ix": "15",
      "subtitulo": "Inteligencia do nicho do criador. Use para alimentar ganchos e achar referencias.",
      "proxima": "Sera preenchida ao final de /produto-novo (Ramo 2) ou /pesquisa-mercado."},
-    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "14",
+    {"id": "dashboards", "grupo": "DADOS", "titulo": "Redes Sociais", "ix": "16",
      "subtitulo": "Metricas de presenca digital. Instagram, TikTok e YouTube em abas.",
      "proxima": "Sera preenchido ao rodar /dashboard-social."},
 ]
@@ -2932,6 +2938,183 @@ def render_stories(dados: dict) -> str:
     return _render_entregas_lista("stories", dados, "Stories", "/criar-stories")
 
 
+# ============================================================
+# POSICAO AUTORAL: Anthem / Arquetipo / Pilares / Manifesto
+# ============================================================
+
+_POSICAO_CSS = """
+<style>
+  .pos-cover{border:1px solid var(--ink);padding:48px 40px 32px;position:relative;background:var(--paper);margin-bottom:32px;}
+  .pos-cover::before{content:"";position:absolute;inset:12px;border:1px solid var(--ink);pointer-events:none;}
+  .pos-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:24px;display:flex;align-items:center;gap:8px;}
+  .pos-eyebrow .sp{color:var(--moss);font-size:1.3em;}
+  .pos-anthem{font-family:var(--font-display);font-style:italic;font-size:clamp(32px, 5vw, 56px);line-height:1.1;letter-spacing:-0.025em;color:var(--ink);max-width:24ch;}
+  .pos-anthem em{color:var(--moss);font-style:italic;}
+  .pos-source{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-top:24px;border-top:1px solid var(--line);padding-top:12px;}
+  .pos-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;}
+  .pos-card{border:1px solid var(--line);background:var(--paper);padding:24px;}
+  .pos-card .label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:8px;}
+  .pos-card .conteudo{font-family:var(--font-display);font-style:italic;font-size:28px;line-height:1.1;letter-spacing:-0.015em;color:var(--ink);}
+  .pos-card .desc{font-family:var(--font-serif);font-size:15px;line-height:1.55;color:var(--ink-soft);margin-top:12px;}
+  .pos-pilar{display:grid;grid-template-columns:48px 1fr;gap:20px;border-bottom:1px solid var(--line);padding:20px 0;}
+  .pos-pilar-num{font-family:var(--font-display);font-style:italic;font-size:38px;color:var(--moss);line-height:1;}
+  .pos-pilar-nome{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--ink);letter-spacing:-0.015em;line-height:1.1;margin-bottom:6px;}
+  .pos-pilar-desc{font-family:var(--font-serif);font-style:italic;font-size:16px;color:var(--ink-soft);line-height:1.5;}
+  .pos-defendo,.pos-rejeito{padding:24px;border-left:3px solid var(--moss);background:var(--paper);margin-bottom:20px;}
+  .pos-defendo .label,.pos-rejeito .label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--moss);margin-bottom:12px;}
+  .pos-rejeito{border-left-color:var(--ink-mute);}
+  .pos-rejeito .label{color:var(--ink-mute);}
+  .pos-defendo .texto,.pos-rejeito .texto{font-family:var(--font-serif);font-size:18px;line-height:1.6;color:var(--ink);font-style:italic;}
+</style>
+"""
+
+
+def render_anthem(dados: dict) -> str:
+    texto = (dados.get("texto") or "").strip()
+    if not texto:
+        miolo = _empty_state(
+            "Sem Anthem ainda",
+            "A frase de posicionamento que captura o que te torna distinto",
+            contexto="Sally Hogshead: 'you are most fascinating when you are most distinct'. Anthem e a unica frase que captura sua diferenca essencial — o que voce defende e como entrega.",
+            cta_comando="/definir-anthem",
+            cta_label="Defina seu Anthem",
+        )
+        return _render_secao("anthem", miolo)
+    miolo = (
+        f'{_POSICAO_CSS}'
+        '<div class="pos-cover">'
+        '<div class="pos-eyebrow"><span class="sp">✦</span><span>Anthem &middot; Posicao Autoral</span></div>'
+        f'<div class="pos-anthem">{_escape(texto)}</div>'
+        '<div class="pos-source">Frase de posicionamento (Sally Hogshead, How to Fascinate)</div>'
+        '</div>'
+    )
+    return _render_secao("anthem", miolo)
+
+
+def render_arquetipo(dados: dict) -> str:
+    brand = (dados.get("brand_archetype") or "").strip()
+    vp = (dados.get("vantagem_primaria") or "").strip()
+    vs = (dados.get("vantagem_secundaria") or "").strip()
+    combinacao = (dados.get("combinacao") or "").strip()
+    como_aparece = (dados.get("como_aparece") or "").strip()
+
+    if not brand and not vp:
+        miolo = _empty_state(
+            "Sem Arquetipo definido",
+            "Escolha o arquetipo de marca e as Vantagens de Fascinacao do criador",
+            contexto="Brand Archetypes (Jung / Mark & Pearson): 12 padroes universais (Hero, Sage, Outlaw, Magician, etc). Vantagens de Fascinacao (Sally Hogshead): Innovation, Passion, Power, Prestige, Trust, Mystique, Alert. A combinacao define como o criador atrai e mantem atencao.",
+            cta_comando="/escolher-arquetipo",
+            cta_label="Escolha seu Arquetipo",
+        )
+        return _render_secao("arquetipo", miolo)
+
+    cards = '<div class="pos-grid-2">'
+    if brand:
+        cards += (
+            '<div class="pos-card">'
+            '<div class="label">Brand Archetype</div>'
+            f'<div class="conteudo">{_escape(brand)}</div>'
+            '<div class="desc">Padrao universal de marca (Mark & Pearson, baseado em Jung).</div>'
+            '</div>'
+        )
+    if vp or vs:
+        vantagens_html = ""
+        if vp:
+            vantagens_html += f'<div class="conteudo">{_escape(vp)}</div>'
+        if vs:
+            vantagens_html += f'<div class="conteudo" style="font-size:20px;opacity:0.7;margin-top:6px;">+ {_escape(vs)}</div>'
+        cards += (
+            '<div class="pos-card">'
+            '<div class="label">Vantagens da Fascinacao</div>'
+            f'{vantagens_html}'
+            '<div class="desc">Como voce atrai atencao quando esta no seu melhor (Sally Hogshead).</div>'
+            '</div>'
+        )
+    cards += '</div>'
+
+    combinacao_html = ""
+    if combinacao or como_aparece:
+        combinacao_html = (
+            '<div class="pos-cover">'
+            '<div class="pos-eyebrow"><span class="sp">✦</span><span>Combinacao</span></div>'
+        )
+        if combinacao:
+            combinacao_html += f'<div class="pos-anthem">{_escape(combinacao)}</div>'
+        if como_aparece:
+            combinacao_html += f'<div class="desc" style="margin-top:24px;font-family:var(--font-serif);font-size:18px;line-height:1.55;color:var(--ink-soft);max-width:62ch;">{_escape(como_aparece)}</div>'
+        combinacao_html += '</div>'
+
+    miolo = f'{_POSICAO_CSS}{combinacao_html}{cards}'
+    return _render_secao("arquetipo", miolo)
+
+
+def render_pilares(dados: dict) -> str:
+    pilares = dados.get("pilares") or []
+    if not pilares:
+        miolo = _empty_state(
+            "Sem Pilares definidos",
+            "3 a 5 temas recorrentes que o criador aborda",
+            contexto="Pilares de conteudo sao os 3 a 5 territorios tematicos do criador. Toda peca de conteudo encaixa em pelo menos 1. Eles dao coerencia ao perfil sem prender o criador em um nicho unico.",
+            cta_comando="/definir-pilares",
+            cta_label="Defina seus Pilares",
+        )
+        return _render_secao("pilares", miolo)
+
+    pilares_html = ""
+    for i, p in enumerate(pilares, start=1):
+        roman = ["i", "ii", "iii", "iv", "v", "vi", "vii"][i - 1] if i <= 7 else str(i)
+        pilares_html += (
+            '<div class="pos-pilar">'
+            f'<div class="pos-pilar-num">{roman}</div>'
+            '<div>'
+            f'<div class="pos-pilar-nome">{_escape(p.get("nome", ""))}</div>'
+            f'<div class="pos-pilar-desc">{_escape(p.get("descricao", ""))}</div>'
+            '</div>'
+            '</div>'
+        )
+    miolo = (
+        f'{_POSICAO_CSS}'
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px;">'
+        f'<div style="font-family:var(--font-display);font-style:italic;font-size:28px;color:var(--ink);">{len(pilares)} <em style="color:var(--moss);">pilares</em></div>'
+        '<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);">Territorios tematicos</div>'
+        '</div>'
+        f'{pilares_html}'
+    )
+    return _render_secao("pilares", miolo)
+
+
+def render_manifesto(dados: dict) -> str:
+    defendo = (dados.get("defendo") or "").strip()
+    rejeito = (dados.get("rejeito") or "").strip()
+
+    if not defendo and not rejeito:
+        miolo = _empty_state(
+            "Sem Manifesto ainda",
+            "O que voce defende publicamente e o que se contrapoe",
+            contexto="Manifesto e a postura editorial declarada. Inclui o que voce defende (a tese central que organiza suas pecas) e o que voce rejeita (o oposto da posicao, os territorios e narrativas que voce nao cobre). Sem manifesto, conteudo perde nervo.",
+            cta_comando="/escrever-manifesto",
+            cta_label="Escreva seu Manifesto",
+        )
+        return _render_secao("manifesto", miolo)
+
+    miolo = f'{_POSICAO_CSS}'
+    if defendo:
+        miolo += (
+            '<div class="pos-defendo">'
+            '<div class="label">✦ O que defendo</div>'
+            f'<div class="texto">{_escape(defendo)}</div>'
+            '</div>'
+        )
+    if rejeito:
+        miolo += (
+            '<div class="pos-rejeito">'
+            '<div class="label">× O que rejeito</div>'
+            f'<div class="texto">{_escape(rejeito)}</div>'
+            '</div>'
+        )
+    return _render_secao("manifesto", miolo)
+
+
 RENDERS = {
     "quadro": render_quadro,
     "furadeira": render_furadeira,
@@ -2952,4 +3135,9 @@ RENDERS = {
     "newsletter": render_newsletter,
     "carrosseis": render_carrosseis,
     "stories": render_stories,
+    # Posicao Autoral
+    "anthem": render_anthem,
+    "arquetipo": render_arquetipo,
+    "pilares": render_pilares,
+    "manifesto": render_manifesto,
 }

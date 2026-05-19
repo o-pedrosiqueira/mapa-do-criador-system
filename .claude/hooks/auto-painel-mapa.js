@@ -32,6 +32,7 @@ const PASTA_ENTREGAS = {
 const ARQUIVO_FIXO = {
   'banco-de-ideias.md': ['banco-de-ideias', 'esta-semana'],
   'dna-criativo.md': ['identidade-comunicador'],
+  'posicao-autoral.md': ['anthem', 'arquetipo', 'pilares', 'manifesto'],
 };
 
 function detectarSecoes(filePath) {

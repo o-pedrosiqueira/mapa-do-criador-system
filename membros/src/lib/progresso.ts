@@ -2,7 +2,7 @@
 // Hook React: useProgresso() devolve { prog, toggle, contarConcluidos, loading }.
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 type Progresso = Record<string, boolean>;
@@ -10,54 +10,51 @@ type Progresso = Record<string, boolean>;
 export function useProgresso() {
   const [prog, setProg] = useState<Progresso>({});
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  // Instancia unica por hook (evita recriar client a cada render)
+  const supabase = useMemo(() => createClient(), []);
 
-  // Carregar progresso ao montar
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        if (mounted) setLoading(false);
-        return;
-      }
-      const { data } = await supabase
-        .from("user_progress")
-        .select("item_id, checked")
-        .eq("user_id", user.id);
-      if (!mounted) return;
-      const mapa: Progresso = {};
-      (data || []).forEach((r: { item_id: string; checked: boolean }) => {
-        if (r.checked) mapa[r.item_id] = true;
-      });
-      setProg(mapa);
+  // Funcao para (re)carregar progresso do banco
+  const recarregar = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setProg({});
       setLoading(false);
-    })();
+      return;
+    }
+    const { data } = await supabase
+      .from("user_progress")
+      .select("item_id, checked")
+      .eq("user_id", user.id);
+    const mapa: Progresso = {};
+    (data || []).forEach((r: { item_id: string; checked: boolean }) => {
+      if (r.checked) mapa[r.item_id] = true;
+    });
+    setProg(mapa);
+    setLoading(false);
+  }, [supabase]);
 
-    // Realtime: outras abas/dispositivos atualizam
+  // Carga inicial
+  useEffect(() => {
+    recarregar();
+  }, [recarregar]);
+
+  // Realtime subscription. Nome do canal unico por mount para nao colidir
+  // com canais antigos em React Strict Mode (que faz mount > unmount > mount).
+  useEffect(() => {
+    const nomeCanal = `user_progress_${Math.random().toString(36).slice(2, 10)}`;
     const channel = supabase
-      .channel("user_progress_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "user_progress" }, async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-        const { data } = await supabase
-          .from("user_progress")
-          .select("item_id, checked")
-          .eq("user_id", user.id);
-        if (!mounted) return;
-        const mapa: Progresso = {};
-        (data || []).forEach((r: { item_id: string; checked: boolean }) => {
-          if (r.checked) mapa[r.item_id] = true;
-        });
-        setProg(mapa);
-      })
+      .channel(nomeCanal)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "user_progress" },
+        () => recarregar()
+      )
       .subscribe();
 
     return () => {
-      mounted = false;
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [supabase, recarregar]);
 
   const toggle = useCallback(
     async (itemId: string) => {
@@ -65,7 +62,7 @@ export function useProgresso() {
       if (!user) return;
       const atualEstaMarcado = !!prog[itemId];
 
-      // Otimista: atualiza UI primeiro
+      // Update otimista
       setProg((p) => {
         const novo = { ...p };
         if (atualEstaMarcado) delete novo[itemId];
@@ -74,16 +71,19 @@ export function useProgresso() {
       });
 
       if (atualEstaMarcado) {
-        // Desmarcar -> deletar linha
         await supabase
           .from("user_progress")
           .delete()
           .eq("user_id", user.id)
           .eq("item_id", itemId);
       } else {
-        // Marcar -> upsert
         await supabase.from("user_progress").upsert(
-          { user_id: user.id, item_id: itemId, checked: true, checked_at: new Date().toISOString() },
+          {
+            user_id: user.id,
+            item_id: itemId,
+            checked: true,
+            checked_at: new Date().toISOString(),
+          },
           { onConflict: "user_id,item_id" }
         );
       }

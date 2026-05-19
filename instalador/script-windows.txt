@@ -71,7 +71,7 @@ begin
     RunStep('Baixando o Mapa do Criador... (passo 5 de 7)',
       PathRefresh +
       InstallDir +
-      'if (Test-Path ($p+''\.git'')) { Set-Location $p; git pull } else { git clone -b main https://github.com/pedrosiqueira/mapa-do-criador.git $p }',
+      'if (Test-Path ($p+''\.git'')) { Set-Location $p; git pull } else { git clone -b main https://github.com/o-pedrosiqueira/mapa-do-criador-system.git $p }',
       5, 7);
 
     RunStep('Instalando dependencias do painel... (passo 6 de 7)',

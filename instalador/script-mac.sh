@@ -3,7 +3,7 @@ set -e
 
 INSTALL_DIR="$HOME/Documents/mapa-do-criador"
 # TODO: substituir pelo repositorio publico oficial do Mapa do Criador quando criado
-REPO_URL="${MAPA_REPO_URL:-https://github.com/pedrosiqueira/mapa-do-criador.git}"
+REPO_URL="${MAPA_REPO_URL:-https://github.com/o-pedrosiqueira/mapa-do-criador-system.git}"
 DESKTOP="$HOME/Desktop"
 
 echo ""

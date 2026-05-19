@@ -4,8 +4,7 @@ const os = require('os')
 const fs = require('fs')
 
 const DEFAULT_INSTALL_DIR = path.join(os.homedir(), 'Documents', 'mapa-do-criador')
-// TODO: substituir pelo repo publico real do Mapa do Criador antes de distribuir
-const REPO_URL = process.env.MAPA_REPO_URL || 'https://github.com/pedrosiqueira/mapa-do-criador.git'
+const REPO_URL = process.env.MAPA_REPO_URL || 'https://github.com/o-pedrosiqueira/mapa-do-criador-system.git'
 
 function run(cmd, args, opts = {}) {
   return new Promise((resolve, reject) => {

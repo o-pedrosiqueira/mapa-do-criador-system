@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa do Criador — Seu Download</title>
+<meta name="description" content="Bem-vindo ao Mapa do Criador. Baixe o instalador e configure o sistema em 10 minutos.">
+<link rel="icon" type="image/svg+xml" href="painel-assets/sinete.svg">
+<link rel="apple-touch-icon" href="painel-assets/apple-touch-icon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mapa do Criador — Seu Download">
+<meta property="og:description" content="Bem-vindo. Baixe o instalador e configure o sistema em 10 minutos.">
+<meta property="og:image" content="painel-assets/social-card.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: oklch(95.5% 0.018 82);
+    --paper-deep: oklch(92% 0.022 82);
+    --sand: oklch(86% 0.030 80);
+    --ink: oklch(16% 0.022 55);
+    --ink-soft: oklch(32% 0.020 55);
+    --ink-mute: oklch(52% 0.016 68);
+    --line: oklch(82% 0.012 75);
+    --moss: oklch(34% 0.060 148);
+    --moss-deep: oklch(28% 0.055 148);
+    --moss-soft: oklch(86% 0.035 145);
+    --gold: oklch(72% 0.110 86);
+    --font-display: "Instrument Serif", Georgia, serif;
+    --font-serif: "Newsreader", Georgia, serif;
+    --font-sans: "Geist", system-ui, sans-serif;
+    --font-mono: "Geist Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper); color: var(--ink);
+    font-family: var(--font-serif); font-size: 17px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(oklch(20% 0.02 60 / 0.018) 1px, transparent 1.2px),
+      radial-gradient(oklch(20% 0.02 60 / 0.012) 1px, transparent 1.4px);
+    background-size: 3px 3px, 7px 7px;
+    min-height: 100vh;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 64px 32px 96px; }
+
+  /* Capa de boas-vindas */
+  .welcome {
+    border: 1px solid var(--ink);
+    padding: 56px 40px;
+    position: relative;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .welcome::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px solid var(--ink); pointer-events: none;
+  }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss); margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .eyebrow .sp { color: var(--moss); font-size: 1.4em; }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 0.95; letter-spacing: -0.03em;
+    font-weight: 400; margin-bottom: 20px;
+  }
+  h1 em { font-style: italic; color: var(--moss); }
+  .lede {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 22px; line-height: 1.4;
+    color: var(--ink-soft); max-width: 48ch; margin: 0 auto 32px;
+  }
+  .lede em { color: var(--moss); }
+
+  /* Botão principal de download */
+  .download-card {
+    border: 1px solid var(--moss);
+    background: var(--moss-soft);
+    padding: 40px 32px;
+    text-align: center;
+    margin: 48px 0;
+    position: relative;
+  }
+  .download-card .label {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss-deep); margin-bottom: 12px;
+  }
+  .download-card .so-detected {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 32px; color: var(--ink); margin-bottom: 8px;
+  }
+  .download-card .so-detected em { color: var(--moss); }
+  .download-card .file-info {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-sans); font-size: 16px; font-weight: 500;
+    padding: 16px 28px; border-radius: 4px;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    letter-spacing: -0.005em;
+  }
+  .btn-download:hover { background: var(--moss-deep); transform: translateY(-1px); }
+  .btn-download .sp { color: var(--moss); font-size: 1.3em; }
+  .btn-download:hover .sp { color: var(--moss-soft); }
+
+  .alt-download {
+    margin-top: 24px;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .alt-download a { color: var(--moss); border-bottom: 1px solid var(--moss); padding-bottom: 1px; text-decoration: none; }
+  .alt-download a:hover { background: var(--moss); color: var(--paper); }
+
+  /* Passos */
+  .section { margin-bottom: 48px; }
+  .section-head {
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 24px; align-items: end;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px; margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss); border-top: 1.5px solid var(--moss);
+    padding-top: 8px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 44px); line-height: 1.05;
+    letter-spacing: -0.025em; font-weight: 400;
+  }
+  .section-title em { font-style: italic; color: var(--moss); }
+
+  .steps { display: flex; flex-direction: column; gap: 20px; }
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    border: 1px solid var(--line);
+    padding: 24px;
+    background: var(--paper);
+    align-items: start;
+  }
+  .step-num {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 38px; color: var(--moss); line-height: 1;
+  }
+  .step h3 {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 400;
+    line-height: 1.15; letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .step p {
+    font-family: var(--font-serif); font-size: 16px;
+    line-height: 1.6; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .step p em { font-style: italic; color: var(--moss); }
+  .step code {
+    font-family: var(--font-mono); font-size: 13px;
+    background: var(--paper-deep); color: var(--ink);
+    padding: 8px 12px; border: 1px solid var(--line);
+    display: block; margin: 8px 0;
+    overflow-x: auto; user-select: all; cursor: text;
+  }
+
+  /* Alerta */
+  .alert {
+    background: var(--paper-deep);
+    border-left: 3px solid var(--gold);
+    padding: 20px 24px; margin: 32px 0;
+  }
+  .alert .label {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .alert p {
+    font-family: var(--font-serif); font-size: 15px;
+    line-height: 1.55; color: var(--ink-soft);
+  }
+  .alert strong { color: var(--ink); font-weight: 500; }
+
+  /* Próximos passos */
+  .next-steps {
+    margin-top: 64px;
+    background: var(--ink); color: var(--paper);
+    padding: 48px 40px;
+    position: relative; overflow: hidden;
+  }
+  .next-steps::after {
+    content: "✦";
+    position: absolute; right: 24px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display); font-size: 200px;
+    color: var(--moss); opacity: 0.2; line-height: 1;
+    pointer-events: none;
+  }
+  .next-steps h2 {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px; max-width: 22ch;
+  }
+  .next-steps p {
+    font-family: var(--font-serif); font-size: 17px;
+    line-height: 1.6; color: oklch(82% 0.02 75);
+    max-width: 56ch; margin-bottom: 24px;
+  }
+  .next-steps em { color: var(--moss); font-style: italic; }
+  .next-steps .cmd-list { list-style: none; padding: 0; margin: 24px 0 0; }
+  .next-steps .cmd-list li {
+    font-family: var(--font-mono); font-size: 14px;
+    color: oklch(82% 0.02 75); margin-bottom: 8px;
+    padding-left: 20px; position: relative;
+  }
+  .next-steps .cmd-list li::before {
+    content: "✦"; position: absolute; left: 0;
+    color: var(--moss);
+  }
+  .next-steps .cmd-list code {
+    color: var(--moss-soft); background: oklch(16% 0.022 55 / 0.5);
+    padding: 2px 8px; border-radius: 3px;
+    border: 1px solid oklch(34% 0.060 148 / 0.4);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 32px; margin-top: 64px;
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  footer .sp { color: var(--moss); }
+  footer a { color: var(--ink-mute); text-decoration: none; }
+  footer a:hover { color: var(--moss); }
+
+  @media (max-width: 720px) {
+    .page { padding: 32px 20px 64px; }
+    .welcome { padding: 32px 20px; }
+    .section-head { grid-template-columns: 60px 1fr; gap: 12px; }
+    .next-steps { padding: 32px 24px; }
+    .next-steps::after { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Capa de boas-vindas -->
+  <header class="welcome">
+    <div class="eyebrow">
+      <span class="sp">✦</span>
+      <span>Pagamento confirmado &middot; Bem-vindo ao Mapa</span>
+    </div>
+    <h1>Você está <em>dentro</em>.</h1>
+    <p class="lede">A partir de agora, três horas por semana viram sete dias de conteúdo. <em>Preservando sua voz.</em></p>
+  </header>
+
+  <!-- Card de download principal -->
+  <div class="download-card">
+    <div class="label">Seu instalador</div>
+    <div class="so-detected" id="so-detected">Detectando seu sistema<em>...</em></div>
+    <div class="file-info" id="file-info">cerca de 122 MB</div>
+
+    <a id="btn-download" class="btn-download" href="https://github.com/o-pedrosiqueira/mapa-do-criador-system/releases/download/v1.0.0/Mapa-do-Criador-arm64.dmg" download>
+      <span class="sp">↓</span>
+      <span>Baixar Mapa do Criador</span>
+    </a>
+
+    <div class="alt-download">
+      Outro Mac?
+      <a href="https://github.com/o-pedrosiqueira/mapa-do-criador-system/releases/download/v1.0.0/Mapa-do-Criador-arm64.dmg" download>Apple Silicon (M1/M2/M3)</a>
+      &middot;
+      <a href="https://github.com/o-pedrosiqueira/mapa-do-criador-system/releases/download/v1.0.0/Mapa-do-Criador-x64.dmg" download>Intel</a>
+    </div>
+  </div>
+
+  <!-- Aviso de segurança macOS -->
+  <div class="alert">
+    <div class="label">⚠ Aviso do macOS na primeira abertura</div>
+    <p>Como o app ainda não tem certificado Apple Developer (vamos providenciar quando alcançarmos volume de validação), o macOS vai mostrar <strong>"Aplicativo não pode ser aberto porque não foi possível verificar o desenvolvedor"</strong> na primeira vez. É esperado e seguro.</p>
+    <p><strong>Solução:</strong> clique com o <strong>botão direito</strong> no app em Applications → escolha <strong>Abrir</strong> → confirme. Você só faz isso na primeira vez.</p>
+  </div>
+
+  <!-- 01. Instalar -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">01 / Instalar</div>
+      <h2 class="section-title">Coloque o <em>sistema</em> na sua máquina.</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">i.</div>
+        <div>
+          <h3>Abrir o DMG baixado</h3>
+          <p>Dê duplo-clique no arquivo <em>Mapa-do-Criador-arm64.dmg</em> (ou <em>x64</em>) na sua pasta Downloads.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">ii.</div>
+        <div>
+          <h3>Arrastar para Applications</h3>
+          <p>Na janela do DMG, arraste o ícone <em>Mapa do Criador</em> para o atalho <em>Applications</em> ao lado.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">iii.</div>
+        <div>
+          <h3>Abrir pela primeira vez</h3>
+          <p>Vá em <em>Applications</em>, clique com <strong>botão direito</strong> no <em>Mapa do Criador</em> e escolha <strong>Abrir</strong>. Confirme o aviso de segurança do macOS.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">iv.</div>
+        <div>
+          <h3>Aguardar o setup</h3>
+          <p>O app vai instalar automaticamente: <em>Homebrew, Python, Git, Node.js e o Claude da Anthropic</em>. Em algum momento ele pede sua senha do Mac (é a senha do usuário do computador). Tempo total: cerca de <strong>10 minutos</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">v.</div>
+        <div>
+          <h3>Painel abre automaticamente</h3>
+          <p>Quando terminar, o painel-entregas.html abre no navegador. Você vê a capa do Mapa, a Sala dos Agentes, e 16 seções vazias prontas pra preencher.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02. Primeiro Ritual -->
+  <section class="section next-steps">
+    <h2>Primeiro ritual: configurar seu <em>DNA Criativo</em>.</h2>
+    <p>Antes de produzir conteúdo, o sistema precisa conhecer sua voz. Abra o Claude (instalado junto) e rode <em>/dna-criativo</em>. Ele vai pedir 1 a 3 textos seus autênticos para extrair os padrões.</p>
+
+    <p>Depois do DNA, defina sua posição autoral:</p>
+    <ul class="cmd-list">
+      <li><code>/definir-anthem</code> — Frase de posicionamento (Sally Hogshead)</li>
+      <li><code>/escolher-arquetipo</code> — Brand Archetype + Vantagens da Fascinação</li>
+      <li><code>/definir-pilares</code> — 3 a 5 temas recorrentes</li>
+      <li><code>/escrever-manifesto</code> — O que você defende e o que rejeita</li>
+    </ul>
+
+    <p style="margin-top: 24px;">Com DNA + Posição prontos, a primeira sessão semanal: <em>/ritual-3x3</em>. Três horas, sete dias de conteúdo. Newsletter + carrosséis + stories na sua voz.</p>
+  </section>
+
+  <footer>
+    <span>✦ Mapa do Criador &middot; Pedro Siqueira &middot; 2026</span>
+    <span>
+      <a href="privacidade.html">Privacidade</a>
+      &middot;
+      <a href="termos.html">Termos</a>
+      &middot;
+      <a href="mailto:contato@mapadocriador.com">Suporte</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  // Detectar SO e ajustar o botão principal
+  const ua = navigator.userAgent.toLowerCase();
+  const platform = navigator.platform || '';
+  const $title = document.getElementById('so-detected');
+  const $info = document.getElementById('file-info');
+  const $btn = document.getElementById('btn-download');
+
+  const BASE = 'https://github.com/o-pedrosiqueira/mapa-do-criador-system/releases/download/v1.0.0/';
+
+  function isAppleSilicon() {
+    // Heurística: M-series tem CPU detectada como 'arm' em alguns navegadores
+    // ou Mac sem 'Intel' explícito (defaultando para arm64 nos modernos)
+    if (ua.includes('mac')) {
+      if (navigator.userAgentData && navigator.userAgentData.platform === 'macOS') {
+        const cpu = (navigator.userAgentData.getHighEntropyValues
+          ? navigator.userAgentData.getHighEntropyValues(['architecture'])
+          : Promise.resolve({architecture: 'arm'})
+        );
+      }
+      // Fallback: assumir arm64 (Apple Silicon) por padrão para Macs novos.
+      // Usuários de Intel podem clicar no link alternativo.
+      return true;
+    }
+    return false;
+  }
+
+  if (ua.includes('mac')) {
+    $title.innerHTML = 'Mac <em>Apple Silicon</em>';
+    $info.textContent = 'cerca de 122 MB · macOS 12 ou superior';
+    $btn.href = BASE + 'Mapa-do-Criador-arm64.dmg';
+  } else if (ua.includes('windows')) {
+    $title.innerHTML = '<em>Windows</em>';
+    $info.textContent = 'versão em desenvolvimento · em breve';
+    $btn.innerHTML = '<span class="sp">i</span><span>Versão Windows em breve</span>';
+    $btn.href = '#';
+    $btn.style.opacity = '0.6';
+    $btn.style.cursor = 'not-allowed';
+  } else if (ua.includes('linux')) {
+    $title.innerHTML = '<em>Linux</em>';
+    $info.textContent = 'não suportado oficialmente · você pode tentar via Wine ou container';
+    $btn.style.opacity = '0.6';
+  } else {
+    $title.innerHTML = 'Sistema <em>não detectado</em>';
+    $info.textContent = 'escolha sua versão abaixo';
+  }
+</script>
+
+<!-- Meta Pixel placeholder (substituir SEU_PIXEL_ID) -->
+<!--
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'SEU_PIXEL_ID');
+  fbq('track', 'PageView');
+  fbq('track', 'Purchase'); // evento de conversao na pagina de obrigado
+</script>
+-->
+</body>
+</html>

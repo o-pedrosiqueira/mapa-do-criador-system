@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTransition } from "react";
 import { TRILHA, itensDoDia, totalItens } from "@/lib/trilha";
 import { useProgresso } from "@/lib/progresso";
+import { signOut } from "@/lib/auth-actions";
 
 export default function Sidebar({ userEmail = "voce@email.com" }: { userEmail?: string }) {
+  const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const { prog, contarConcluidos } = useProgresso();
   const total = totalItens();
@@ -92,16 +95,11 @@ export default function Sidebar({ userEmail = "voce@email.com" }: { userEmail?: 
         </div>
         <button
           className="btn-ghost"
-          style={{ width: "100%", justifyContent: "center", padding: "8px 12px", fontSize: 12 }}
-          onClick={() => {
-            // Por enquanto so limpa o localStorage. Quando o Supabase entrar, fazer signOut.
-            if (typeof window !== "undefined") {
-              localStorage.removeItem("mapa-criador-progresso-v1");
-              window.location.href = "/login";
-            }
-          }}
+          style={{ width: "100%", justifyContent: "center", padding: "8px 12px", fontSize: 12, opacity: isPending ? 0.6 : 1 }}
+          disabled={isPending}
+          onClick={() => startTransition(() => signOut())}
         >
-          Sair
+          {isPending ? "Saindo..." : "Sair"}
         </button>
       </div>
     </aside>

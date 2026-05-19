@@ -1,30 +1,10 @@
-"use client";
+// Root: redireciona conforme sessao. Middleware ja cobre, mas mantemos esse fallback
+// pra usuario que acessa "/" sem cookie ainda preenchido.
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const userEmail = localStorage.getItem("mapa-criador-user-email");
-    router.replace(userEmail ? "/tutorial" : "/login");
-  }, [router]);
-
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center",
-        fontFamily: "var(--font-mono)",
-        fontSize: 11,
-        letterSpacing: "0.16em",
-        textTransform: "uppercase",
-        color: "var(--ink-mute)",
-      }}
-    >
-      ✦ Carregando…
-    </div>
-  );
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  redirect(user ? "/tutorial" : "/login");
 }

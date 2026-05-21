@@ -63,7 +63,7 @@ export default function TutorialHome() {
         </p>
       </div>
 
-      {/* 3 cards de dias */}
+      {/* 3 cards de etapas */}
       <div
         style={{
           display: "grid",
@@ -72,16 +72,16 @@ export default function TutorialHome() {
           marginBottom: 64,
         }}
       >
-        {TRILHA.map((dia) => {
-          const ids = itensDoDia(dia.slug).map((i) => i.id);
+        {TRILHA.map((etapa) => {
+          const ids = itensDoDia(etapa.slug).map((i) => i.id);
           const c = contarConcluidos(ids);
           const t = ids.length;
           const p = t > 0 ? Math.round((c / t) * 100) : 0;
           const completo = c === t;
           return (
             <Link
-              key={dia.slug}
-              href={`/tutorial/${dia.slug}`}
+              key={etapa.slug}
+              href={`/tutorial/${etapa.slug}`}
               style={{
                 border: completo ? "1px solid var(--moss)" : "1px solid var(--line)",
                 background: completo ? "var(--moss-soft)" : "var(--paper)",
@@ -102,7 +102,7 @@ export default function TutorialHome() {
                   color: "var(--moss)",
                 }}
               >
-                Dia {dia.numero}
+                {etapa.rotulo}
               </div>
               <h2
                 className="font-display"
@@ -114,8 +114,8 @@ export default function TutorialHome() {
                   color: "var(--ink)",
                 }}
               >
-                {dia.titulo}{" "}
-                <em style={{ color: "var(--moss)", fontStyle: "italic" }}>{dia.titulo_destaque}</em>
+                {etapa.titulo}{" "}
+                <em style={{ color: "var(--moss)", fontStyle: "italic" }}>{etapa.titulo_destaque}</em>
               </h2>
               <p
                 className="font-serif"
@@ -126,7 +126,7 @@ export default function TutorialHome() {
                   flex: 1,
                 }}
               >
-                {dia.resumo}
+                {etapa.resumo}
               </p>
               <div
                 style={{

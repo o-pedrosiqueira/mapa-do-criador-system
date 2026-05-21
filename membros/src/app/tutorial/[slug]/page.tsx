@@ -3,18 +3,21 @@
 import { use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TRILHA, itensDoDia } from "@/lib/trilha";
+import { TRILHA, itensDaEtapa } from "@/lib/trilha";
 import { useProgresso } from "@/lib/progresso";
 import ItemChecklist from "@/components/ItemChecklist";
 
-export default function PaginaDia({ params }: { params: Promise<{ slug: string }> }) {
+export default function PaginaEtapa({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const dia = TRILHA.find((d) => d.slug === slug);
-  if (!dia) notFound();
+  const etapa = TRILHA.find((e) => e.slug === slug);
+  if (!etapa) notFound();
   const { contarConcluidos } = useProgresso();
-  const idsTotais = itensDoDia(slug).map((i) => i.id);
+  const idsTotais = itensDaEtapa(slug).map((i) => i.id);
   const c = contarConcluidos(idsTotais);
   const t = idsTotais.length;
+
+  const etapaAnterior = TRILHA.find((e) => e.numero === etapa.numero - 1);
+  const etapaProxima = TRILHA.find((e) => e.numero === etapa.numero + 1);
 
   return (
     <div style={{ padding: "64px 64px 96px", maxWidth: 1080 }}>
@@ -38,7 +41,7 @@ export default function PaginaDia({ params }: { params: Promise<{ slug: string }
       <div style={{ marginBottom: 48 }}>
         <div className="eyebrow" style={{ marginBottom: 16 }}>
           <span className="sp">✦</span>
-          <span>Dia {dia.numero}</span>
+          <span>{etapa.rotulo}</span>
           <span style={{ marginLeft: 16, color: "var(--ink-mute)" }}>
             {c} / {t} concluídos
           </span>
@@ -54,8 +57,8 @@ export default function PaginaDia({ params }: { params: Promise<{ slug: string }
             marginBottom: 16,
           }}
         >
-          {dia.titulo}{" "}
-          <em style={{ color: "var(--moss)", fontStyle: "italic" }}>{dia.titulo_destaque}</em>
+          {etapa.titulo}{" "}
+          <em style={{ color: "var(--moss)", fontStyle: "italic" }}>{etapa.titulo_destaque}</em>
         </h1>
         <p
           className="font-serif"
@@ -67,12 +70,12 @@ export default function PaginaDia({ params }: { params: Promise<{ slug: string }
             maxWidth: "60ch",
           }}
         >
-          {dia.resumo}
+          {etapa.resumo}
         </p>
       </div>
 
       {/* Grupos */}
-      {dia.grupos.map((grupo, idxGrupo) => {
+      {etapa.grupos.map((grupo, idxGrupo) => {
         const idsGrupo = grupo.itens.map((i) => i.id);
         const cGrupo = contarConcluidos(idsGrupo);
         const tGrupo = idsGrupo.length;
@@ -118,7 +121,7 @@ export default function PaginaDia({ params }: { params: Promise<{ slug: string }
         );
       })}
 
-      {/* Navegação entre dias */}
+      {/* Navegação entre etapas */}
       <nav
         style={{
           marginTop: 64,
@@ -132,16 +135,16 @@ export default function PaginaDia({ params }: { params: Promise<{ slug: string }
           textTransform: "uppercase",
         }}
       >
-        {dia.numero > 1 ? (
-          <Link href={`/tutorial/dia-${dia.numero - 1}`} style={{ color: "var(--ink-soft)", textDecoration: "none" }}>
-            ← Dia {dia.numero - 1}
+        {etapaAnterior ? (
+          <Link href={`/tutorial/${etapaAnterior.slug}`} style={{ color: "var(--ink-soft)", textDecoration: "none" }}>
+            ← {etapaAnterior.rotulo_curto}
           </Link>
         ) : (
           <span />
         )}
-        {dia.numero < TRILHA.length ? (
-          <Link href={`/tutorial/dia-${dia.numero + 1}`} style={{ color: "var(--moss)", textDecoration: "none" }}>
-            Dia {dia.numero + 1} →
+        {etapaProxima ? (
+          <Link href={`/tutorial/${etapaProxima.slug}`} style={{ color: "var(--moss)", textDecoration: "none" }}>
+            {etapaProxima.rotulo_curto} →
           </Link>
         ) : (
           <Link href="/tutorial" style={{ color: "var(--moss)", textDecoration: "none" }}>

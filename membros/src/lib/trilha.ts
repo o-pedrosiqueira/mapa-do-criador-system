@@ -1,5 +1,5 @@
-// Trilha do Mapa do Criador. 3 dias x ~7 itens cada = 20 itens totais.
-// Cada item tem id estavel para persistencia do checkbox no Supabase/localStorage.
+// Trilha do Mapa do Criador. 3 etapas x ~7 itens cada = 20 itens totais.
+// Cada item tem id estavel para persistencia do checkbox no Supabase.
 
 export type ItemTrilha = {
   id: string;
@@ -14,19 +14,26 @@ export type GrupoTrilha = {
   itens: ItemTrilha[];
 };
 
-export type Dia = {
+export type Etapa = {
   slug: string;
   numero: number;
+  rotulo: string; // ex: "Primeira Etapa"
+  rotulo_curto: string; // ex: "Etapa 1" (usado em sidebar mobile e progresso)
   titulo: string;
   titulo_destaque: string;
   resumo: string;
   grupos: GrupoTrilha[];
 };
 
-export const TRILHA: Dia[] = [
+// Mantido o nome Dia como alias por compatibilidade interna
+export type Dia = Etapa;
+
+export const TRILHA: Etapa[] = [
   {
-    slug: "dia-1",
+    slug: "etapa-1",
     numero: 1,
+    rotulo: "Primeira Etapa",
+    rotulo_curto: "Etapa 1",
     titulo: "Instalação e",
     titulo_destaque: "primeiros passos.",
     resumo: "Coloque o Mapa do Criador na sua máquina. App desktop, Claude da Anthropic, primeira abertura do painel.",
@@ -92,8 +99,10 @@ export const TRILHA: Dia[] = [
     ],
   },
   {
-    slug: "dia-2",
+    slug: "etapa-2",
     numero: 2,
+    rotulo: "Segunda Etapa",
+    rotulo_curto: "Etapa 2",
     titulo: "Configurar seu",
     titulo_destaque: "DNA e Posição.",
     resumo: "Antes de produzir conteúdo, o sistema precisa conhecer sua voz e sua posição autoral. Cinco comandos, uma sessão de cerca de 45 a 60 minutos.",
@@ -161,8 +170,10 @@ export const TRILHA: Dia[] = [
     ],
   },
   {
-    slug: "dia-3",
+    slug: "etapa-3",
     numero: 3,
+    rotulo: "Terceira Etapa",
+    rotulo_curto: "Etapa 3",
     titulo: "Primeiro",
     titulo_destaque: "Ritual 3x3.",
     resumo: "Com DNA + Posição prontos, a primeira sessão semanal: Capture, Cure, Crie. Três horas, uma newsletter, dois carrosséis e uma sequência de stories.",
@@ -241,8 +252,11 @@ export function totalItens(): number {
   );
 }
 
-export function itensDoDia(slug: string): ItemTrilha[] {
-  const dia = TRILHA.find((d) => d.slug === slug);
-  if (!dia) return [];
-  return dia.grupos.flatMap((g) => g.itens);
+export function itensDaEtapa(slug: string): ItemTrilha[] {
+  const etapa = TRILHA.find((e) => e.slug === slug);
+  if (!etapa) return [];
+  return etapa.grupos.flatMap((g) => g.itens);
 }
+
+// Alias antigo, mantido para compatibilidade interna durante a transicao
+export const itensDoDia = itensDaEtapa;

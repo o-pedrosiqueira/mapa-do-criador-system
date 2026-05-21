@@ -65,19 +65,19 @@ export default function Sidebar({ userEmail = "voce@email.com" }: { userEmail?: 
       {/* Navegação */}
       <nav style={{ flex: 1 }}>
         <NavItem href="/tutorial" label="Início" active={pathname === "/tutorial"} />
-        {TRILHA.map((dia) => {
-          const itensDia = itensDoDia(dia.slug);
-          const idsDia = itensDia.map((i) => i.id);
-          const concluidosDia = contarConcluidos(idsDia);
-          const totalDia = idsDia.length;
+        {TRILHA.map((etapa) => {
+          const itensEtapa = itensDoDia(etapa.slug);
+          const idsEtapa = itensEtapa.map((i) => i.id);
+          const concluidosEtapa = contarConcluidos(idsEtapa);
+          const totalEtapa = idsEtapa.length;
           return (
             <NavItem
-              key={dia.slug}
-              href={`/tutorial/${dia.slug}`}
-              label={`Dia ${dia.numero}`}
-              progress={`${concluidosDia}/${totalDia}`}
-              completed={concluidosDia === totalDia}
-              active={pathname === `/tutorial/${dia.slug}`}
+              key={etapa.slug}
+              href={`/tutorial/${etapa.slug}`}
+              label={etapa.rotulo_curto}
+              progress={`${concluidosEtapa}/${totalEtapa}`}
+              completed={concluidosEtapa === totalEtapa}
+              active={pathname === `/tutorial/${etapa.slug}`}
             />
           );
         })}

@@ -42,7 +42,8 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Se ja logado e tentando ver login -> redireciona pra tutorial
-  if (user && rotaPublica && path !== "/auth/callback") {
+  // Excecoes: /auth/callback (em processo) e /recuperar/nova-senha (sessao temporaria de reset)
+  if (user && rotaPublica && path !== "/auth/callback" && path !== "/recuperar/nova-senha") {
     const url = request.nextUrl.clone();
     url.pathname = "/tutorial";
     return NextResponse.redirect(url);

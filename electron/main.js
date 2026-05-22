@@ -26,12 +26,14 @@ function getRepoDir() {
 }
 
 function getPanelPath() {
-  return path.join(getRepoDir(), 'painel', 'index.html')
+  // app-shell.html: shell do Electron (lista de produtos, agentes, etc).
+  // painel/index.html agora e a pagina de vendas publica usada no deploy Vercel.
+  return path.join(getRepoDir(), 'painel', 'app-shell.html')
 }
 
 function isInstalled() {
   if (process.argv.includes('--force-setup')) return false
-  if (!app.isPackaged) return fs.existsSync(path.join(__dirname, '..', 'painel', 'index.html'))
+  if (!app.isPackaged) return fs.existsSync(path.join(__dirname, '..', 'painel', 'app-shell.html'))
   return fs.existsSync(path.join(getRepoDir(), '.installed'))
 }
 

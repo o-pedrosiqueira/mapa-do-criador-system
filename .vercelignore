@@ -19,5 +19,13 @@ instalador/
 # Workshop e arquivos legados
 workshop-live-office.html
 
+# Shell do app Electron - usado apenas no app desktop local, NAO na Vercel.
+# painel/index.html agora e a pagina de vendas publica (renomeada de vendas.html).
+# painel/app-shell.html e o shell do Electron e nao precisa ser servido na Vercel.
+painel/app-shell.html
+painel/skeleton-painel-entregas.html
+# A pasta membros/ tem seu proprio projeto Vercel separado (mapa-do-criador-membros)
+membros/
+
 # Markdown da raiz
 *.md
